@@ -60,11 +60,11 @@ from strix.telemetry.logging import setup_console_logging
 logger = logging.getLogger(__name__)
 
 _ROOT_SUBCOMMAND_HELP = """
-Additional commands:
-  strix cloud ...          Use the managed Strix platform
-  strix auth ...           Manage model-subscription sign-in
-  strix view [RUN]         View a completed or running scan
-  strix completions SHELL  Generate zsh, bash, or fish tab completion
+其他指令:
+  strix cloud ...          使用受管的 Strix 平台
+  strix auth ...           管理模型訂閱登入
+  strix view [RUN]         檢視已完成或執行中的掃描
+  strix completions SHELL  產生 zsh、bash 或 fish 的補全腳本
 """
 
 
@@ -92,8 +92,8 @@ def _subscription_error_hint(exc: BaseException) -> str | None:
     joined = " ".join(_exception_messages(exc)).lower()
     if "not supported when using codex with a chatgpt account" in joined:
         return (
-            "This model isn't available on your ChatGPT subscription. "
-            "Set STRIX_LLM to a model your plan includes (e.g. chatgpt/gpt-5.4)."
+            "此模型不在你的 ChatGPT 訂閱方案中。"
+            "請把 STRIX_LLM 設為方案內含的模型（例如 chatgpt/gpt-5.4）。"
         )
     if (
         "error code: 401" in joined
@@ -101,10 +101,7 @@ def _subscription_error_hint(exc: BaseException) -> str | None:
         or "unauthorized" in joined
         or "invalid_grant" in joined
     ):
-        return (
-            "Your ChatGPT sign-in has expired or was revoked. Sign in again:\n"
-            "  strix auth login chatgpt"
-        )
+        return "你的 ChatGPT 登入已過期或被撤銷。請重新登入：\n  strix auth login chatgpt"
     return None
 
 
@@ -130,17 +127,17 @@ async def warm_up_llm() -> None:
             and not llm.api_base
         ):
             warn_text = Text()
-            warn_text.append("UNKNOWN MODEL NAME", style="bold yellow")
+            warn_text.append("未知的模型名稱", style="bold yellow")
             warn_text.append("\n\n", style="white")
             warn_text.append(f"'{raw_model}'", style="bold cyan")
             warn_text.append(
-                " is not a known OpenAI model. Bare names route to OpenAI by default.\n"
-                "If you meant a non-OpenAI provider, use the '",
+                " 不是已知的 OpenAI 模型。未帶供應商前綴的名稱預設會送到 OpenAI。\n"
+                "如果你想使用非 OpenAI 的供應商，請改用「",
                 style="white",
             )
             warn_text.append("<provider>/<model>", style="bold cyan")
             warn_text.append(
-                "' form, e.g. 'anthropic/claude-opus-4-7', 'deepseek/deepseek-v4-pro'.",
+                "」格式，例如 'anthropic/claude-opus-4-7'、'deepseek/deepseek-v4-pro'。",
                 style="white",
             )
             console.print(
@@ -196,17 +193,17 @@ def display_completion_message(args: argparse.Namespace, results_path: Path) -> 
 
     completion_text = Text()
     if scan_completed:
-        completion_text.append("Penetration test completed", style="bold #22c55e")
+        completion_text.append("滲透測試完成", style="bold #22c55e")
     else:
-        completion_text.append("SESSION ENDED", style="bold #eab308")
+        completion_text.append("工作階段已結束", style="bold #eab308")
 
     target_text = Text()
-    target_text.append("Target", style="dim")
-    target_text.append("  ")
+    target_text.append("目標", style="dim")
+    target_text.append("    ")
     if len(args.targets_info) == 1:
         target_text.append(args.targets_info[0]["original"], style="bold white")
     else:
-        target_text.append(f"{len(args.targets_info)} targets", style="bold white")
+        target_text.append(f"{len(args.targets_info)} 個目標", style="bold white")
         for target_info in args.targets_info:
             target_text.append("\n        ")
             target_text.append(target_info["original"], style="white")
@@ -220,14 +217,14 @@ def display_completion_message(args: argparse.Namespace, results_path: Path) -> 
 
     results_text = Text()
     results_text.append("\n")
-    results_text.append("Output", style="dim")
-    results_text.append("  ")
+    results_text.append("輸出", style="dim")
+    results_text.append("    ")
     results_text.append(str(results_path), style="#60a5fa")
     panel_parts.extend(["\n", results_text])
 
     view_text = Text()
     view_text.append("\n")
-    view_text.append("View", style="dim")
+    view_text.append("檢視", style="dim")
     view_text.append("    ")
     view_text.append(f"strix view {args.run_name}", style="#22c55e")
     panel_parts.extend(["\n", view_text])
@@ -235,8 +232,8 @@ def display_completion_message(args: argparse.Namespace, results_path: Path) -> 
     if not scan_completed:
         resume_text = Text()
         resume_text.append("\n")
-        resume_text.append("Resume", style="dim")
-        resume_text.append("  ")
+        resume_text.append("接續", style="dim")
+        resume_text.append("    ")
         resume_text.append(f"strix --resume {args.run_name}", style="#22c55e")
         panel_parts.extend(["\n", resume_text])
 
@@ -262,8 +259,8 @@ def display_completion_message(args: argparse.Namespace, results_path: Path) -> 
     )
     if not args.non_interactive:
         console.print(
-            "[dim]Run a pentest in Strix Cloud[/]  [#60a5fa]app.strix.ai[/]  [dim]·[/]  "
-            "[dim]Enterprise[/]  [#60a5fa]strix.ai/demo[/]"
+            "[dim]在 Strix Cloud 執行滲透測試[/]  [#60a5fa]app.strix.ai[/]  [dim]·[/]  "
+            "[dim]企業版[/]  [#60a5fa]strix.ai/demo[/]"
         )
     console.print()
     if not args.non_interactive:
@@ -318,17 +315,17 @@ def _print_model_connection_error(exc: BaseException) -> None:
     sub_hint = _subscription_error_hint(exc)
     if sub_hint is not None:
         border_style = "yellow"
-        error_text.append("MODEL NOT AVAILABLE ON SUBSCRIPTION", style="bold yellow")
+        error_text.append("此模型不在訂閱方案中", style="bold yellow")
         error_text.append("\n\n", style="white")
         error_text.append(f"{sub_hint}\n", style="white")
-        error_text.append(f"\nDetails: {exc}", style="dim white")
+        error_text.append(f"\n詳細資訊: {exc}", style="dim white")
     else:
         border_style = "red"
-        error_text.append("LLM CONNECTION FAILED", style="bold red")
+        error_text.append("LLM 連線失敗", style="bold red")
         error_text.append("\n\n", style="white")
-        error_text.append("Could not establish connection to the language model.\n", style="white")
-        error_text.append("Please check your configuration and try again.\n", style="white")
-        error_text.append(f"\nError: {exc}", style="dim white")
+        error_text.append("無法建立與語言模型的連線。\n", style="white")
+        error_text.append("請檢查你的設定後再試一次。\n", style="white")
+        error_text.append(f"\n錯誤: {exc}", style="dim white")
 
     panel = Panel(
         error_text,
@@ -344,11 +341,11 @@ def _print_model_connection_error(exc: BaseException) -> None:
 
 def _print_cli_error(message: str) -> None:
     Console(stderr=True, soft_wrap=True).print(
-        f"strix: error: {message}", markup=False, highlight=False
+        f"strix: 錯誤: {message}", markup=False, highlight=False
     )
 
 
-HEADLESS_HINT = "If Strix runs without a terminal (CI, nohup, pipes), pass -n to run headless."
+HEADLESS_HINT = "若 Strix 在沒有終端機的環境執行（CI、nohup、管線），請加上 -n 以無介面模式執行。"
 
 
 def _fall_back_to_headless(args: argparse.Namespace) -> None:
@@ -365,13 +362,12 @@ def _fall_back_to_headless(args: argparse.Namespace) -> None:
     if args.needs_setup:
         report_error("no_terminal_for_setup")
         _print_error_panel(
-            "NO TERMINAL ATTACHED",
-            "The interactive interface needs a terminal and no target was given.\n"
-            "Pass -t <target> -n to run headless.",
+            "未連接終端機",
+            "互動介面需要終端機，但沒有提供任何目標。\n請加上 -t <目標> -n 以無介面模式執行。",
         )
         sys.exit(1)
     args.non_interactive = True
-    Console().print("No terminal attached, running headless (same as -n).", style="dim")
+    Console().print("未連接終端機，改以無介面模式執行（等同 -n）。", style="dim")
 
 
 def _pick_run_to_resume(args: argparse.Namespace) -> None:
@@ -385,7 +381,7 @@ def _pick_run_to_resume(args: argparse.Namespace) -> None:
         _print_cli_error(resume_run_list_message(f"{exc}."))
         sys.exit(2)
     if chosen is None:
-        Console().print("No run selected.", style="dim")
+        Console().print("未選擇任何執行記錄。", style="dim")
         sys.exit(0)
     args.resume = chosen.run_name
     try:
@@ -413,7 +409,7 @@ def _bootstrap_scan(args: argparse.Namespace) -> None:
         prepare_run(args)
     except ValueError as e:
         report_error("scan_preparation_failed", e)
-        _print_error_panel("SCAN PREPARATION FAILED", str(e))
+        _print_error_panel("掃描準備失敗", str(e))
         sys.exit(1)
     telemetry_start(args)
 
@@ -509,12 +505,12 @@ def main() -> None:
     except InteractiveSetupUnavailableError as exc:
         exit_reason = "error"
         report_error("interactive_setup_unavailable", exc)
-        _print_error_panel("INTERACTIVE SETUP UNAVAILABLE", str(exc))
+        _print_error_panel("互動式設定無法使用", str(exc))
         sys.exit(1)
     except InteractiveInterfaceExitedError as exc:
         exit_reason = "error"
         report_error("interactive_interface_exited", exc)
-        _print_error_panel("INTERACTIVE INTERFACE STOPPED", f"{exc}.\n{HEADLESS_HINT}")
+        _print_error_panel("互動介面已停止", f"{exc}。\n{HEADLESS_HINT}")
         sys.exit(1)
     except KeyboardInterrupt:
         exit_reason = "interrupted"

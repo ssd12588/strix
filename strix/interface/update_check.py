@@ -209,7 +209,7 @@ def notify_update(console: Console) -> None:
     if not latest:
         return
     console.print(
-        f"[#eab308]A new version of strix is available:[/] "
+        f"[#eab308]有新版本的 strix 可用:[/] "
         f"[dim]{get_version()}[/] [dim]→[/] [bold #22c55e]{latest}[/]"
         f"  [dim]·[/]  [#60a5fa]{get_upgrade_command()}[/]"
     )
@@ -219,19 +219,19 @@ def notify_update(console: Console) -> None:
 def run_package_upgrade(console: Console, method: str) -> bool:
     """Upgrade a package-manager install by running its upgrade command."""
     command = get_upgrade_command(method).split()
-    console.print(f"[dim]Running[/] [#60a5fa]{' '.join(command)}[/]")
+    console.print(f"[dim]正在執行[/] [#60a5fa]{' '.join(command)}[/]")
     try:
         result = subprocess.run(command, check=False)  # noqa: S603
     except OSError as e:
-        console.print(f"[bold red]Update failed:[/] {e}")
+        console.print(f"[bold red]更新失敗:[/] {e}")
         return False
     if result.returncode != 0:
         console.print(
-            f"[bold red]Update failed[/] [dim](exit code {result.returncode}).[/] "
-            f"Run it manually: [#60a5fa]{get_upgrade_command(method)}[/]"
+            f"[bold red]更新失敗[/] [dim]（結束代碼 {result.returncode}）。[/] "
+            f"請手動執行: [#60a5fa]{get_upgrade_command(method)}[/]"
         )
         return False
-    console.print("[#22c55e]✓ strix updated — restart the scan to use the new version[/]")
+    console.print("[#22c55e]✓ strix 已更新 —— 請重新啟動掃描以使用新版本[/]")
     return True
 
 
@@ -245,13 +245,11 @@ def prompt_update_if_available(console: Console) -> bool:
         return False
     console.print()
     console.print(
-        f"[#eab308]A new version of strix is available:[/] "
+        f"[#eab308]有新版本的 strix 可用:[/] "
         f"[dim]{get_version()}[/] [dim]→[/] [bold #22c55e]{latest}[/]"
     )
-    console.print(
-        "[dim]  y — update now    n — not now (ask again next run)    s — skip this version[/]"
-    )
-    choice = Prompt.ask("Update strix?", choices=["y", "n", "s"], default="n")
+    console.print("[dim]  y — 立即更新    n — 稍後再說（下次執行時再問）    s — 略過此版本[/]")
+    choice = Prompt.ask("要更新 strix 嗎？", choices=["y", "n", "s"], default="n")
     console.print()
     if choice == "s":
         skip_version(latest)
@@ -323,7 +321,7 @@ def _download_and_replace(version: str, target: str, console: Console) -> bool:
     with tempfile.TemporaryDirectory() as tmp:
         tmp_dir = Path(tmp)
         archive_path = tmp_dir / filename
-        console.print(f"[dim]Downloading[/] {url}")
+        console.print(f"[dim]正在下載[/] {url}")
         with requests.get(  # nosec B113
             url,
             stream=True,
@@ -343,7 +341,7 @@ def _download_and_replace(version: str, target: str, console: Console) -> bool:
                     f"expected sha256 {expected_digest}, got {actual_digest}"
                 )
         else:
-            console.print("[dim yellow]No published checksum available; skipping verification[/]")
+            console.print("[dim yellow]沒有可用的已發佈校驗碼，略過驗證[/]")
 
         if is_windows:
             with zipfile.ZipFile(archive_path) as zf:
@@ -387,26 +385,25 @@ def self_update(console: Console | None = None, version: str | None = None) -> b
     if not is_binary_install():
         method = get_install_method()
         console.print(
-            f"[#eab308]This strix was installed via {method};[/] "
-            f"upgrade it with: [#60a5fa]{get_upgrade_command(method)}[/]"
+            f"[#eab308]這個 strix 是透過 {method} 安裝的；[/] "
+            f"請用以下指令升級: [#60a5fa]{get_upgrade_command(method)}[/]"
         )
         return False
 
     latest = version or _fetch_latest_version()
     if not latest:
-        console.print("[bold red]Could not determine the latest strix version.[/]")
+        console.print("[bold red]無法判斷 strix 的最新版本。[/]")
         return False
 
     current = get_version()
     if current != "unknown" and not _is_newer(latest, current):
-        console.print(f"[#22c55e]strix {current} is already the latest version.[/]")
+        console.print(f"[#22c55e]strix {current} 已經是最新版本。[/]")
         return True
 
     target = _release_target()
     if not target:
         console.print(
-            f"[bold red]No prebuilt binary for this platform "
-            f"({platform.system()}/{platform.machine()}).[/]"
+            f"[bold red]此平台沒有預先建置的執行檔 ({platform.system()}/{platform.machine()})。[/]"
         )
         return False
 
@@ -414,13 +411,12 @@ def self_update(console: Console | None = None, version: str | None = None) -> b
         _download_and_replace(latest, target, console)
     except Exception as e:  # noqa: BLE001
         logger.debug("self-update failed", exc_info=True)
-        console.print(f"[bold red]Update failed:[/] {e}")
+        console.print(f"[bold red]更新失敗:[/] {e}")
         console.print(
-            "[dim]You can reinstall manually with:[/] "
-            "[#60a5fa]curl -sSL https://strix.ai/install | bash[/]"
+            "[dim]你也可以手動重新安裝:[/] [#60a5fa]curl -sSL https://strix.ai/install | bash[/]"
         )
         return False
 
     _write_cache(latest_version=latest, checked_at=time.time())
-    console.print(f"[#22c55e]✓ Updated strix to {latest}[/]")
+    console.print(f"[#22c55e]✓ 已將 strix 更新到 {latest}[/]")
     return True

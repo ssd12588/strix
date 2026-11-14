@@ -65,41 +65,41 @@ def format_vulnerability_report(report: dict[str, Any]) -> Text:  # noqa: PLR091
 
     title = report.get("title", "")
     if title:
-        text.append("Vulnerability Report", style="bold #ea580c")
+        text.append("漏洞報告", style="bold #ea580c")
         text.append("\n\n")
-        text.append("Title: ", style=field_style)
+        text.append("標題: ", style=field_style)
         text.append(title)
 
     severity = report.get("severity", "")
     if severity:
         text.append("\n\n")
-        text.append("Severity: ", style=field_style)
+        text.append("嚴重度: ", style=field_style)
         severity_color = get_severity_color(severity.lower())
         text.append(severity.upper(), style=f"bold {severity_color}")
 
     cvss = report.get("cvss")
     if cvss is not None:
         text.append("\n\n")
-        text.append("CVSS Score: ", style=field_style)
+        text.append("CVSS 分數: ", style=field_style)
         cvss_color = get_cvss_color(cvss)
         text.append(f"{cvss:.1f}", style=f"bold {cvss_color}")
 
     target = report.get("target")
     if target:
         text.append("\n\n")
-        text.append("Target: ", style=field_style)
+        text.append("目標: ", style=field_style)
         text.append(target)
 
     endpoint = report.get("endpoint")
     if endpoint:
         text.append("\n\n")
-        text.append("Endpoint: ", style=field_style)
+        text.append("端點: ", style=field_style)
         text.append(endpoint)
 
     method = report.get("method")
     if method:
         text.append("\n\n")
-        text.append("Method: ", style=field_style)
+        text.append("方法: ", style=field_style)
         text.append(method)
 
     cve = report.get("cve")
@@ -129,7 +129,7 @@ def format_vulnerability_report(report: dict[str, Any]) -> Text:  # noqa: PLR091
         if cvss_breakdown.get("availability"):
             cvss_parts.append(f"A:{cvss_breakdown['availability']}")
         if cvss_parts:
-            text.append("CVSS Vector: ", style=field_style)
+            text.append("CVSS 向量: ", style=field_style)
             text.append("/".join(cvss_parts), style="dim")
 
     dependency_metadata = report.get("dependency_metadata") or {}
@@ -137,65 +137,65 @@ def format_vulnerability_report(report: dict[str, Any]) -> Text:  # noqa: PLR091
         contextual_vector = dependency_metadata.get("contextual_cvss_vector")
         if contextual_vector:
             text.append("\n\n")
-            text.append("Contextual CVSS Vector: ", style=field_style)
+            text.append("情境 CVSS 向量: ", style=field_style)
             text.append(contextual_vector, style="dim")
 
         advisory_cvss = dependency_metadata.get("advisory_cvss")
         if advisory_cvss is not None and advisory_cvss != report.get("cvss"):
             text.append("\n\n")
-            text.append("Advisory CVSS: ", style=field_style)
+            text.append("公告 CVSS: ", style=field_style)
             text.append(f"{float(advisory_cvss):.1f}", style="dim")
 
         contextual_reasoning = dependency_metadata.get("contextual_cvss_reasoning")
         if contextual_reasoning:
             text.append("\n\n")
-            text.append("Contextual CVSS Reasoning", style=field_style)
+            text.append("情境 CVSS 判定理由", style=field_style)
             text.append("\n")
             text.append(contextual_reasoning)
 
     description = report.get("description")
     if description:
         text.append("\n\n")
-        text.append("Description", style=field_style)
+        text.append("說明", style=field_style)
         text.append("\n")
         text.append(description)
 
     impact = report.get("impact")
     if impact:
         text.append("\n\n")
-        text.append("Impact", style=field_style)
+        text.append("影響", style=field_style)
         text.append("\n")
         text.append(impact)
 
     technical_analysis = report.get("technical_analysis")
     if technical_analysis:
         text.append("\n\n")
-        text.append("Technical Analysis", style=field_style)
+        text.append("技術分析", style=field_style)
         text.append("\n")
         text.append(technical_analysis)
 
     poc_description = report.get("poc_description")
     if poc_description:
         text.append("\n\n")
-        text.append("PoC Description", style=field_style)
+        text.append("PoC 說明", style=field_style)
         text.append("\n")
         text.append(poc_description)
 
     poc_script_code = report.get("poc_script_code")
     if poc_script_code:
         text.append("\n\n")
-        text.append("PoC Code", style=field_style)
+        text.append("PoC 程式碼", style=field_style)
         text.append("\n")
         text.append(poc_script_code, style="dim")
 
     code_locations = report.get("code_locations")
     if code_locations:
         text.append("\n\n")
-        text.append("Code Locations", style=field_style)
+        text.append("程式碼位置", style=field_style)
         for i, loc in enumerate(code_locations):
             text.append("\n\n")
-            text.append(f"  Location {i + 1}: ", style="dim")
-            text.append(loc.get("file", "unknown"), style="bold")
+            text.append(f"  位置 {i + 1}: ", style="dim")
+            text.append(loc.get("file", "未知"), style="bold")
             start = loc.get("start_line")
             end = loc.get("end_line")
             if start is not None:
@@ -209,7 +209,7 @@ def format_vulnerability_report(report: dict[str, Any]) -> Text:  # noqa: PLR091
                 text.append("\n  ")
                 text.append(loc["snippet"], style="dim")
             if loc.get("fix_before") or loc.get("fix_after"):
-                text.append("\n  Fix:")
+                text.append("\n  修正:")
                 if loc.get("fix_before"):
                     text.append("\n  - ", style="dim")
                     text.append(loc["fix_before"], style="dim")
@@ -220,7 +220,7 @@ def format_vulnerability_report(report: dict[str, Any]) -> Text:  # noqa: PLR091
     remediation_steps = report.get("remediation_steps")
     if remediation_steps:
         text.append("\n\n")
-        text.append("Remediation", style=field_style)
+        text.append("修補建議", style=field_style)
         text.append("\n")
         text.append(remediation_steps)
 
@@ -237,7 +237,7 @@ def _build_vulnerability_stats(stats_text: Text, report_state: Any) -> None:
             if severity in severity_counts:
                 severity_counts[severity] += 1
 
-        stats_text.append("Vulnerabilities  ", style="bold red")
+        stats_text.append("漏洞  ", style="bold red")
 
         severity_parts = []
         for severity in ["critical", "high", "medium", "low", "info"]:
@@ -254,14 +254,14 @@ def _build_vulnerability_stats(stats_text: Text, report_state: Any) -> None:
             if i < len(severity_parts) - 1:
                 stats_text.append(" | ", style="dim white")
 
-        stats_text.append(" (Total: ", style="dim white")
+        stats_text.append("（總計: ", style="dim white")
         stats_text.append(str(vuln_count), style="bold yellow")
-        stats_text.append(")", style="dim white")
+        stats_text.append("）", style="dim white")
         stats_text.append("\n")
     else:
-        stats_text.append("Vulnerabilities  ", style="bold #22c55e")
+        stats_text.append("漏洞  ", style="bold #22c55e")
         stats_text.append("0", style="bold white")
-        stats_text.append(" (No exploitable vulnerabilities detected)", style="dim green")
+        stats_text.append("（未偵測到可利用的漏洞）", style="dim green")
         stats_text.append("\n")
 
 
@@ -326,14 +326,14 @@ def _build_llm_usage_stats(
     usage = _llm_usage(report_state)
     if not usage or _int_stat(usage, "requests") <= 0:
         stats_text.append("\n")
-        stats_text.append("Cost ", style="dim")
+        stats_text.append("費用 ", style="dim")
         if subscription:
             stats_text.append("$0.00 ", style="#22c55e")
-            stats_text.append("(subscription) ", style="dim")
+            stats_text.append("（訂閱）", style="dim")
         else:
             stats_text.append("$0.0000 ", style="#fbbf24")
         stats_text.append("· ", style="dim white")
-        stats_text.append("Tokens ", style="dim")
+        stats_text.append("Token 數 ", style="dim")
         stats_text.append("0", style="white")
         return
 
@@ -343,27 +343,27 @@ def _build_llm_usage_stats(
     cost = _float_stat(usage, "cost")
 
     stats_text.append("\n")
-    stats_text.append("Input Tokens ", style="dim")
+    stats_text.append("輸入 Token ", style="dim")
     stats_text.append(format_token_count(input_tokens), style="white")
 
     if live or cached_tokens > 0:
         stats_text.append("  ·  ", style="dim white")
-        stats_text.append("Cached Tokens ", style="dim")
+        stats_text.append("快取 Token ", style="dim")
         stats_text.append(format_token_count(cached_tokens), style="white")
 
     separator = "\n" if live else "  ·  "
     stats_text.append(separator, style="dim white")
-    stats_text.append("Output Tokens ", style="dim")
+    stats_text.append("輸出 Token ", style="dim")
     stats_text.append(format_token_count(output_tokens), style="white")
 
     if subscription:
         stats_text.append("  ·  ", style="dim white")
-        stats_text.append("Cost ", style="dim")
+        stats_text.append("費用 ", style="dim")
         stats_text.append("$0.00", style="#22c55e")
-        stats_text.append(" (subscription)", style="dim")
+        stats_text.append("（訂閱）", style="dim")
     elif live or cost > 0:
         stats_text.append("  ·  ", style="dim white")
-        stats_text.append("Cost ", style="dim")
+        stats_text.append("費用 ", style="dim")
         stats_text.append(f"${cost:.4f}", style="#fbbf24")
 
 
@@ -383,16 +383,16 @@ def build_live_stats_text(report_state: Any) -> Text:
     if not report_state:
         return stats_text
 
-    model = load_settings().llm.model or "unknown"
-    stats_text.append("Model ", style="dim")
+    model = load_settings().llm.model or "未設定"
+    stats_text.append("模型 ", style="dim")
     stats_text.append(str(model), style="white")
     if is_subscription_run(report_state):
         stats_text.append("  ·  ", style="dim white")
-        stats_text.append("ChatGPT subscription", style="#22c55e")
+        stats_text.append("ChatGPT 訂閱", style="#22c55e")
     stats_text.append("\n")
 
     vuln_count = len(report_state.vulnerability_reports)
-    stats_text.append("Vulnerabilities ", style="dim")
+    stats_text.append("漏洞數 ", style="dim")
     stats_text.append(f"{vuln_count}", style="white")
     stats_text.append("\n")
     if vuln_count > 0:
@@ -429,12 +429,12 @@ def build_tui_stats_text(report_state: Any) -> Text:
     if not report_state:
         return stats_text
 
-    model = load_settings().llm.model or "unknown"
+    model = load_settings().llm.model or "未設定"
     stats_text.append(str(model), style="white")
     subscription = is_subscription_run(report_state)
     if subscription:
         stats_text.append("\n")
-        stats_text.append("ChatGPT subscription", style="#22c55e")
+        stats_text.append("ChatGPT 訂閱", style="#22c55e")
 
     usage = _llm_usage(report_state)
     if usage and _int_stat(usage, "total_tokens") > 0:
@@ -1607,13 +1607,13 @@ def check_docker_connection() -> Any:
         report_error("docker_unavailable", exc.cause)
         console = Console()
         error_text = Text()
-        error_text.append("DOCKER NOT AVAILABLE", style="bold red")
+        error_text.append("Docker 無法使用", style="bold red")
         error_text.append("\n\n", style="white")
-        error_text.append(f"Cannot connect to Docker at {exc.endpoint.label}.\n", style="white")
+        error_text.append(f"無法連線到 {exc.endpoint.label} 上的 Docker。\n", style="white")
         error_text.append(f"{exc.detail}\n\n", style="dim red")
         error_text.append(
-            "Make sure Docker is running. If `docker info` works in this shell, strix uses "
-            "the same daemon. Otherwise set DOCKER_HOST.\n",
+            "請確認 Docker 正在執行。若這個 shell 裡 `docker info` 能正常運作，"
+            "strix 會使用同一個 daemon；否則請設定 DOCKER_HOST。\n",
             style="white",
         )
 
@@ -1663,7 +1663,7 @@ def process_pull_line(
         total = len(layers_info)
 
         if total > 0:
-            update_msg = f"[bold cyan]Progress: {completed}/{total} layers complete"
+            update_msg = f"[bold cyan]進度: {completed}/{total} 層完成"
             if update_msg != last_update:
                 status.update(update_msg)
                 return update_msg
@@ -1671,11 +1671,11 @@ def process_pull_line(
     elif "status" in line and "id" not in line:
         global_status = line["status"]
         if "Pulling from" in global_status:
-            status.update("[bold cyan]Fetching image manifest...")
+            status.update("[bold cyan]正在取得映像 manifest...")
         elif "Digest:" in global_status:
-            status.update("[bold cyan]Verifying image...")
+            status.update("[bold cyan]正在驗證映像...")
         elif "Status:" in global_status:
-            status.update("[bold cyan]Finalizing...")
+            status.update("[bold cyan]正在收尾...")
 
     return last_update
 
@@ -1685,22 +1685,22 @@ def validate_config_file(config_path: str) -> Path:
     path = Path(config_path)
 
     if not path.exists():
-        console.print(f"[bold red]Error:[/] Config file not found: {config_path}")
+        console.print(f"[bold red]錯誤:[/] 找不到設定檔: {config_path}")
         sys.exit(1)
 
     if path.suffix != ".json":
-        console.print("[bold red]Error:[/] Config file must be a .json file")
+        console.print("[bold red]錯誤:[/] 設定檔必須是 .json 檔案")
         sys.exit(1)
 
     try:
         with path.open("r", encoding="utf-8") as f:
             data = json.load(f)
     except json.JSONDecodeError as e:
-        console.print(f"[bold red]Error:[/] Invalid JSON in config file: {e}")
+        console.print(f"[bold red]錯誤:[/] 設定檔的 JSON 格式無效: {e}")
         sys.exit(1)
 
     if not isinstance(data, dict):
-        console.print("[bold red]Error:[/] Config file must contain a JSON object")
+        console.print("[bold red]錯誤:[/] 設定檔內容必須是 JSON 物件")
         sys.exit(1)
 
     if "env" not in data or not isinstance(data.get("env"), dict):
