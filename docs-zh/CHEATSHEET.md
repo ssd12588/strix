@@ -148,7 +148,10 @@ uv run strix --resume 2026-11-14_xxx     # 指定執行名稱
 | 推送（會推到 strix-zh-tw） | `git push origin main` |
 | 同步 `zh-TW` 分支 | `git checkout zh-TW; git merge --ff-only main; git push origin zh-TW; git checkout main` |
 | 抓上游更新 | `git fetch upstream` |
-| 合併上游 | `git merge upstream/main` |
+| **同步助手（建議）** | `.\scripts\sync-upstream.ps1`（只分析衝突風險，不改檔案） |
+| 首次補齊完整歷史 | `.\scripts\sync-upstream.ps1 -Unshallow` |
+| 真的執行合併 | `.\scripts\sync-upstream.ps1 -Merge` |
+| 合併失敗要還原 | `git merge --abort` |
 
 ---
 
