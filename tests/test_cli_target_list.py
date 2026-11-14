@@ -83,7 +83,7 @@ def test_parse_arguments_rejects_resume_with_target_list(
     with pytest.raises(SystemExit):
         cli_main.parse_arguments()
 
-    assert "Cannot combine --resume with --target/--target-list" in capsys.readouterr().err
+    assert "不能同時使用 --resume 與 --target/--target-list" in capsys.readouterr().err
 
 
 def _write_run_record(runs_dir: Path, run_name: str, record: dict[str, Any]) -> None:
@@ -187,7 +187,7 @@ def test_resume_rejects_an_edited_workspace_file_path(
     with pytest.raises(SystemExit):
         cli_main.parse_arguments()
 
-    assert "invalid workspace file" in capsys.readouterr().err
+    assert "工作區檔案無效" in capsys.readouterr().err
 
 
 def test_resume_reports_a_missing_workspace_directory(
@@ -209,7 +209,7 @@ def test_resume_reports_a_missing_workspace_directory(
     with pytest.raises(SystemExit):
         cli_main.parse_arguments()
 
-    assert "is missing" in capsys.readouterr().err
+    assert "不存在" in capsys.readouterr().err
 
 
 def test_resume_still_requires_targets_or_a_workspace(
@@ -226,7 +226,7 @@ def test_resume_still_requires_targets_or_a_workspace(
     with pytest.raises(SystemExit):
         cli_main.parse_arguments()
 
-    assert "has no targets_info" in capsys.readouterr().err
+    assert "內沒有 targets_info" in capsys.readouterr().err
 
 
 def test_resume_non_object_run_json_exits(
@@ -243,5 +243,5 @@ def test_resume_non_object_run_json_exits(
 
     assert exc_info.value.code == 2
     captured = capsys.readouterr()
-    assert "run.json unreadable" in captured.err
+    assert "run.json 無法讀取" in captured.err
     assert "not an object" in captured.err

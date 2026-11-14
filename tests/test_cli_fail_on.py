@@ -111,7 +111,7 @@ def test_parse_fail_on_requires_non_interactive(
     with pytest.raises(SystemExit):
         cli_main.parse_arguments()
 
-    assert "--fail-on only applies to headless runs" in capsys.readouterr().err
+    assert "--fail-on 僅適用於無介面執行" in capsys.readouterr().err
 
 
 def test_parse_fail_on_without_a_terminal_waits_for_the_headless_fallback(

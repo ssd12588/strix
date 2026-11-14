@@ -158,7 +158,7 @@ def test_no_terminal_with_a_target_runs_headless_with_a_notice(
 
     assert calls == ["bootstrap", "cli"]
     assert args.non_interactive is True
-    assert "No terminal attached, running headless (same as -n)." in capsys.readouterr().out
+    assert "未連接終端機，改以無介面模式執行（等同 -n）。" in capsys.readouterr().out
 
 
 def test_no_terminal_fallback_keeps_the_fail_on_gate(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -204,9 +204,9 @@ def test_no_terminal_without_a_target_stops_with_the_headless_hint(
     assert exit_info.value.code == 1
     assert panels == [
         (
-            "NO TERMINAL ATTACHED",
-            "The interactive interface needs a terminal and no target was given.\n"
-            "Pass -t <target> -n to run headless.",
+            "未連接終端機",
+            "互動介面需要終端機，但沒有提供任何目標。\n"
+            "請加上 -t <目標> -n 以無介面模式執行。",
         )
     ]
     assert args.non_interactive is False
@@ -287,9 +287,9 @@ def test_tui_process_dying_after_startup_prints_a_panel_instead_of_a_traceback(
     assert calls == ["bootstrap", "cleanup:failed"]
     assert panels == [
         (
-            "INTERACTIVE INTERFACE STOPPED",
-            "Bubble Tea TUI exited with status 1.\n"
-            "If Strix runs without a terminal (CI, nohup, pipes), pass -n to run headless.",
+            "互動介面已停止",
+            "Bubble Tea TUI exited with status 1。\n"
+            "若 Strix 在沒有終端機的環境執行（CI、nohup、管線），請加上 -n 以無介面模式執行。",
         )
     ]
 

@@ -79,7 +79,7 @@ def test_bare_resume_with_no_runs_is_an_error(
     with pytest.raises(SystemExit):
         cli_main.parse_arguments()
 
-    assert "no runs in ./strix_runs" in capsys.readouterr().err
+    assert "中沒有可恢復的執行記錄" in capsys.readouterr().err
 
 
 def test_bare_resume_headless_lists_the_runs_instead_of_prompting(
@@ -94,7 +94,7 @@ def test_bare_resume_headless_lists_the_runs_instead_of_prompting(
         cli_main.parse_arguments()
 
     err = capsys.readouterr().err
-    assert "--resume needs a run name in headless mode" in err
+    assert "--resume 在無介面模式下需要指定執行名稱" in err
     assert "example-com_1111  completed  2026-10-04T10:00:00  https://example.com" in err
     assert "example-com_2222  completed  2026-10-04T10:00:00  https://example.com" in err
     assert "example-com_2222" in err
@@ -110,7 +110,7 @@ def test_bare_resume_still_rejects_targets(
     with pytest.raises(SystemExit):
         cli_main.parse_arguments()
 
-    assert "Cannot combine --resume with --target" in capsys.readouterr().err
+    assert "不能同時使用 --resume 與 --target" in capsys.readouterr().err
 
 
 def test_named_resume_without_agent_state_is_an_error(
@@ -123,4 +123,4 @@ def test_named_resume_without_agent_state_is_an_error(
     with pytest.raises(SystemExit):
         cli_main.parse_arguments()
 
-    assert "never reached its first agent snapshot" in capsys.readouterr().err
+    assert "但從未產生第一份代理快照" in capsys.readouterr().err
