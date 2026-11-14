@@ -1,115 +1,115 @@
 ---
-title: "Introduction"
-description: "Open-source AI hackers to secure your apps"
+title: "簡介"
+description: "開源 AI 駭客，為你的應用程式把關"
 ---
 
-Strix are autonomous AI agents that act like real hackers—they run your code dynamically, find vulnerabilities, and validate them with proof-of-concepts. Built for developers and security teams who need fast, accurate security testing without the overhead of manual pentesting or the false positives of static analysis tools.
+Strix 是一群自主運作的 AI 代理，行為就像真正的駭客 —— 它們會動態執行程式碼、找出漏洞，並用概念驗證（PoC）確認漏洞真的可利用。它為需要快速、準確安全測試的開發者與安全團隊而打造，免去人工滲透測試的沉重負擔，也沒有靜態分析工具常見的誤報。
 
 <Frame>
-  <img src="/images/screenshot.png" alt="Strix Demo" />
+  <img src="/images/screenshot.png" alt="Strix 示範" />
 </Frame>
 
 <CardGroup cols={2}>
-  <Card title="Quick Start" icon="rocket" href="/quickstart">
-    Install and run your first scan in minutes.
+  <Card title="快速開始" icon="rocket" href="/quickstart">
+    幾分鐘內完成安裝並執行第一次掃描。
   </Card>
-  <Card title="CLI Reference" icon="terminal" href="/usage/cli">
-    Learn all command-line options.
+  <Card title="CLI 參考" icon="terminal" href="/usage/cli">
+    了解所有命令列選項。
   </Card>
-  <Card title="Tools" icon="wrench" href="/tools/overview">
-    Explore the security testing toolkit.
+  <Card title="工具" icon="wrench" href="/tools/overview">
+    探索安全測試工具箱。
   </Card>
   <Card title="GitHub Actions" icon="github" href="/integrations/github-actions">
-    Integrate into your CI/CD pipeline.
+    整合進你的 CI/CD 流程。
   </Card>
 </CardGroup>
 
-## Use Cases
+## 適用場景
 
-- **Application Security Testing** — Detect and validate critical vulnerabilities in your applications
-- **Rapid Penetration Testing** — Get penetration tests done in hours, not weeks
-- **Bug Bounty Automation** — Automate research and generate PoCs for faster reporting
-- **CI/CD Integration** — Block vulnerabilities before they reach production
+- **應用程式安全測試** —— 偵測並驗證應用程式中的重大漏洞
+- **快速滲透測試** —— 幾小時內完成滲透測試，而非幾週
+- **Bug Bounty 自動化** —— 自動化研究並產生 PoC，加快回報速度
+- **CI/CD 整合** —— 在上線前攔下漏洞
 
-## Key Capabilities
+## 核心能力
 
-- **Full hacker toolkit** — Browser automation, HTTP proxy, terminal, Python runtime
-- **Real validation** — PoCs, not false positives
-- **Multi-agent orchestration** — Specialized agents collaborate on complex targets
-- **Developer-first CLI** — Interactive TUI or headless mode for automation
+- **完整駭客工具箱** —— 瀏覽器自動化、HTTP 代理、終端機、Python 執行環境
+- **真實驗證** —— 產出可運作的 PoC，而不是誤報
+- **多代理協同** —— 專責代理在複雜目標上合作
+- **開發者優先的 CLI** —— 互動式 TUI 或適合自動化的無介面模式
 
-## Security Tools
+## 安全工具
 
-Strix agents come equipped with a comprehensive toolkit:
+Strix 代理配備完整的工具箱：
 
-| Tool | Purpose |
-|------|---------|
-| HTTP Proxy | Full request/response manipulation and analysis |
-| Browser Automation | Multi-tab browser for XSS, CSRF, auth flow testing |
-| Terminal | Interactive shells for command execution |
-| Python Runtime | Custom exploit development and validation |
-| Reconnaissance | Automated OSINT and attack surface mapping |
-| Code Analysis | Static and dynamic analysis capabilities |
+| 工具 | 用途 |
+|------|------|
+| HTTP 代理 | 完整操作與分析請求／回應 |
+| 瀏覽器自動化 | 多分頁瀏覽器，用於 XSS、CSRF、認證流程測試 |
+| 終端機 | 互動式 shell，用於執行指令 |
+| Python 執行環境 | 自訂利用程式開發與驗證 |
+| 偵察 | 自動化 OSINT 與攻擊面測繪 |
+| 程式碼分析 | 靜態與動態分析能力 |
 
-## Vulnerability Coverage
+## 漏洞涵蓋範圍
 
-| Category | Examples |
-|----------|----------|
-| Access Control | IDOR, privilege escalation, auth bypass |
-| Injection | SQL, NoSQL, command injection |
-| Server-Side | SSRF, XXE, deserialization |
-| Client-Side | XSS, prototype pollution, DOM vulnerabilities |
-| Business Logic | Race conditions, workflow manipulation |
-| Authentication | JWT vulnerabilities, session management |
-| Infrastructure | Misconfigurations, exposed services |
+| 類別 | 範例 |
+|------|------|
+| 存取控制 | IDOR、權限提升、認證繞過 |
+| 注入 | SQL、NoSQL、指令注入 |
+| 伺服器端 | SSRF、XXE、反序列化 |
+| 用戶端 | XSS、原型污染、DOM 漏洞 |
+| 業務邏輯 | 競態條件、流程竄改 |
+| 認證 | JWT 漏洞、工作階段管理 |
+| 基礎設施 | 錯誤設定、曝露的服務 |
 
-## Multi-Agent Architecture
+## 多代理架構
 
-Strix uses a graph of specialized agents for comprehensive security testing:
+Strix 使用專責代理組成的關係圖來進行全面的安全測試：
 
-- **Distributed Workflows** — Specialized agents for different attacks and assets
-- **Scalable Testing** — Parallel execution for fast comprehensive coverage
-- **Dynamic Coordination** — Agents collaborate and share discoveries
+- **分散式流程** —— 針對不同攻擊與資產的專責代理
+- **可擴展測試** —— 平行執行，快速且全面地涵蓋
+- **動態協調** —— 代理會合作並共享發現
 
-## Quick Example
+## 快速範例
 
 <CodeGroup>
 ```bash Vercel AI Gateway
-# Install
+# 安裝
 curl -sSL https://strix.ai/install | bash
 
-# Configure
+# 設定
 export STRIX_LLM="vercel_ai_gateway/zai/glm-5.3"
 export LLM_API_KEY="your-api-key"
 
-# Scan
+# 掃描
 strix --target ./your-app
 ```
 
 ```bash OpenRouter
-# Install
+# 安裝
 curl -sSL https://strix.ai/install | bash
 
-# Configure
+# 設定
 export STRIX_LLM="openrouter/z-ai/glm-5.3"
 export LLM_API_KEY="your-api-key"
 
-# Scan
+# 掃描
 strix --target ./your-app
 ```
 </CodeGroup>
 
-## Community
+## 社群
 
 <CardGroup cols={2}>
   <Card title="Discord" icon="discord" href="https://discord.gg/strix-ai">
-    Join the community for help and discussion.
+    加入社群尋求協助與討論。
   </Card>
   <Card title="GitHub" icon="github" href="https://github.com/usestrix/strix">
-    Star the repo and contribute.
+    給專案一個 Star 並參與貢獻。
   </Card>
 </CardGroup>
 
 <Warning>
-Only test applications you own or have explicit permission to test.
+僅對你擁有、或已取得明確授權的應用程式進行測試。
 </Warning>

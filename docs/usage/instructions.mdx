@@ -1,55 +1,55 @@
 ---
-title: "Custom Instructions"
-description: "Guide Strix with custom testing instructions"
+title: "自訂指令"
+description: "用自訂測試指令引導 Strix"
 ---
 
-Use instructions to provide context, credentials, or focus areas for your scan.
+使用指令可為掃描提供背景資訊、帳號密碼或關注範圍。
 
-## Inline Instructions
+## 直接寫在命令列
 
 ```bash
 strix --target https://app.com --instruction "Focus on authentication vulnerabilities"
 ```
 
-## File-Based Instructions
+## 從檔案讀取指令
 
-For complex instructions, use a file:
+指令較複雜時，可改用檔案：
 
 ```bash
 strix --target https://app.com --instruction-file ./pentest-instructions.md
 ```
 
-## Common Use Cases
+## 常見用法
 
-### Authenticated Testing
+### 認證測試
 
 ```bash
 strix --target https://app.com \
   --instruction "Login with email: test@example.com, password: TestPass123"
 ```
 
-### Focused Scope
+### 限定範圍
 
 ```bash
 strix --target https://api.example.com \
   --instruction "Focus on IDOR vulnerabilities in the /api/users endpoints"
 ```
 
-### Exclusions
+### 排除範圍
 
 ```bash
 strix --target https://app.com \
   --instruction "Do not test /admin or /internal endpoints"
 ```
 
-### API Testing
+### API 測試
 
 ```bash
 strix --target https://api.example.com \
   --instruction "Use API key header: X-API-Key: abc123. Focus on rate limiting bypass."
 ```
 
-## Instruction File Example
+## 指令檔範例
 
 ```markdown instructions.md
 # Penetration Test Instructions
@@ -69,21 +69,18 @@ strix --target https://api.example.com \
 ```
 
 <Tip>
-Be specific. Good instructions help Strix prioritize the most valuable attack paths.
+指令要具體。好的指令能幫 Strix 優先處理最有價值的攻擊路徑。
 </Tip>
 
-## Workspace files
+## 工作區檔案
 
-Instructions become part of the prompt. To give Strix a file to work with, such
-as a wordlist, an API specification, or notes, use `--workspace-file`. Strix
-places the file into the sandbox workspace before the scan starts.
+指令會成為提示詞的一部分。若要讓 Strix 有檔案可用（例如字典檔、API 規格或筆記），請使用 `--workspace-file`。Strix 會在掃描開始前把檔案放進沙箱工作區。
 
 ```bash
 strix --target https://app.com --workspace-file ./wordlist.txt
 ```
 
-The file lands at `/workspace/<file name>`. To choose the destination, write
-`PATH:DEST`. `DEST` is a path inside `/workspace`.
+檔案會放在 `/workspace/<檔案名稱>`。若要指定目的路徑，請寫成 `PATH:DEST`，其中 `DEST` 是 `/workspace` 內的路徑。
 
 ```bash
 strix --target https://app.com \
@@ -91,24 +88,19 @@ strix --target https://app.com \
   --workspace-file ./notes.md
 ```
 
-Repeat the option for every file you want to place. Strix lists the files in the
-agent task, so the agent knows where to read them.
+每個要放入的檔案都請重複指定此選項。Strix 會在代理任務中列出這些檔案，代理才知道要到哪裡讀取。
 
-Rules that apply to every workspace file:
+所有工作區檔案都適用以下規則：
 
-- Strix copies the file into the sandbox. The agent can edit the copy, but the
-  file on your machine does not change.
-- The destination must stay inside `/workspace`.
-- The destination must not fall inside a target directory, because target files
-  come from the target itself. Strix skips such a file and logs a warning.
-- Two files cannot claim the same destination.
+- Strix 會把檔案複製進沙箱。代理可以編輯副本，但你機器上的原檔案不會改變。
+- 目的路徑必須位於 `/workspace` 內。
+- 目的路徑不得落在目標目錄內，因為目標檔案來自目標本身。Strix 會略過這類檔案並記錄警告。
+- 兩個檔案不能使用相同的目的路徑。
 
 <Note>
-A workspace file is data for the agent to use. It is not a scan target, and its
-contents do not change the instructions.
+工作區檔案是給代理使用的資料，不是掃描目標，其內容也不會改變指令。
 </Note>
 
 <Warning>
-Do not place secrets in a workspace file. The sandbox runs untrusted target
-code, so treat anything you place there as readable by the target.
+不要在工作區檔案中放置機密資訊。沙箱會執行不受信任的目標程式碼，因此請把你放進去的任何內容視為目標可讀取。
 </Warning>

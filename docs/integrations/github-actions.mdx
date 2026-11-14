@@ -1,11 +1,11 @@
 ---
 title: "GitHub Actions"
-description: "Run Strix security scans on every pull request"
+description: "在每個 Pull Request 上執行 Strix 安全掃描"
 ---
 
-Integrate Strix into your GitHub workflow to catch vulnerabilities before they reach production.
+把 Strix 整合進你的 GitHub 流程，在上線前攔下漏洞。
 
-## Basic Workflow
+## 基本工作流程
 
 ```yaml .github/workflows/security.yml
 name: Security Scan
@@ -31,38 +31,38 @@ jobs:
         run: strix -n -t ./ --scan-mode quick
 ```
 
-## Required Secrets
+## 必要的 Secrets
 
-Add these secrets to your repository:
+請在儲存庫中加入以下 secrets：
 
-| Secret | Description |
+| Secret | 說明 |
 |--------|-------------|
-| `STRIX_LLM` | Model name (e.g., `openrouter/z-ai/glm-5.3`) |
-| `LLM_API_KEY` | API key for your LLM provider |
+| `STRIX_LLM` | 模型名稱（例如 `openrouter/z-ai/glm-5.3`） |
+| `LLM_API_KEY` | 你的 LLM 供應商 API 金鑰 |
 
-## Exit Codes
+## 結束碼
 
-The workflow fails when vulnerabilities are found:
+發現漏洞時，該工作流程會失敗：
 
-| Code | Result |
+| 代碼 | 結果 |
 |------|--------|
-| 0 | Pass — No vulnerabilities (with `--fail-on`, none at or above the threshold) |
-| 2 | Fail — Vulnerabilities found |
+| 0 | 通過 —— 沒有漏洞（使用 `--fail-on` 時，代表沒有達到或超過門檻的發現） |
+| 2 | 失敗 —— 發現漏洞 |
 
-Add `--fail-on high` (or `critical`, `medium`, `low`) to fail only on findings at or above that severity. Lower findings still appear in the report, so a passing run is not necessarily finding-free.
+加上 `--fail-on high`（或 `critical`、`medium`、`low`）可只在達到該嚴重度以上時才失敗。較輕微的發現仍會出現在報告中，因此「通過」不代表完全沒有發現。
 
-## Scan Modes for CI
+## CI 用的掃描模式
 
-| Mode | Duration | Use Case |
+| 模式 | 耗時 | 使用時機 |
 |------|----------|----------|
-| `quick` | Minutes | Every PR |
-| `standard` | ~30 min | Nightly builds |
-| `deep` | 1-4 hours | Release candidates |
+| `quick` | 數分鐘 | 每個 PR |
+| `standard` | 約 30 分鐘 | 每晚建置 |
+| `deep` | 1–4 小時 | 候選發行版 |
 
 <Tip>
-Use `quick` mode for PRs to keep feedback fast. Schedule `deep` scans nightly.
+PR 請使用 `quick` 模式以保持回饋速度；`deep` 掃描可安排在每晚執行。
 </Tip>
 
 <Note>
-For pull_request workflows, Strix automatically uses changed-files diff-scope in CI/headless runs. If diff resolution fails, ensure full history is fetched (`fetch-depth: 0`) or set `--diff-base`.
+對於 pull_request 工作流程，Strix 會在 CI／無介面執行時自動使用變更檔案的 diff 範圍。若 diff 解析失敗，請確認有抓取完整歷史（`fetch-depth: 0`），或設定 `--diff-base`。
 </Note>

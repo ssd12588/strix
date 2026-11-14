@@ -1,49 +1,49 @@
 ---
-title: "Local Web Viewer"
-description: "Browse a run in a local dashboard with strix view"
+title: "本機 Web 檢視器"
+description: "用 strix view 在本機儀表板中檢視一次執行"
 ---
 
-Every scan writes its results to disk as it runs. `strix view` serves those files in a local dashboard, for a live run or a finished one.
+每次掃描在執行過程中都會把結果寫入磁碟。`strix view` 會把這些檔案以本機儀表板呈現，無論是執行中的掃描或已完成的掃描皆可。
 
 ```bash
-strix view                                    # the most recent run
-strix view my-run-name                        # a specific run under ./strix_runs
+strix view                                    # 最近一次執行
+strix view my-run-name                        # ./strix_runs 下指定的執行
 strix view --host 0.0.0.0 --port 8080 --no-open
 ```
 
-The UI ships prebuilt with Strix, so there is no extra install and no JavaScript build step. The dashboard reads the run files straight off disk. Nothing leaves your machine, and you do not need a cloud account.
+介面已隨 Strix 預先建置好，不需要額外安裝，也不需要 JavaScript 建置步驟。儀表板直接從磁碟讀取執行檔案。所有資料都留在你的機器上，也不需要雲端帳號。
 
-## Options
+## 選項
 
 <ParamField path="run" type="string">
-  Run name under `./strix_runs`. Defaults to the most recent run.
+  `./strix_runs` 下的執行名稱。預設為最近一次執行。
 </ParamField>
 
 <ParamField path="--host" type="string" default="127.0.0.1">
-  Host to bind to. Use `0.0.0.0` to reach the viewer from other machines.
+  要綁定的主機位址。使用 `0.0.0.0` 可讓其他機器連上檢視器。
 </ParamField>
 
 <ParamField path="--port" type="number" default="0">
-  Port to serve on. The default selects an available ephemeral port.
+  要服務的連接埠。預設會自動挑選一個可用的臨時連接埠。
 </ParamField>
 
 <ParamField path="--no-open" type="boolean">
-  Do not open the browser automatically.
+  不要自動開啟瀏覽器。
 </ParamField>
 
-## What Is In The Dashboard
+## 儀表板包含什麼
 
-- **Overview** — run status, target, and a severity breakdown of everything found so far.
-- **Vulnerabilities** — each validated finding with its severity, details, and reproduction steps.
-- **Agent graph** — a live map of the multi-agent team, and what each agent is doing.
-- **Steering** — send instructions to a live scan to redirect the agents during the run. Steering works only in the dashboard the running scan opens. A standalone `strix view` has no live scan to steer.
-- **History** — browse past runs on this machine and move between them. Verify your email address in the dashboard to unlock the other runs.
-- **Reports** — generate a shareable report and send it by email. Verify your email address first.
+- **總覽** —— 執行狀態、目標，以及目前為止所有發現的嚴重度分布。
+- **漏洞** —— 每個經驗證的發現，含嚴重度、細節與重現步驟。
+- **代理關係圖** —— 多代理團隊的即時地圖，以及每個代理正在做什麼。
+- **引導（Steering）** —— 對執行中的掃描送出指令，在過程中導引代理。引導功能只在執行中掃描所開啟的儀表板可用；獨立執行的 `strix view` 沒有可引導的即時掃描。
+- **歷史** —— 瀏覽本機上的過往執行並切換。請先在儀表板驗證電子郵件，才能解鎖其他執行紀錄。
+- **報告** —— 產生可分享的報告並以電子郵件寄送。需先驗證電子郵件。
 
-## Sharing The Link
+## 分享連結
 
 <Warning>
-  The token in the printed URL grants access to the run data, and to the steering of a live scan. Share it only with trusted users.
+  列印出的網址含有權杖，持有即可存取執行資料，也能對執行中的掃描進行引導。請只分享給可信任的使用者。
 </Warning>
 
-To reach the viewer from another machine, start it with `--host 0.0.0.0` and replace `0.0.0.0` in the printed URL with a reachable IP address or hostname. Restrict the port with your firewall. A request without the token-derived session cannot read run data.
+若要從其他機器連上檢視器，請以 `--host 0.0.0.0` 啟動，並把列印網址中的 `0.0.0.0` 換成可連線的 IP 或主機名稱，再用防火牆限制連接埠。沒有權杖衍生的工作階段，請求就無法讀取執行資料。

@@ -1,65 +1,65 @@
 ---
-title: "Terminal"
-description: "Bash shell for running commands and security tools"
+title: "終端機"
+description: "用於執行指令與安全工具的 Bash shell"
 ---
 
-Strix has access to a persistent bash terminal running inside the Docker sandbox. This gives the agent access to all [pre-installed security tools](/tools/sandbox).
+Strix 可在 Docker 沙箱內使用常駐的 bash 終端機，因此代理能存取所有[預先安裝的安全工具](/tools/sandbox)。
 
-## Capabilities
+## 能力
 
-| Feature           | Description                                                |
+| 特性           | 說明                                                |
 | ----------------- | ---------------------------------------------------------- |
-| Persistent state  | Working directory and environment persist between commands |
-| Multiple sessions | Run parallel terminals for concurrent operations           |
-| Background jobs   | Start long-running processes without blocking              |
-| Interactive       | Respond to prompts and control running processes           |
+| 狀態保留  | 工作目錄與環境變數會在指令之間保留 |
+| 多個工作階段 | 可同時執行多個終端機以並行作業           |
+| 背景作業   | 啟動長時間執行的程序而不阻塞              |
+| 互動式       | 可回應提示並控制執行中的程序           |
 
-## Common Uses
+## 常見用途
 
-### Running Security Tools
+### 執行安全工具
 
 ```bash
-# Subdomain enumeration
+# 子網域列舉
 subfinder -d example.com
 
-# Vulnerability scanning
+# 漏洞掃描
 nuclei -u https://example.com
 
-# SQL injection testing
+# SQL 注入測試
 sqlmap -u "https://example.com/page?id=1"
 ```
 
-### Code Analysis
+### 程式碼分析
 
 ```bash
-# Fast SAST triage
+# 快速 SAST 篩選
 opengrep scan --config /opt/opengrep-rules ./src
 
-# Structural AST search
+# 結構化 AST 搜尋
 sg scan ./src
 
-# Secret detection
+# 機密偵測
 gitleaks detect --source ./
 trufflehog filesystem ./
 
-# Supply-chain and misconfiguration checks
+# 供應鏈與錯誤設定檢查
 trivy fs ./
 ```
 
-### Custom Scripts
+### 自訂腳本
 
 ```bash
-# Run Python exploits
+# 執行 Python 利用程式
 python3 exploit.py
 
-# Execute shell scripts
+# 執行 shell 腳本
 ./test_auth_bypass.sh
 ```
 
-## Session Management
+## 工作階段管理
 
-The agent can run multiple terminal sessions concurrently, for example:
+代理可以同時執行多個終端機工作階段，例如：
 
-- Main session for primary testing
-- Secondary session for monitoring
-- Background processes for servers or watchers
+- 主要工作階段負責主要測試
+- 次要工作階段負責監控
+- 背景程序用於伺服器或監看程式

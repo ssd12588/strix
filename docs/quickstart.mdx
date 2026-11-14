@@ -1,14 +1,14 @@
 ---
-title: "Quick Start"
-description: "Install Strix and run your first security scan"
+title: "快速開始"
+description: "安裝 Strix 並執行你的第一次安全掃描"
 ---
 
-## Prerequisites
+## 先決條件
 
-- Docker (running)
-- An LLM API key from any [supported provider](/llm-providers/overview) (OpenAI, Anthropic, Google, etc.)
+- Docker（需正在執行）
+- 任一[支援的供應商](/llm-providers/overview)的 LLM API 金鑰（OpenAI、Anthropic、Google 等）
 
-## Installation
+## 安裝
 
 <Tabs>
   <Tab title="curl">
@@ -23,9 +23,9 @@ description: "Install Strix and run your first security scan"
   </Tab>
 </Tabs>
 
-## Configuration
+## 設定
 
-Set your LLM provider. We recommend GLM-5.3 through [Vercel AI Gateway](/llm-providers/vercel-ai-gateway) or [OpenRouter](/llm-providers/openrouter):
+設定你的 LLM 供應商。建議透過 [Vercel AI Gateway](/llm-providers/vercel-ai-gateway) 或 [OpenRouter](/llm-providers/openrouter) 使用 GLM-5.3：
 
 <CodeGroup>
 ```bash Vercel AI Gateway
@@ -40,47 +40,47 @@ export LLM_API_KEY="your-api-key"
 </CodeGroup>
 
 <Tip>
-For best results, use `zai/glm-5.3`, `deepseek/deepseek-v4.1-flash-1017`, `anthropic/claude-opus-5-5` (needs [CVP](https://support.claude.com/en/articles/14604842-cyber-verification-program) access), or `openai/gpt-6.1-sol` (needs [Daybreak](https://openai.com/daybreak/) access).
+為取得最佳效果，請使用 `zai/glm-5.3`、`deepseek/deepseek-v4.1-flash-1017`、`anthropic/claude-opus-5-5`（需具備 [CVP](https://support.claude.com/en/articles/14604842-cyber-verification-program) 存取權），或 `openai/gpt-6.1-sol`（需具備 [Daybreak](https://openai.com/daybreak/) 存取權）。
 </Tip>
 
-## Run Your First Scan
+## 執行第一次掃描
 
 ```bash
 strix --target ./your-app
 ```
 
 <Note>
-First run pulls the Docker sandbox image automatically. Results are saved to `strix_runs/<run-name>`.
+第一次執行會自動拉取 Docker 沙箱映像。結果會儲存在 `strix_runs/<run-name>`。
 </Note>
 
-## Target Types
+## 目標類型
 
-Strix accepts multiple target types:
+Strix 接受多種目標類型：
 
 ```bash
-# Local codebase
+# 本機程式庫
 strix --target ./app-directory
 
-# GitHub repository
+# GitHub 儲存庫
 strix --target https://github.com/org/repo
 
-# Live web application
+# 線上 Web 應用程式
 strix --target https://your-app.com
 
-# Multiple targets (white-box testing)
+# 多個目標（白箱測試）
 strix -t https://github.com/org/repo -t https://your-app.com
 
-# Targets from a file, one target per non-empty, non-comment line
+# 從檔案讀取目標，每行一個（略過空行與註解行）
 strix --target-list ./targets.txt
 ```
 
-## Next Steps
+## 下一步
 
 <CardGroup cols={2}>
-  <Card title="CLI Options" icon="terminal" href="/usage/cli">
-    Explore all command-line options.
+  <Card title="CLI 選項" icon="terminal" href="/usage/cli">
+    探索所有命令列選項。
   </Card>
-  <Card title="Scan Modes" icon="gauge" href="/usage/scan-modes">
-    Choose the right scan depth.
+  <Card title="掃描模式" icon="gauge" href="/usage/scan-modes">
+    選擇合適的掃描深度。
   </Card>
 </CardGroup>

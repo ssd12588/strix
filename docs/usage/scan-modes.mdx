@@ -1,62 +1,62 @@
 ---
-title: "Scan Modes"
-description: "Choose the right scan depth for your use case"
+title: "掃描模式"
+description: "為你的使用情境選擇合適的掃描深度"
 ---
 
-Strix offers three scan modes to balance speed and thoroughness.
+Strix 提供三種掃描模式，用來平衡速度與徹底程度。
 
-## Quick
+## 快速（quick）
 
 ```bash
 strix --target ./app --scan-mode quick
 ```
 
-Fast checks for obvious vulnerabilities. Best for:
-- CI/CD pipelines
-- Pull request validation
-- Rapid smoke tests
+針對明顯漏洞的快速檢查。最適合：
+- CI/CD 流程
+- Pull Request 驗證
+- 快速煙霧測試
 
-**Duration**: Minutes
+**耗時**：數分鐘
 
-## Standard
+## 標準（standard）
 
 ```bash
 strix --target ./app --scan-mode standard
 ```
 
-Balanced testing for routine security reviews. Best for:
-- Regular security assessments
-- Pre-release validation
-- Development milestones
+例行安全檢視的均衡測試。最適合：
+- 定期安全評估
+- 發行前驗證
+- 開發里程碑
 
-**Duration**: 30 minutes to 1 hour
+**耗時**：30 分鐘至 1 小時
 
-**White-box behavior**: Uses source-aware mapping and static triage to prioritize dynamic exploit validation paths.
+**白箱行為**：使用原始碼感知的測繪與靜態初步篩選，優先找出值得動態驗證的利用路徑。
 
-## Deep
+## 深度（deep）
 
 ```bash
 strix --target ./app --scan-mode deep
 ```
 
-Thorough penetration testing. Best for:
-- Comprehensive security audits
-- Pre-production reviews
-- Critical application assessments
+徹底的滲透測試。最適合：
+- 全面安全稽核
+- 正式環境上線前檢視
+- 關鍵應用程式評估
 
-**Duration**: 1-4 hours depending on target complexity
+**耗時**：依目標複雜度約 1–4 小時
 
-**White-box behavior**: Runs broad source-aware triage (`opengrep`, AST structural search, secrets, supply-chain checks) and then systematically validates top candidates dynamically.
+**白箱行為**：先執行大範圍的原始碼感知篩選（`opengrep`、AST 結構搜尋、機密掃描、供應鏈檢查），再系統性地動態驗證最有希望的候選項目。
 
 <Note>
-Deep mode is the default. It explores edge cases, chained vulnerabilities, and complex attack paths.
+深度模式是預設值。它會探索邊界情況、串接型漏洞與複雜攻擊路徑。
 </Note>
 
-## Choosing a Mode
+## 如何選擇
 
-| Scenario | Recommended Mode |
-|----------|------------------|
-| Every PR | Quick |
-| Weekly scans | Standard |
-| Before major release | Deep |
-| Bug bounty hunting | Deep |
+| 情境 | 建議模式 |
+|------|----------|
+| 每個 PR | 快速（quick） |
+| 每週掃描 | 標準（standard） |
+| 重大版本發布前 | 深度（deep） |
+| 漏洞賞金獵捕 | 深度（deep） |

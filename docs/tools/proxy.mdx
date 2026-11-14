@@ -1,36 +1,36 @@
 ---
-title: "HTTP Proxy"
-description: "Caido-powered proxy for request interception and replay"
+title: "HTTP 代理"
+description: "以 Caido 驅動的代理，用於攔截與重送請求"
 ---
 
-Strix includes [Caido](https://caido.io), a modern HTTP proxy built for security testing. All browser traffic flows through Caido, giving the agent full control over requests and responses.
+Strix 內建 [Caido](https://caido.io) —— 一款專為安全測試打造的現代 HTTP 代理。所有瀏覽器流量都會經過 Caido，讓代理能完全掌控請求與回應。
 
-## Capabilities
+## 能力
 
-| Feature          | Description                                  |
+| 特性          | 說明                                  |
 | ---------------- | -------------------------------------------- |
-| Request Capture  | Log all HTTP/HTTPS traffic automatically     |
-| Request Replay   | Repeat any request with modifications        |
-| HTTPQL           | Query captured traffic with powerful filters |
-| Scope Management | Focus on specific domains or paths           |
-| Sitemap          | Visualize the discovered attack surface      |
+| 請求擷取  | 自動記錄所有 HTTP/HTTPS 流量     |
+| 請求重送   | 以修改後的內容重複送出任何請求        |
+| HTTPQL           | 用強大的篩選語法查詢已擷取的流量 |
+| 範圍管理 | 聚焦特定網域或路徑           |
+| 網站地圖          | 視覺化已發現的攻擊面      |
 
-## HTTPQL Filtering
+## HTTPQL 篩選
 
-Query captured requests using Caido's HTTPQL syntax
+使用 Caido 的 HTTPQL 語法查詢已擷取的請求。
 
-## Request Replay
+## 請求重送
 
-The agent can take any captured request and replay it with modifications:
+代理可以取出任何已擷取的請求，修改後重送：
 
-- Change path parameters (test for IDOR)
-- Modify request body (test for injection)
-- Add/remove headers (test for auth bypass)
-- Alter cookies (test for session issues)
+- 變更路徑參數（測試 IDOR）
+- 修改請求內容（測試注入）
+- 新增／移除標頭（測試認證繞過）
+- 竄改 Cookie（測試工作階段問題）
 
-## Python Integration
+## Python 整合
 
-Proxy helpers are available to sandbox Python scripts through the image-baked `caido_api` module. This enables powerful scripted security testing:
+沙箱內的 Python 腳本可透過映像內建的 `caido_api` 模組使用代理輔助函式，實現強大的腳本化安全測試：
 
 ```python
 import asyncio
@@ -39,16 +39,16 @@ from caido_api import list_requests, repeat_request, view_request
 
 
 async def main():
-    # List recent POST requests
+    # 列出最近的 POST 請求
     post_requests = await list_requests(
         httpql_filter='req.method.eq:"POST"',
         first=20,
     )
 
-    # View a specific request
+    # 檢視特定請求
     request_details = await view_request("req_123", part="request")
 
-    # Replay with modified payload
+    # 以修改後的內容重送
     response = await repeat_request(
         "req_123",
         modifications={"body": '{"user_id": "admin"}'},
@@ -59,28 +59,25 @@ async def main():
 asyncio.run(main())
 ```
 
-### Available Functions
+### 可用函式
 
-| Function               | Description                                |
+| 函式               | 說明                                |
 | ---------------------- | ------------------------------------------ |
-| `list_requests()`      | Query captured traffic with HTTPQL filters |
-| `view_request()`       | Get full request/response details          |
-| `repeat_request()`     | Replay a request with modifications        |
-| `list_sitemap()`       | Browse the request-tree view of discovered surface |
-| `view_sitemap_entry()` | Inspect one sitemap entry + its related requests |
-| `scope_rules()`        | Manage proxy scope (allowlist/denylist)    |
+| `list_requests()`      | 以 HTTPQL 篩選查詢已擷取的流量 |
+| `view_request()`       | 取得完整的請求／回應細節          |
+| `repeat_request()`     | 以修改後的內容重送請求        |
+| `list_sitemap()`       | 瀏覽已發現攻擊面的請求樹狀檢視 |
+| `view_sitemap_entry()` | 檢視單一網站地圖項目及其相關請求 |
+| `scope_rules()`        | 管理代理範圍（允許／拒絕清單）    |
 
-For one-off arbitrary requests, use shell tooling like `curl` — the
-sandbox's `HTTP_PROXY` env routes the traffic through Caido
-automatically, so it lands in `list_requests` and can be replayed via
-`repeat_request`.
+若要送出單次任意請求，請使用 `curl` 這類 shell 工具 —— 沙箱的 `HTTP_PROXY` 環境變數會自動把流量導向 Caido，因此該請求會出現在 `list_requests` 中，並可透過 `repeat_request` 重送。
 
-### Example: Automated IDOR Testing
+### 範例：自動化 IDOR 測試
 
 ```python
 import asyncio
 
-# Get all requests to user endpoints
+# 取得所有送往使用者端點的請求
 from caido_api import list_requests, repeat_request
 
 
@@ -98,36 +95,36 @@ async def main():
             )
             print(req.id, test_id, response["status"])
             if response["status"] == "DONE":
-                print(f"Replay completed for candidate {test_id}")
+                print(f"已完成候選項目 {test_id} 的重送")
 
 
 asyncio.run(main())
 ```
 
-## Human-in-the-Loop
+## 人工協作（Human-in-the-Loop）
 
-Strix exposes the Caido proxy to your host machine, so you can interact with it alongside the automated scan. When the sandbox starts, the Caido URL is displayed in the TUI sidebar — click it to copy, then open it in Caido Desktop.
+Strix 會把 Caido 代理開放給你的主機，讓你可以在自動掃描之外同時操作。沙箱啟動後，Caido 網址會顯示在 TUI 側欄 —— 點擊即可複製，再於 Caido Desktop 開啟。
 
-### Accessing Caido
+### 連上 Caido
 
-1. Start a scan as usual
-2. Look for the **Caido** URL in the sidebar stats panel (e.g. `localhost:52341`)
-3. Open the URL in Caido Desktop
-4. Click **Continue as guest** to access the instance
+1. 照平常方式啟動一次掃描
+2. 在側欄統計面板找到 **Caido** 網址（例如 `localhost:52341`）
+3. 在 Caido Desktop 開啟該網址
+4. 點擊 **Continue as guest** 進入該實例
 
-### What You Can Do
+### 你可以做什麼
 
-- **Inspect traffic** — Browse all HTTP/HTTPS requests the agent is making in real time
-- **Replay requests** — Take any captured request and resend it with your own modifications
-- **Intercept and modify** — Pause requests mid-flight, edit them, then forward
-- **Explore the sitemap** — See the full attack surface the agent has discovered
-- **Manual testing** — Use Caido's tools to test findings the agent reports, or explore areas it hasn't reached
+- **檢視流量** —— 即時瀏覽代理正在發出的所有 HTTP/HTTPS 請求
+- **重送請求** —— 取出任何已擷取的請求，用你自己的修改重送
+- **攔截與修改** —— 在請求途中暫停、編輯，再放行
+- **探索網站地圖** —— 查看代理已發現的完整攻擊面
+- **手動測試** —— 用 Caido 的工具測試代理回報的發現，或探索它尚未觸及的地方
 
-This turns Strix from a fully automated scanner into a collaborative tool — the agent handles the heavy lifting while you focus on the interesting parts.
+這讓 Strix 從全自動掃描器變成協作工具 —— 代理負責吃重的工作，你專注在有趣的部分。
 
-## Scope
+## 範圍
 
-Create scopes to filter traffic to relevant domains:
+建立範圍以篩選出相關網域的流量：
 
 ```
 Allowlist: ["api.example.com", "*.example.com"]
