@@ -1,4 +1,4 @@
-# Strix 漢化版 · 桌面啟動器
+﻿# Strix 漢化版 · 桌面啟動器
 # 由桌面捷徑 (.bat) 呼叫；也可直接執行：
 #   powershell -ExecutionPolicy Bypass -File .\scripts\strix-launcher.ps1
 param(

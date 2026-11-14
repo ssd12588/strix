@@ -47,7 +47,10 @@
 - 本倉庫是 [usestrix/strix](https://github.com/usestrix/strix) 的**繁體中文漢化版**，依 Apache-2.0 授權散布，原始版權聲明與 [`LICENSE`](LICENSE) 均完整保留。
 - **已漢化**：終端機（CLI）說明與錯誤訊息、TUI 互動介面、`strix view` 的 Web 檢視器介面、`docs/` 文件站（31 篇）、`AGENTS.md`、`CONTRIBUTING.md`、本 README。
 - **中文入門文件**：[10 分鐘上手](docs-zh/QUICKSTART.md) · [常見錯誤排錯](docs-zh/TROUBLESHOOTING.md) · [術語對照表](docs-zh/glossary.md)
-- **Windows 一鍵啟動**：[`start-strix.ps1`](start-strix.ps1)（檢查 Docker、記住模型與金鑰、帶你啟動）
+- **Windows 一鍵啟動**：
+  - [`start-strix.ps1`](start-strix.ps1)：命令列版（檢查 Docker、記住模型與金鑰、直接掃描）
+  - [`scripts/strix-launcher.ps1`](scripts/strix-launcher.ps1)：**互動選單版**（選任務 md → 輸入目標 → 選模式與預算 → 啟動，跑完可開 Web 儀表板）
+  - 安裝桌面捷徑：`powershell -ExecutionPolicy Bypass -File .\scripts\install-desktop-shortcut.ps1`
 - **刻意不改**：掃描引擎邏輯、代理提示詞（`strix/agents/prompts`）與技能內容（`skills/`）維持英文，以確保 AI 行為與上游一致。
 - 與上游同步：
 
