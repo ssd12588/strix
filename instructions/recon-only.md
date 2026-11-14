@@ -102,7 +102,29 @@ login, auth, upload, export, download, internal, debug
 
 ## 輸出格式
 
-請產生三份清單（Markdown 表格 + JSON 檔），並在最後給一段摘要。
+**輸出位置（重要）**：所有檔案一律寫到 `/workspace/out/recon/`。
+
+`/workspace/out/` 是本機目錄的掛載點（會直接保存在你的電腦上）。
+`/workspace/` 根目錄是容器臨時空間，**寫在那裡的檔案掃描結束就會消失**，請勿使用。
+
+請建立並使用以下結構：
+
+```
+/workspace/out/recon/
+├── recon_report.md          主報告（三份清單彙整 + 指令、時間、筆數）
+├── subdomains.json          子網域清單
+├── ports_services.md        IP / 埠 / 服務
+├── endpoints_table.md       端點清單（URL｜方法｜狀態碼｜標題）
+├── endpoints.json
+├── high_value.txt           高價值端點（login/auth/admin/member/api/order/export）
+└── excluded/                被剔除項目
+    ├── cdn_ips.txt
+    ├── static_stats.json
+    ├── waf_sample.txt
+    └── products_pages.txt
+```
+
+請產生三份清單，並在最後給一段摘要。
 
 ### 清單 1：子網域
 
@@ -114,7 +136,7 @@ login, auth, upload, export, download, internal, debug
 | IP | 對應主機 | 開放埠 | 服務／指紋 | 是否 CDN |
 |---|---|---|---|---|
 
-> 僅列出**非 CDN 網段**的 IP；CDN IP 另放附錄。
+> 僅列出**非 CDN 網段**的 IP；CDN IP 另放 `excluded/cdn_ips.txt`。
 
 ### 清單 3：端點 / URL
 
@@ -127,6 +149,8 @@ login, auth, upload, export, download, internal, debug
 - 被剔除的靜態資源統計（數量）
 - 被剔除的 WAF／垃圾 URL（範例 3–5 筆即可）
 - 未涵蓋範圍與原因
+
+> ⚠️ `/workspace` 只是輸出目錄，**不要把它當成掃描目標分析**。真正目標只有 instruction 中指定的網域。
 
 ---
 
