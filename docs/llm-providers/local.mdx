@@ -1,97 +1,88 @@
 ---
-title: "Local Models"
-description: "Run Strix with self-hosted LLMs for privacy and air-gapped testing"
+title: "本機模型"
+description: "以自架 LLM 執行 Strix，兼顧隱私與離線測試"
 ---
 
-Running Strix with local models allows for completely offline, privacy-first security assessments. Data never leaves your machine, making this ideal for sensitive internal networks or air-gapped environments.
+使用本機模型執行 Strix，可進行完全離線、隱私優先的安全評估。資料永遠不會離開你的機器，非常適合敏感內部網路或離線（air-gapped）環境。
 
-## Privacy vs Performance
+## 隱私與效能的取捨
 
-| Feature | Local Models | Cloud Models (GPT-5/Claude 4.5) |
+| 特性 | 本機模型 | 雲端模型（GPT-5/Claude 4.5） |
 |---------|--------------|--------------------------------|
-| **Privacy** | 🔒 Data stays local | Data sent to provider |
-| **Cost** | Free (hardware only) | Pay-per-token |
-| **Reasoning** | Lower (struggles with agents) | State-of-the-art |
-| **Setup** | Complex (GPU required) | Instant |
+| **隱私** | 🔒 資料留在本機 | 資料送往供應商 |
+| **成本** | 免費（僅硬體） | 依 token 計費 |
+| **推理能力** | 較低（難以勝任代理任務） | 業界頂尖 |
+| **安裝** | 複雜（需要 GPU） | 立即可用 |
 
 <Warning>
-**Compatibility Note**: Strix relies on advanced agentic capabilities (tool use, multi-step planning, self-correction). Most local models, especially those under 70B parameters, struggle with these complex tasks.
+**相容性提醒**：Strix 依賴進階的代理能力（工具使用、多步規劃、自我修正）。大多數本機模型 —— 尤其是 70B 參數以下的 —— 難以勝任這些複雜任務。
 
-For critical assessments, we strongly recommend using state-of-the-art cloud models like **Claude 4.5 Sonnet** or **GPT-5**. Use local models only when privacy is the absolute priority.
+對於關鍵評估，我們強烈建議使用業界頂尖的雲端模型，例如 **Claude 4.5 Sonnet** 或 **GPT-5**。只有在隱私是絕對優先時才使用本機模型。
 </Warning>
 
 ## Ollama
 
-[Ollama](https://ollama.ai) is the easiest way to run local models on macOS, Linux, and Windows.
+[Ollama](https://ollama.ai) 是在 macOS、Linux 與 Windows 上執行本機模型最簡單的方式。
 
-### Setup
+### 設定
 
-1. Install Ollama from [ollama.ai](https://ollama.ai)
-2. Pull a high-performance model:
+1. 從 [ollama.ai](https://ollama.ai) 安裝 Ollama
+2. 拉取高效能模型：
    ```bash
    ollama pull qwen3-vl
    ```
-3. Configure Strix:
+3. 設定 Strix：
    ```bash
    export STRIX_LLM="ollama/qwen3-vl"
    export LLM_API_BASE="http://localhost:11434"
    ```
 
-### Recommended Models
+### 建議模型
 
-We recommend these models for the best balance of reasoning and tool use:
+以下是推理與工具使用平衡最佳的模型：
 
-**Recommended models:**
-- **Qwen3 VL** (`ollama pull qwen3-vl`)
-- **DeepSeek V3.1** (`ollama pull deepseek-v3.1`)
-- **Devstral 2** (`ollama pull devstral-2`)
+**建議模型：**
+- **Qwen3 VL**（`ollama pull qwen3-vl`）
+- **DeepSeek V3.1**（`ollama pull deepseek-v3.1`）
+- **Devstral 2**（`ollama pull devstral-2`）
 
-## LM Studio / OpenAI Compatible
+## LM Studio / 相容 OpenAI
 
-If you use LM Studio, vLLM, or other runners:
+若你使用 LM Studio、vLLM 或其他執行器：
 
 ```bash
 export STRIX_LLM="openai/local-model"
-export LLM_API_BASE="http://localhost:1234/v1"  # Adjust port as needed
+export LLM_API_BASE="http://localhost:1234/v1"  # 需要時調整連接埠
 ```
 
-### Gateways that require custom headers
+### 需要自訂標頭的閘道
 
-Some OpenAI-compatible gateways require extra HTTP headers (for attribution or
-tenant routing) alongside the bearer token. Set them with `LLM_EXTRA_HEADERS` as
-a JSON object — they are sent on every request:
+有些相容 OpenAI 的閘道除了 bearer 權杖外，還需要額外的 HTTP 標頭（用於歸屬或租戶路由）。請以 JSON 物件設定 `LLM_EXTRA_HEADERS` —— 它們會隨每個請求送出：
 
 ```bash
 export STRIX_LLM="openai/your-model"
 export LLM_API_BASE="https://your-gateway.example/v1"
-export LLM_API_KEY="your-bearer-token"          # sent as Authorization: Bearer ...
+export LLM_API_KEY="your-bearer-token"          # 以 Authorization: Bearer ... 送出
 export LLM_EXTRA_HEADERS='{"X-Feature-Key":"value","X-Tenant":"acme"}'
 ```
 
-### Extra request-body fields
+### 額外的請求內容欄位
 
-Some provider parameters go in the request body rather than a header, and
-Strix has no dedicated setting for them. Set them with `LLM_EXTRA_BODY` as a
-JSON object — they are merged into the body of every request to the model. For example, to
-use OpenAI's cheaper flex processing and attribute requests to a user with a
-safety identifier (a hash, never a raw email):
+有些供應商參數要放在請求內容而非標頭，Strix 沒有專屬設定。請以 JSON 物件設定 `LLM_EXTRA_BODY` —— 它們會合併到送往模型的每個請求內容中。例如，使用 OpenAI 較便宜的 flex 處理，並以安全識別碼（雜湊值，絕不用原始電子郵件）標註使用者：
 
 ```bash
 export LLM_EXTRA_BODY='{"service_tier":"flex","safety_identifier":"9f86d081884c7d65"}'
 ```
 
-Fields aren't validated, so use only fields your provider accepts, and don't
-set fields Strix already sends, such as `model`, `messages` or `stream`.
+這些欄位不會被驗證，因此請只使用供應商接受的欄位，也不要設定 Strix 已經送出的欄位，例如 `model`、`messages` 或 `stream`。
 
-For endpoints behind a private CA, point Strix at your certificate bundle with
-the standard `SSL_CERT_FILE=/path/to/ca-bundle.pem` — never disable TLS
-verification against a real endpoint.
+若端點位於私有 CA 之後，請用標準的 `SSL_CERT_FILE=/path/to/ca-bundle.pem` 讓 Strix 指向你的憑證捆綁包 —— 絕不要對真實端點關閉 TLS 驗證。
 
-## Tool calling must return structured `tool_calls`
+## 工具呼叫必須回傳結構化的 `tool_calls`
 
-Strix is entirely tool-driven: every working turn must be a **native** function/tool call. If your inference server returns the tool call as plain assistant text instead of a structured `tool_calls` field, Strix never sees a call it can execute, so the agent makes no real progress — it re-prompts the model for a tool call and gives up once its recovery attempts are exhausted.
+Strix 完全以工具驅動：每個有效回合都必須是**原生**的函式／工具呼叫。若你的推論伺服器把工具呼叫當成純文字回應，而不是結構化的 `tool_calls` 欄位，Strix 就看不到可執行的呼叫，代理因此毫無實際進展 —— 它會重新提示模型要求工具呼叫，並在重試次數用盡後放棄。
 
-This is almost always an **inference-server configuration** problem, not a model or Strix problem. Common symptoms are the model printing a call as text such as:
+這幾乎總是**推論伺服器設定**的問題，而不是模型或 Strix 的問題。常見症狀是模型把呼叫印成文字，例如：
 
 ```text
 <tool_call>{"name": "exec_command", "arguments": {"cmd": "nmap ..."}}</tool_call>
@@ -99,25 +90,25 @@ exec_command(cmd="nmap ...", timeout=180)
 {"action": "exec_command", "params": {"cmd": "nmap ..."}}
 ```
 
-The fix belongs on the inference server: it must be configured to parse the model's tool tokens into structured `tool_calls`. A correctly configured endpoint either returns a structured call or rejects the request outright — it never leaks the call as text.
+解法在推論伺服器端：必須設定成能把模型的工具 token 解析為結構化 `tool_calls`。設定正確的端點要麼回傳結構化呼叫，要麼直接拒絕請求 —— 絕不會把呼叫當文字洩漏出來。
 
-### Fixes by server
+### 依伺服器的修正方式
 
-**llama.cpp (`llama-server`)**
-- Run with `--jinja` and a correct tool-use chat template (`--chat-template` / `--chat-template-file` matching the model). Recent builds enable `--jinja` by default — **upgrade** if yours doesn't.
-- For thinking models, align or disable reasoning (`--reasoning-format`, `-rea off`) so it doesn't break tool-call parsing.
-- A low temperature (e.g. `--temp 0.2`) improves tool-call reliability.
+**llama.cpp（`llama-server`）**
+- 以 `--jinja` 搭配正確的工具使用對話範本執行（用符合模型的 `--chat-template`／`--chat-template-file`）。較新的版本預設啟用 `--jinja` —— 若你的版本沒有，請**升級**。
+- 對思考型模型，請對齊或關閉推理（`--reasoning-format`、`-rea off`），以免破壞工具呼叫解析。
+- 較低的溫度（例如 `--temp 0.2`）可提升工具呼叫的可靠性。
 
 **Ollama**
-- Use a recent Ollama and a model whose template wires tools. Modern Ollama refuses tools (`tools param requires --jinja flag`) if the template lacks tool support.
-- For reasoning models (e.g. qwen3), disable the model's **thinking** mode — thinking left on frequently pushes the tool call into the text `content` instead of the structured `tool_calls` field. Turn it off on the Ollama side (a non-thinking model variant, or `think: false` in the model's parameters / `Modelfile`).
-- Raise **`num_ctx`** to at least 16k–32k. Strix sends a large system prompt plus many tool schemas; at Ollama's small default context the tool definitions are truncated out of the prompt and the model stops emitting valid calls. A short test prompt can look fine while a real scan fails, so set this explicitly rather than inferring it from a quick check.
+- 使用較新的 Ollama，以及範本有接上工具的模型。若範本不支援工具，現代 Ollama 會拒絕（`tools param requires --jinja flag`）。
+- 對推理型模型（例如 qwen3），請關閉模型的**思考**模式 —— 開啟思考經常會把工具呼叫推進文字 `content`，而不是結構化的 `tool_calls` 欄位。請在 Ollama 端關閉（改用非思考型模型變體，或在模型參數／`Modelfile` 設 `think: false`）。
+- 把 **`num_ctx`** 提高到至少 16k–32k。Strix 會送出很大的系統提示詞與大量工具結構描述；在 Ollama 的預設小上下文下，工具定義會被截掉，模型就不再發出有效呼叫。短測試提示詞看起來正常，但實際掃描會失敗，因此請明確設定，而不是靠快速測試推斷。
 
 **vLLM**
-- Start with `--enable-auto-tool-choice`, a matching `--tool-call-parser` (`hermes`, `qwen3_xml`, or `llama3_json`), and a matching `--reasoning-parser` for reasoning models.
+- 以 `--enable-auto-tool-choice`、對應的 `--tool-call-parser`（`hermes`、`qwen3_xml` 或 `llama3_json`），以及推理模型對應的 `--reasoning-parser` 啟動。
 
-A low sampling temperature (roughly 0.2–0.6, depending on the family) also measurably reduces malformed tool calls on open-weight models. Set it on the server or in your model's parameters.
+較低的取樣溫度（約 0.2–0.6，依模型家族而定）也能明顯減少開放權重模型的畸形工具呼叫。請在伺服器或模型參數中設定。
 
 <Warning>
-Even correctly configured, small models (< ~30B) emit malformed or text-form tool calls far more often than frontier models. Prefer a capable model for reliable agentic behavior.
+即使設定正確，小型模型（約 30B 以下）產生畸形或文字形式工具呼叫的頻率仍遠高於頂尖模型。若要可靠的代理行為，請優先選用能力足夠的模型。
 </Warning>
