@@ -1,177 +1,141 @@
 ---
-title: "CLI Reference"
-description: "Command-line options for Strix"
+title: "CLI 參考"
+description: "Strix 的命令列選項"
 ---
 
-## Basic Usage
+## 基本用法
 
 ```bash
 strix (--target <target> | --target-list <path>) [options]
 ```
 
-## Options
+## 選項
 
 <ParamField path="--target, -t" type="string">
-  Target to test. Accepts URLs, repositories, local directories, domains, IP addresses, API spec files (OpenAPI/Swagger `.json`/`.yaml`, a Postman collection export), or a live Postman collection by id (`postman://<collection-uuid>`). Can be specified multiple times. Fresh runs require at least one target source: `--target` or `--target-list`.
+  要測試的目標。可接受 URL、儲存庫、本機目錄、網域、IP 位址、API 規格檔（OpenAPI/Swagger `.json`/`.yaml`、Postman collection 匯出檔），或以 id 指定的線上 Postman collection（`postman://<collection-uuid>`）。可重複指定。全新執行至少需要一種目標來源：`--target` 或 `--target-list`。
 
-  When the target is an API spec, Strix copies it into the agent's workspace and authorizes the base URLs it declares (including those resolved from a Postman environment) as in-scope hosts - so the agent reads the contract and tests the full declared surface instead of discovering endpoints by crawling. Pair the spec with the deployed base URL (e.g. `--target ./openapi.yaml --target https://api.example.com`) so the agent has a reachable host to attack.
+  當目標是 API 規格時，Strix 會把它複製到代理的工作區，並把它宣告的 base URL（含從 Postman environment 解析出的）授權為範圍內主機 —— 代理因此能讀取契約並測試完整的宣告範圍，而不必靠爬蟲自行探索端點。請把規格與實際部署的 base URL 一起提供（例如 `--target ./openapi.yaml --target https://api.example.com`），代理才有可攻擊的主機。
 
   <Note>
-    A local directory is mounted into the sandbox live and **writable**, so the agent edits your real files (`.git` excepted). Commit or stash first.
+    本機目錄會以即時、**可寫入**方式掛載進沙箱，代理會直接編輯你真實的檔案（`.git` 除外）。請先 commit 或 stash。
   </Note>
 
   <Note>
-    Fetching a Postman collection by id requires `POSTMAN_API_KEY`. Add `?env=<environment-uuid>` to also pull a Postman environment, which resolves `{{baseUrl}}` / token variables the collection references (e.g. `postman://<collection-uuid>?env=<environment-uid>`).
+    以 id 取得 Postman collection 需要 `POSTMAN_API_KEY`。加上 `?env=<environment-uuid>` 也會一併取得 Postman environment，用來解析 collection 引用的 `{{baseUrl}}`／token 變數（例如 `postman://<collection-uuid>?env=<environment-uid>`）。
   </Note>
 </ParamField>
 
 <ParamField path="--target-list" type="string">
-  Path to a file containing targets, one per non-empty, non-comment line. Lines starting with `#` are ignored. Can be specified multiple times and combined with `--target`.
+  目標檔案路徑，每行一個目標（略過空行與註解行）。以 `#` 開頭的行會被忽略。可重複指定，並可與 `--target` 併用。
 </ParamField>
 
 <ParamField path="--instruction" type="string">
-  Custom instructions for the scan. Use for credentials, focus areas, or specific testing approaches.
+  掃描的自訂指令。可用於帳號密碼、關注範圍或特定測試手法。
 </ParamField>
 
 <ParamField path="--instruction-file" type="string">
-  Path to a file containing detailed instructions.
+  包含詳細指令的檔案路徑。
 </ParamField>
 
 <ParamField path="--workspace-file" type="string">
-  Path to a file on your machine to place into the sandbox workspace before the
-  scan starts. Repeat the option for more files. Write `PATH:DEST` to choose the
-  destination inside `/workspace`. `DEST` defaults to the file name. See
-  [Workspace files](/usage/instructions#workspace-files).
+  要放入沙箱工作區的本機檔案路徑（在掃描開始前）。需要多個檔案時可重複指定。寫成 `PATH:DEST` 可指定 `/workspace` 內的目的路徑；`DEST` 預設為原檔名。詳見[工作區檔案](/usage/instructions#workspace-files)。
 </ParamField>
 
 <ParamField path="--scan-mode, -m" type="string" default="deep">
-  Scan depth: `quick`, `standard`, or `deep`.
+  掃描深度：`quick`、`standard` 或 `deep`。
 </ParamField>
 
 <ParamField path="--scope-mode" type="string" default="auto">
-  Code scope mode: `auto` (enable PR diff-scope in CI/headless runs), `diff` (force changed-files scope), or `full` (disable diff-scope).
+  程式碼範圍模式：`auto`（在 CI／無介面執行時啟用 PR diff 範圍）、`diff`（強制只掃描變更的檔案），或 `full`（停用 diff 範圍）。
 </ParamField>
 
 <ParamField path="--diff-base" type="string">
-  Target branch or commit to compare against (e.g., `origin/main`). Defaults to the repository's default branch.
+  用來比對的目標分支或 commit（例如 `origin/main`）。預設為儲存庫的預設分支。
 </ParamField>
 
 <ParamField path="--non-interactive, -n" type="boolean">
-  Run in headless mode without TUI. Ideal for CI/CD. When no terminal is
-  attached (CI, `nohup`, pipes) and a target is given, Strix runs headless
-  automatically and says so on one line.
+  以無介面模式執行，不開啟 TUI。適合 CI/CD。當沒有連接終端機（CI、`nohup`、管線）且已提供目標時，Strix 會自動以無介面模式執行，並以一行訊息說明。
 </ParamField>
 
 <ParamField path="--fail-on" type="string">
-  Headless mode only (requires `-n`). Minimum severity that makes the run exit
-  `2`: `critical`, `high`, `medium`, `low`, or `info`. Findings below the
-  threshold are still written to every report artifact. A finding whose
-  severity Strix does not recognize always counts, so the gate never passes on a
-  value it cannot rank. Omit the flag to exit `2` on any finding.
+  僅限無介面模式（需搭配 `-n`）。使執行以 `2` 結束的最低嚴重度：`critical`、`high`、`medium`、`low` 或 `info`。低於門檻的發現仍會寫入所有報告檔案。Strix 無法辨識的嚴重度一律視為達到門檻，因此這個關卡不會在無法排序的值上放行。省略此旗標時，任何發現都會以 `2` 結束。
 </ParamField>
 
 <ParamField path="--config" type="string">
-  Path to a custom config file (JSON) to use instead of `~/.strix/cli-config.json`.
+  自訂設定檔（JSON）路徑，用來取代 `~/.strix/cli-config.json`。
 </ParamField>
 
 <ParamField path="--max-budget" type="number">
-  Maximum LLM spend in USD for the whole scan, counted cumulatively across the
-  root agent and every child agent. The budget is checked after each model
-  response.
+  整次掃描的 LLM 花費上限（美元），會累計計算根代理與所有子代理。每次模型回應後都會檢查預算。
 
-  In non-interactive mode (`-n`), once the running cost reaches the threshold,
-  the scan stops cleanly with a `stopped` status (not a failure) and the sandbox
-  is torn down. Sub-agents are stopped early, at 90% of the budget, reserving
-  the final slice for the root agent to wind down and produce the final report.
+  在非互動模式（`-n`）下，執行成本達到門檻後，掃描會以 `stopped` 狀態乾淨地停止（非失敗），並拆除沙箱。子代理會在預算的 90% 時提早停止，保留最後一段給根代理收尾並產出最終報告。
 
-  In interactive mode, reaching the budget pauses the scan instead of ending
-  it: every agent parks, and sending any message resumes the scan with the cap
-  extended by the original budget amount. There is no sub-agent reserve in
-  interactive mode.
+  在互動模式下，達到預算會**暫停**掃描而不是結束：所有代理停住，送出任何訊息即可繼續，並以原本的預算金額延長上限。互動模式沒有子代理保留額。
 
-  As the budget is approached, graduated wrap-up warnings are surfaced to
-  **every** agent so they can finish their work and call their lifecycle tool
-  before the hard stop. The bands sit just below each role's own stop point: the
-  root is warned at **70%, 85% and 95%** (it stops at 100%), while sub-agents are
-  warned at **75%, 80% and 85%** (they stop at the 90% reserve). In interactive
-  mode every agent uses the **70%, 85% and 95%** bands. Percentages shown in the
-  warnings are the real cumulative spend against the full budget.
+  接近預算時，會向**每一個**代理發出分級的收尾警告，讓它們能在硬性停止前完成工作並呼叫生命週期工具。警告級距設在每個角色自身停止點之前：根代理在 **70%、85%、95%** 時告警（100% 時停止），子代理在 **75%、80%、85%** 時告警（90% 保留點時停止）。互動模式下所有代理都使用 **70%、85%、95%** 級距。警告中顯示的百分比是真實累計花費佔完整預算的比例。
 
-  Must be greater than `0`. Omit the flag for no limit.
+  必須大於 `0`。省略此旗標則不設上限。
 
-  **Limitations**
+  **限制**
 
-  - The check fires *after* a response is returned, so the final spend can
-    slightly overshoot the limit by any calls already in flight when the
-    threshold is crossed (most relevant with several child agents running
-    concurrently).
-  - Cost is a best-effort estimate derived from token usage and model pricing;
-    providers that do not expose priced usage may under-count.
-  - For LiteLLM-routed models, Strix enables streaming success callbacks to
-    capture provider-reported cost. Message content remains excluded, but
-    third-party LiteLLM callbacks configured in the same process can receive
-    other streaming metadata such as model names, request IDs, and token
-    counts.
+  - 檢查是在回應回來**之後**才觸發，因此最終花費可能因門檻跨越當下已在進行中的呼叫而略微超出上限（同時執行多個子代理時最為明顯）。
+  - 成本是依 token 用量與模型定價推估的最佳估計值；未提供定價用量的供應商可能低估。
+  - 對於經 LiteLLM 路由的模型，Strix 會啟用串流成功回呼以取得供應商回報的成本。訊息內容仍不會被包含，但同一程序中設定的第三方 LiteLLM 回呼可能收到其他串流中介資料，例如模型名稱、請求 ID 與 token 數。
 </ParamField>
 
 <ParamField path="--max-turns" type="integer" default="500">
-  Maximum number of turns (one model response plus its tool round) allotted to
-  **each** agent, applied per run. When an agent reaches this limit it is
-  force-stopped.
+  分配給**每個**代理的最大回合數（一次模型回應加上其工具輪），依每次執行套用。代理達到此上限時會被強制停止。
 
-  As the limit is approached, graduated wrap-up warnings (at 70%, 85% and 95%)
-  are injected into that agent's next model turn so it can prioritise its
-  remaining work and call its lifecycle tool (`finish_scan` for the root agent,
-  `agent_finish` for sub-agents) before the hard stop.
+  接近上限時，會把分級收尾警告（70%、85%、95%）注入該代理的下一次模型回合，讓它能優先處理剩餘工作，並在硬性停止前呼叫生命週期工具（根代理為 `finish_scan`，子代理為 `agent_finish`）。
 
-  Must be greater than `0`.
+  必須大於 `0`。
 </ParamField>
 
-## Examples
+## 範例
 
 ```bash
-# Basic scan
+# 基本掃描
 strix --target https://example.com
 
-# Authenticated testing
+# 認證測試
 strix --target https://app.com --instruction "Use credentials: user:pass"
 
-# Focused testing
+# 聚焦測試
 strix --target api.example.com --instruction "Focus on IDOR and auth bypass"
 
-# CI/CD mode
+# CI/CD 模式
 strix -n --target ./ --scan-mode quick
 
-# CI/CD mode, failing only on high or critical findings
+# CI/CD 模式，只在重大或高風險發現時失敗
 strix -n --target ./ --scan-mode quick --fail-on high
 
-# Cap cost and per-agent turns
+# 限制成本與每個代理的回合數
 strix --target https://example.com --max-budget 25 --max-turns 300
 
-# Force diff-scope against a specific base ref
+# 強制以特定基準 ref 計算 diff 範圍
 strix -n --target ./ --scan-mode quick --scope-mode diff --diff-base origin/main
 
-# Multi-target white-box testing
+# 多目標白箱測試
 strix -t https://github.com/org/app -t https://staging.example.com
 
-# API spec + live target (OpenAPI/Swagger file or Postman collection)
+# API 規格 + 線上目標（OpenAPI/Swagger 檔案或 Postman collection）
 strix -t ./openapi.yaml -t https://api.example.com
 
-# Postman collection pulled live by id (+ optional environment)
+# 以 id 即時取得 Postman collection（可選 environment）
 strix -t "postman://<collection-uuid>?env=<environment-uuid>"
 
-# Targets from a file
+# 從檔案讀取目標
 strix --target-list ./targets.txt
 
-# Extra files placed in the sandbox workspace
+# 額外放入沙箱工作區的檔案
 strix --target ./my-project --workspace-file ./wordlist.txt
 strix --target https://app.com --workspace-file ./openapi.yaml:specs/openapi.yaml
 ```
 
-## Exit Codes
+## 結束碼
 
-| Code | Meaning |
+| 代碼 | 意義 |
 |------|---------|
-| 0 | Scan completed successfully (interactive mode always exits `0`; in headless mode, `0` means no vulnerabilities were found, or with `--fail-on`, none at or above the threshold; lower findings are still in the report) |
-| 1 | A fatal error occurred before or during the scan (e.g. missing environment variables, Docker unavailable, invalid config file, diff-scope resolution failure, or an unhandled error) |
-| 2 | Vulnerabilities found (headless mode only; with `--fail-on`, at least one finding at or above that severity) |
+| 0 | 掃描成功完成（互動模式一律以 `0` 結束；無介面模式下 `0` 代表未發現漏洞，或搭配 `--fail-on` 時代表沒有達到或超過門檻的發現；較輕微的發現仍在報告中） |
+| 1 | 掃描前或掃描中發生致命錯誤（例如缺少環境變數、Docker 無法使用、設定檔無效、diff 範圍解析失敗，或未處理的錯誤） |
+| 2 | 發現漏洞（僅無介面模式；搭配 `--fail-on` 時，代表至少有一項發現達到該嚴重度或以上） |
