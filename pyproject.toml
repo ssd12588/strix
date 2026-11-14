@@ -1,7 +1,7 @@
 [project]
 name = "strix-agent"
 version = "1.7.1"
-description = "Open-source AI Hackers for your apps"
+description = "Open-source AI Hackers for your apps (Traditional Chinese localization of usestrix/strix)"
 readme = "README.md"
 license = "Apache-2.0"
 requires-python = ">=3.12"
