@@ -1,28 +1,28 @@
 ---
-title: "MCP Servers"
-description: "Connect your own MCP servers and expose their tools to the agent"
+title: "MCP 伺服器"
+description: "連接你自己的 MCP 伺服器，並把其工具提供給代理"
 ---
 
-Strix can connect to [Model Context Protocol (MCP)](https://modelcontextprotocol.io) servers you list and expose their tools to the agent during a run. Use this to let the agent read how your system is actually built instead of inferring it from the outside.
+Strix 可以連接你列出的 [Model Context Protocol（MCP）](https://modelcontextprotocol.io) 伺服器，並在執行期間把這些工具提供給代理。這讓代理能實際讀取你的系統是如何建置的，而不是從外部推測。
 
-A few things it pays off for:
+以下是幾個特別有價值的場景：
 
-- **A database server.** The agent can read the schema and access policies and see tables left readable without them, rather than guessing from responses.
-- **A hosting or infrastructure server.** Deployments, domains and environment variable names tell it what is really running, so it tests what exists instead of what it discovered by crawling.
-- **An issue tracker.** Known and accepted risks stop the agent re-reporting findings you already triaged.
-- **A logging server.** Reading logs lets it confirm an exploit attempt actually landed instead of inferring it from a status code.
+- **資料庫伺服器。** 代理能讀取結構描述與存取策略，看出哪些資料表忘了設權限，而不是靠回應猜測。
+- **主機或基礎設施伺服器。** 部署、網域與環境變數名稱能告訴它實際在跑什麼，因此它測試的是真正存在的東西，而不是爬到的東西。
+- **問題追蹤系統。** 已知且已接受的風險可避免代理重複回報你已經分類過的發現。
+- **日誌伺服器。** 讀取日誌可確認某次利用嘗試是否真的成功，而不是只憑狀態碼推斷。
 
-## Setup
+## 設定
 
-Create the file `~/.strix/mcp-servers.json`. It holds a JSON list of the servers you want the agent to reach. Each entry is either a local `stdio` server that Strix launches as a subprocess, or a remote `http` server.
+建立檔案 `~/.strix/mcp-servers.json`。內容是一份 JSON 清單，列出你想讓代理連接的伺服器。每一筆可以是 Strix 以子程序啟動的本機 `stdio` 伺服器，或是遠端的 `http` 伺服器。
 
-Create the directory if it does not exist, then write the file:
+若目錄不存在，請先建立，再寫入檔案：
 
 ```bash
 mkdir -p ~/.strix
 ```
 
-Paste the servers you want into `~/.strix/mcp-servers.json`. The example below shows one of each transport: a local filesystem server over `stdio` and a remote GitHub server over `http` with a bearer token:
+把你想要的伺服器貼進 `~/.strix/mcp-servers.json`。下面範例各示範一種傳輸方式：以 `stdio` 連線的本機檔案系統伺服器，以及以 bearer 權杖透過 `http` 連線的遠端 GitHub 伺服器：
 
 ```json
 [
@@ -42,90 +42,74 @@ Paste the servers you want into `~/.strix/mcp-servers.json`. The example below s
 ]
 ```
 
-Strix reads this file at the start of each run. There is no default file, so no MCP tools are loaded until you create it. Edit `command`, `args`, `url`, and `token` to match your own servers.
+Strix 會在每次執行開始時讀取此檔案。系統沒有預設檔案，因此在建立之前不會載入任何 MCP 工具。請依你的伺服器修改 `command`、`args`、`url` 與 `token`。
 
-## Fields
+## 欄位
 
 <ParamField path="name" type="string" required>
-  A short label for the connection. Each server's tools are namespaced by
-  `name` (for example `local_fs_read_file`), so two servers can offer the same
-  tool name without colliding.
+  此連線的簡短標籤。每個伺服器的工具都會以此 `name` 加上命名空間（例如 `local_fs_read_file`），因此兩個伺服器可以提供同名工具而不衝突。
 </ParamField>
 
 <ParamField path="transport" type="string">
-  `stdio` for a local subprocess server, or `http` for a remote server.
+  本機子程序伺服器用 `stdio`，遠端伺服器用 `http`。
 </ParamField>
 
 <ParamField path="command" type="string">
-  For `stdio` servers: the executable Strix launches (for example `npx`).
+  對 `stdio` 伺服器：Strix 啟動的執行檔（例如 `npx`）。
 </ParamField>
 
 <ParamField path="args" type="array">
-  For `stdio` servers: the arguments passed to `command`.
+  對 `stdio` 伺服器：傳給 `command` 的參數。
 </ParamField>
 
 <ParamField path="url" type="string">
-  For `http` servers: the server endpoint URL.
+  對 `http` 伺服器：伺服器端點網址。
 </ParamField>
 
 <ParamField path="auth" type="object">
-  For `http` servers that need a bearer token:
-  `{ "kind": "bearer", "token": "your-token" }`.
+  對需要 bearer 權杖的 `http` 伺服器：
+  `{ "kind": "bearer", "token": "your-token" }`。
 </ParamField>
 
 <ParamField path="allowed_tools" type="array">
-  Restrict which tools the agent can call. Omit it to expose every tool the
-  server offers, or set it to a list of tool names to allow only those. Strix
-  does not decide for you which of a server's tools only read and which change
-  things, so run the server in its own read-only mode if it has one.
+  限制代理可以呼叫哪些工具。省略時會開放伺服器提供的所有工具；也可設為工具名稱清單，只允許其中這些。Strix 不會替你判斷伺服器的哪些工具只讀、哪些會造成變更，因此若伺服器本身有唯讀模式，請以該模式執行。
 </ParamField>
 
 <ParamField path="notes" type="string">
-  Free-text notes for the agent about what this connection is and how you want
-  it used, for example "Staging analytics database, read-only, prefer aggregate
-  queries." When set, the notes are given to the agent at the start of the run
-  as a description of the connection.
+  給代理的自由文字備註，說明此連線是什麼、你希望它怎麼使用，例如「Staging analytics database, read-only, prefer aggregate queries.」。設定後，這些備註會在執行開始時作為連線說明提供給代理。
 </ParamField>
 
-## Choosing connections per run
+## 每次執行選擇連線
 
-By default every connection in the file is used on each run. To narrow it for a
-single run without editing the file, use either flag (both repeatable):
+預設情況下，檔案中的每條連線都會在每次執行時使用。若想在不編輯檔案的情況下只針對單次執行縮小範圍，請使用以下任一個旗標（兩者皆可重複指定）：
 
 ```bash
-strix --mcp-server github -t ...        # use only the named connection(s)
-strix --mcp-exclude staging-db -t ...   # use everything except the named one(s)
+strix --mcp-server github -t ...        # 只使用指定的連線
+strix --mcp-exclude staging-db -t ...   # 使用指定的連線以外的全部
 ```
 
-`--mcp-server` keeps only the connections you name; `--mcp-exclude` drops the
-ones you name. Connection names must be unique in the file; if two entries share
-a name, the first is kept and the rest are ignored.
+`--mcp-server` 只保留你指定的連線；`--mcp-exclude` 則排除你指定的連線。連線名稱在檔案中必須唯一；若有兩筆同名，會保留第一筆，其餘忽略。
 
-## Pointing at a different file
+## 指定其他設定檔
 
-To read the config from another path instead of `~/.strix/mcp-servers.json`, either pass `--mcp-config <path>` on the command line:
+若想從其他路徑讀取設定（而非 `~/.strix/mcp-servers.json`），可在命令列加上 `--mcp-config <path>`：
 
 ```bash
 strix --mcp-config ./mcp-servers.json -t ...
 ```
 
-or set the `STRIX_MCP_CONFIG` environment variable to that path. The flag takes precedence when both are given.
+或把 `STRIX_MCP_CONFIG` 環境變數設為該路徑。兩者同時提供時，旗標優先。
 
-## Startup confirmation
+## 啟動確認
 
-When servers are configured, Strix prints a one-line summary at scan startup, for example `MCP: connected 1 server (14 tools): local_fs`, so you can confirm your servers connected.
+若有設定伺服器，Strix 會在掃描啟動時印出一行摘要，例如 `MCP: connected 1 server (14 tools): local_fs`，方便你確認伺服器已連上。
 
-## Seeing the calls
+## 檢視呼叫
 
-Each call the agent makes to one of your servers is shown with its own icon and
-labelled with the connection it went out to, in the terminal and in the run
-viewer (`strix view`), so a call that left Strix for a server you connected is
-easy to pick out of a transcript. The terminal shows the call and its arguments;
-results can be large and arbitrary, so read them in the viewer, which shows a
-preview you can expand.
+代理每次呼叫你的伺服器時，都會有獨立圖示並標註它送往哪條連線，終端機與執行檢視器（`strix view`）都會顯示，因此從對話紀錄中很容易看出哪些呼叫是離開 Strix、送往你設定的伺服器。終端機會顯示呼叫與其參數；結果可能很大且內容任意，建議在檢視器中閱讀，那裡會顯示可展開的預覽。
 
-## Behavior
+## 行為
 
-- The config file is optional. Without it, a run simply gets no MCP tools.
-- A server that fails to connect is skipped and logged, and the run continues without it.
-- A single malformed entry is skipped without blocking the valid ones.
+- 設定檔是選用的。沒有它，該次執行就不會有任何 MCP 工具。
+- 連線失敗的伺服器會被略過並記錄，該次執行會在沒有它的情況下繼續。
+- 單一格式錯誤的項目會被略過，不會阻擋其他有效項目。

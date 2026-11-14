@@ -1,103 +1,103 @@
 ---
-title: "Cloud CLI"
-description: "Drive app.strix.ai from the terminal with strix cloud"
+title: "雲端 CLI"
+description: "用 strix cloud 從終端機操作 app.strix.ai"
 ---
 
-The `strix cloud` commands drive the managed platform ([app.strix.ai](https://app.strix.ai)) from the terminal. You do not need Docker or an LLM key.
+`strix cloud` 指令可從終端機操作受管平台（[app.strix.ai](https://app.strix.ai)）。不需要 Docker 或 LLM 金鑰。
 
-## Sign In
+## 登入
 
-Sign in once with the browser device flow. The sign-in creates your account and workspace on first use, and it stores a personal API token in `~/.strix/platform-auth.json`.
+以瀏覽器裝置流程登入一次即可。首次使用時，登入會建立你的帳號與工作區，並把個人 API 權杖存到 `~/.strix/platform-auth.json`。
 
 ```bash
-strix cloud login                         # browser approval, then workspace and scope profile
-strix cloud login --workspace "My Team"   # select a workspace by name or ID
-strix cloud whoami                        # local account and workspace status
-strix cloud session                       # verify the remote session and consent ceiling
-strix cloud logout                        # revoke remotely, then remove the local token
+strix cloud login                         # 瀏覽器核准，然後設定工作區與 scope 設定檔
+strix cloud login --workspace "My Team"   # 以名稱或 ID 選擇工作區
+strix cloud whoami                        # 本機帳號與工作區狀態
+strix cloud session                       # 驗證遠端工作階段與授權上限
+strix cloud logout                        # 先在遠端撤銷，再移除本機權杖
 ```
 
-A browser sign-in creates one reusable credential for each CLI installation. A second sign-in on the same installation replaces the secret instead of adding another key. `strix cloud logout` revokes the server session before it deletes the local token. Use `--local-only` when you cannot reach the server.
+一次瀏覽器登入會為每個 CLI 安裝建立一組可重複使用的憑證。同一安裝再次登入會取代原本的密鑰，而不是新增另一把金鑰。`strix cloud logout` 會先撤銷伺服器端工作階段，再刪除本機權杖。無法連上伺服器時可加上 `--local-only`。
 
-## Scopes
+## Scopes（權限範圍）
 
-The default **Recommended** preset covers normal scan work, local source uploads, workspace switching, and user-approved credit top-ups. It excludes credential creation, so request `tokens:write` when you need it.
+預設的 **Recommended** 預設集涵蓋一般掃描工作、本機來源上傳、工作區切換，以及使用者核准的點數加值。它不包含建立憑證，因此需要時請額外要求 `tokens:write`。
 
 ```bash
 strix cloud login --scopes scans:read scans:write uploads:write billing:read
-strix cloud login --scope-profile minimal   # also accepts recommended or full
-strix cloud session scopes                  # granted scopes and the login ceiling
-strix cloud session scopes set minimal      # narrow without another browser sign-in
+strix cloud login --scope-profile minimal   # 也可使用 recommended 或 full
+strix cloud session scopes                  # 已授予的 scopes 與登入授權上限
+strix cloud session scopes set minimal      # 縮小範圍，不需再次瀏覽器登入
 ```
 
-A workspace switch keeps the credential and its expiry, preserves the server-side scope preference, and caps access by the target role. A switch can never exceed the login consent ceiling. Each process pins the workspace it started with, so a concurrent switch fails safely instead of sending a stale command to another organization.
+切換工作區會保留憑證與其到期時間、保留伺服器端的 scope 偏好，並依目標角色限制存取。切換後的權限永遠不會超過登入時的授權上限。每個程序都會固定啟動時的工作區，因此並行切換會安全地失敗，而不會把過期指令送到另一個組織。
 
-## Commands
+## 指令
 
-Every operation of the [REST API](https://docs.app.strix.ai) has a matching command in the form `strix cloud <resource> <verb>`.
+[REST API](https://docs.app.strix.ai) 的每個操作都有對應指令，形式為 `strix cloud <resource> <verb>`。
 
 ```bash
-strix cloud                                   # list all resources
-strix cloud scans                             # run the safe default (scans list)
-strix cloud scans help                        # list the verbs of a resource
+strix cloud                                   # 列出所有資源
+strix cloud scans                             # 執行安全的預設動作（scans list）
+strix cloud scans help                        # 列出某資源的動詞
 strix cloud domains add --domain example.com --asset-type web_app
 strix cloud scans start --engagement-type live_test --domain-ids <uuid> --wait
 strix cloud vulns list --severity critical
-strix cloud credits                           # credit balance
+strix cloud credits                           # 點數餘額
 ```
 
-Write commands take request fields as flags. Every write command also accepts one JSON object with `--data`:
+寫入類指令可用旗標帶入請求欄位。每個寫入指令也接受一個 JSON 物件（`--data`）：
 
 ```bash
-strix cloud scans start --data '{"engagement_type":"code_review"}'   # literal JSON
-strix cloud scans start --data @request.json                         # read a file
-cat request.json | strix cloud scans start --data -                  # read standard input
+strix cloud scans start --data '{"engagement_type":"code_review"}'   # 直接寫 JSON
+strix cloud scans start --data @request.json                         # 從檔案讀取
+cat request.json | strix cloud scans start --data -                  # 從標準輸入讀取
 ```
 
-`--token` and `STRIX_API_TOKEN` are stateless overrides for a single command, and they never replace the stored sign-in. Pair a CLI-session override with `--workspace-id` or `STRIX_WORKSPACE_ID`.
+`--token` 與 `STRIX_API_TOKEN` 是針對單一指令的無狀態覆寫，不會取代已儲存的登入狀態。若用 CLI 工作階段覆寫，請搭配 `--workspace-id` 或 `STRIX_WORKSPACE_ID`。
 
-## Workspaces And Account Setup
+## 工作區與帳號設定
 
 ```bash
-strix cloud workspaces list                       # numbered list; workspace is also accepted
-strix cloud workspaces create --name "My Team"    # needs admin and organizations:write
-strix cloud workspaces use 2                      # switch by list number, exact name, or ID
-strix cloud billing topup --credits 20 --yes      # approve an agent payment after HTTP 402
-strix cloud billing subscribe --plan strix_cloud  # opens the hosted checkout page
-strix cloud billing portal                        # opens the billing portal
-strix cloud integrations install github           # opens the app installation page
-strix cloud domains verify <domain-id>            # prints the DNS record to add
+strix cloud workspaces list                       # 編號清單；也接受 workspace
+strix cloud workspaces create --name "My Team"    # 需要 admin 與 organizations:write
+strix cloud workspaces use 2                      # 以清單編號、完整名稱或 ID 切換
+strix cloud billing topup --credits 20 --yes      # 在 HTTP 402 後核准代理付款
+strix cloud billing subscribe --plan strix_cloud  # 開啟託管結帳頁
+strix cloud billing portal                        # 開啟帳務入口
+strix cloud integrations install github           # 開啟應用安裝頁
+strix cloud domains verify <domain-id>            # 印出要新增的 DNS 記錄
 ```
 
-The last four commands end at a person. Strix creates the link, opens the browser for an interactive terminal, and always prints the URL. The user enters the card, approves the installation, or adds the DNS record. Pass `--no-browser` to print the URL only.
+最後四個指令都需要真人操作。Strix 會產生連結、在互動式終端機自動開啟瀏覽器，並一律印出網址。使用者負責輸入卡片、核准安裝或新增 DNS 記錄。加上 `--no-browser` 則只印出網址。
 
-## Output And Exit Codes
+## 輸出與結束碼
 
-The commands work for people and for agents. Terminal output favors names, branches, lifecycle states, and numbered selectors. Redirected output, and `--json`, preserve the complete machine-readable record.
+這些指令同時適合人與代理使用。終端輸出偏向名稱、分支、生命週期狀態與編號選擇子；重導輸出與 `--json` 則保留完整的機器可讀紀錄。
 
-- Human lists keep the selectors that follow-up commands need, and they omit internal organization and user IDs. A selector that is too long for the compact table is repeated losslessly in a copyable block.
-- Paginated lists print the next `--page` or `--offset`. Detail views keep useful prose within a safe terminal bound, so use `--json` for the complete record.
-- Token lists separate API keys from named CLI device sessions.
-- Binary downloads are the exception to JSON output. Redirect the raw bytes on purpose, or use `--output FILE --json` to write the file and receive structured download metadata.
-- There are no prompts when stdin is not a terminal.
+- 人類可讀的清單會保留後續指令所需的選擇子，並省略內部的組織與使用者 ID。若選擇子過長而無法放入精簡表格，會以可複製的區塊完整重複一次。
+- 分頁清單會印出下一步的 `--page` 或 `--offset`。詳細檢視會把有用的敘述限制在安全的終端範圍內，因此需要完整紀錄時請用 `--json`。
+- 權杖清單會區分 API 金鑰與具名的 CLI 裝置工作階段。
+- 二進位下載是 JSON 輸出的例外。請刻意重導原始位元組，或使用 `--output FILE --json` 寫入檔案並取得結構化的下載中介資料。
+- 當 stdin 不是終端機時，不會出現任何互動提示。
 
-Exit codes: `0` success, `1` error, `2` invalid usage, `4` authentication or plan limit, `5` payment required.
+結束碼：`0` 成功、`1` 錯誤、`2` 用法無效、`4` 需要驗證或超出方案限制、`5` 需要付款。
 
-## Credits And Plan Limits
+## 點數與方案限制
 
-Non-Enterprise scans consume the deterministic estimate shown for their scope. A source-only code review at the default `ultra` tier currently starts at 60 credits. Enterprise scans are plan-included and do not consume the credit wallet.
+非企業版掃描會消耗其範圍所顯示的確定性估算值。預設 `ultra` 等級的純來源程式碼檢視目前起價 60 點。企業版掃描包含於方案內，不消耗點數錢包。
 
-Report downloads need Enterprise, schedules need Pro, and billing writes need an admin token. A plan block exits `4`. An insufficient credit wallet exits `5` without the creation of a scan and without a charge.
+報告下載需要企業版，排程需要 Pro，帳務寫入需要 admin 權杖。方案不符會以 `4` 結束。點數不足會以 `5` 結束，且不會建立掃描也不會扣款。
 
-## Local Source Scans
+## 本機來源掃描
 
-See [Scan Local Source](/cloud/overview#scan-local-source) for the upload approval flow, the exclusion rules, and the size limits.
+上傳核准流程、排除規則與大小限制，請見[掃描本機原始碼](/cloud/overview#scan-local-source)。
 
-## Tab Completion
+## 分頁補全
 
-Enable native tab completion once for each shell session:
+每個 shell 工作階段啟用一次原生分頁補全即可：
 
 ```bash
-source <(strix completions zsh)       # use bash instead of zsh when appropriate
+source <(strix completions zsh)       # 視情況把 zsh 換成 bash
 strix completions fish | source
 ```
