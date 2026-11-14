@@ -102,14 +102,14 @@ OpenAI / Anthropic / Google 的頂尖模型，用於安全測試需要額外申�
 
 ```powershell
 # Windows PowerShell
-git clone https://github.com/ssd12588/strix.git
+git clone https://github.com/ssd12588/strix-zh-tw.git
 cd strix
 uv sync
 ```
 
 macOS / Linux：
 ```bash
-git clone https://github.com/ssd12588/strix.git
+git clone https://github.com/ssd12588/strix-zh-tw.git
 cd strix
 uv sync
 ```

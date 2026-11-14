@@ -7,7 +7,7 @@
 
 ## 一句話現況
 
-`ssd12588/strix` 是 [usestrix/strix](https://github.com/usestrix/strix) 的**繁體中文漢化版**，
+`ssd12588/strix-zh-tw` 是 [usestrix/strix](https://github.com/usestrix/strix) 的**繁體中文漢化版**，
 介面、文件、中文上手包都已完成，**尚未做真實掃描驗證**。
 
 - 預設分支：`main`（另有同步分支 `zh-TW`）
@@ -98,7 +98,7 @@ git merge upstream/main
 
 ## 給新對話的開場提示
 
-> 這個倉庫是 `ssd12588/strix`，上游 `usestrix/strix` 的繁體中文漢化版。
+> 這個倉庫是 `ssd12588/strix-zh-tw`，上游 `usestrix/strix` 的繁體中文漢化版。
 > 請先讀 `docs-zh/PROJECT-STATUS.md` 與 `docs-zh/glossary.md` 了解現況與術語，
 > 再依 `docs-zh/PROJECT-STATUS.md` 的「尚未完成」清單繼續。
 > 漢化時遵守 `docs-zh/glossary.md` 的譯法；不要漢化 `strix/skills/` 與 `prompts/`。

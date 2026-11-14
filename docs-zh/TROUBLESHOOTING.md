@@ -349,4 +349,4 @@ docker info
 - 你用的 `STRIX_LLM` 值
 - 作業系統版本
 
-→ [回報問題](https://github.com/ssd12588/strix/issues/new)
+→ [回報問題](https://github.com/ssd12588/strix-zh-tw/issues/new)
