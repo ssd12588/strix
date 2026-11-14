@@ -40,6 +40,27 @@
 
 ---
 
+## 系統需求
+
+| 項目 | 最低需求 | 建議 |
+|---|---|---|
+| 作業系統 | Windows 10 / macOS 12 / Linux | Windows 11 + PowerShell 7 |
+| 記憶體 | 8 GB | 16 GB |
+| 磁碟空間 | 10 GB（沙箱映像約 3–5 GB） | 20 GB |
+| 必要軟體 | **Docker Desktop、Git、uv** | 加上 PowerShell 7 |
+| 網路 | 需能連線 `ghcr.io` 與 LLM API | — |
+
+> 不確定自己的環境能不能跑？執行體檢：
+> ```powershell
+> cd strix-zh-tw
+> .\scripts\doctor.ps1
+> ```
+> 會逐項檢查並用中文告訴你缺什麼、怎麼補。
+
+**中國大陸使用者注意**：`ghcr.io` 可能很慢，請先設定 Docker 鏡像加速，見 [`docs-zh/QUICKSTART.md`](docs-zh/QUICKSTART.md#06-中國大陸使用者先設定-docker-鏡像加速很重要)。
+
+---
+
 ## 關於本漢化版
 
 **本漢化版由 [阿樂](https://github.com/ssd12588) 負責繁體中文漢化與維護。**

@@ -16,6 +16,73 @@
 
 ---
 
+## 0.5 安裝前置工具（Windows 一次搞定）
+
+複製這幾行到 PowerShell（**系統管理員**身分，裝完要重開機）：
+
+```powershell
+winget install Git.Git
+winget install Microsoft.PowerShell
+powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
+winget install Docker.DockerDesktop
+```
+
+裝完**重新開機**，然後跑環境體檢：
+
+```powershell
+cd C:\Users\阿樂\.cline\data\workspaces\chat\strix-zh
+.\scripts\doctor.ps1
+```
+
+體檢會用中文告訴你缺什麼、該跑哪一行指令。
+
+### macOS / Linux
+
+```bash
+# Git
+xcode-select --install          # macOS
+sudo apt install git            # Ubuntu/Debian
+
+# uv
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Docker
+brew install --cask docker      # macOS
+curl -fsSL https://get.docker.com | sh   # Linux
+```
+
+---
+
+## 0.6 中國大陸使用者：先設定 Docker 鏡像加速（很重要）
+
+`ghcr.io` 在中國大陸經常很慢或連不上，會卡在「拉取沙箱映像」。先設定鏡像：
+
+**Docker Desktop → Settings → Docker Engine**，把內容改成：
+
+```json
+{
+  "registry-mirrors": [
+    "https://docker.m.daocloud.io",
+    "https://dockerproxy.com",
+    "https://mirror.ccs.tencentyun.com"
+  ]
+}
+```
+
+存檔 → **Apply & Restart** → 再跑 `docker pull ghcr.io/usestrix/strix-sandbox:1.4.1`
+
+若鏡像仍失敗，改用代理：
+
+```powershell
+$env:HTTP_PROXY="http://127.0.0.1:7890"
+$env:HTTPS_PROXY="http://127.0.0.1:7890"
+docker pull ghcr.io/usestrix/strix-sandbox:1.4.1
+```
+
+> 模型選擇也要注意：**OpenRouter 在中國大陸需要代理**，建議改用 `deepseek/deepseek-v4-pro`（見下一節）。
+
+---
+
 ## 1. 安裝 Docker
 
 ### Windows
