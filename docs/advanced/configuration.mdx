@@ -1,222 +1,196 @@
 ---
-title: "Configuration"
-description: "Environment variables for Strix"
+title: "設定"
+description: "Strix 的環境變數"
 ---
 
-Configure Strix using environment variables or a config file.
+可用環境變數或設定檔來設定 Strix。
 
-## LLM Configuration
+## LLM 設定
 
 <ParamField path="STRIX_LLM" type="string" required>
-  Model name in LiteLLM format (e.g., `openrouter/z-ai/glm-5.3`, `openai/gpt-6.1-sol`).
+  以 LiteLLM 格式表示的模型名稱（例如 `openrouter/z-ai/glm-5.3`、`openai/gpt-6.1-sol`）。
 </ParamField>
 
 <ParamField path="LLM_API_KEY" type="string">
-  API key for your LLM provider. Not required for local models or cloud provider auth (Vertex AI, AWS Bedrock).
+  你的 LLM 供應商 API 金鑰。本機模型或雲端供應商驗證（Vertex AI、AWS Bedrock）不需要。
 </ParamField>
 
 <ParamField path="LLM_API_BASE" type="string">
-  Custom API base URL. Also accepts `OPENAI_API_BASE`, `LITELLM_BASE_URL`, or `OLLAMA_API_BASE`.
+  自訂 API base URL。也接受 `OPENAI_API_BASE`、`LITELLM_BASE_URL` 或 `OLLAMA_API_BASE`。
 </ParamField>
 
 <ParamField path="STRIX_LLM_INPUT_COST_PER_MTOK" type="number">
-  Price per 1M input tokens in USD for `STRIX_LLM`. Use it for gateway or self-hosted model ids that LiteLLM can't price.
+  `STRIX_LLM` 每 100 萬輸入 token 的價格（美元）。用於 LiteLLM 無法計價的閘道或自架模型 ID。
 </ParamField>
 
 <ParamField path="STRIX_LLM_OUTPUT_COST_PER_MTOK" type="number">
-  Price per 1M output tokens in USD for `STRIX_LLM`.
+  `STRIX_LLM` 每 100 萬輸出 token 的價格（美元）。
 </ParamField>
 
 <ParamField path="STRIX_LLM_CACHED_INPUT_COST_PER_MTOK" type="number">
-  Price per 1M cached input tokens in USD for `STRIX_LLM`. If unset, cached tokens use the input price.
+  `STRIX_LLM` 每 100 萬快取輸入 token 的價格（美元）。未設定時，快取 token 會使用輸入價格。
 </ParamField>
 
 <Note>
-  Setting any of these prices replaces the provider-reported and LiteLLM cost for `STRIX_LLM` in reports and `--max-budget`. An unset input or output price counts as `0`, so set both. A separate `STRIX_DEDUPE_MODEL` keeps its LiteLLM price.
+  只要設定其中任一價格，就會取代報告與 `--max-budget` 中 `STRIX_LLM` 的供應商回報成本與 LiteLLM 成本。未設定的輸入或輸出價格視為 `0`，因此請兩者都設定。另設的 `STRIX_DEDUPE_MODEL` 仍使用其 LiteLLM 價格。
 </Note>
 
 <ParamField path="STRIX_API_TYPE" type="string">
-  Select the OpenAI API path for the model: `responses` or `chat_completions`.
-  By default the model decides: Responses when LiteLLM's model catalog lists
-  `/v1/responses` for it (e.g. `gpt-5`), chat completions otherwise. A custom
-  `LLM_API_BASE` does not change this, so set `STRIX_API_TYPE=chat_completions`
-  when your gateway only serves chat completions. Applies to bare and `openai/`
-  model names. Also accepts `STRIX_FORCE_API`.
+  選擇模型的 OpenAI API 路徑：`responses` 或 `chat_completions`。
+  預設由模型決定：若 LiteLLM 的模型目錄列出該模型支援 `/v1/responses`（例如 `gpt-5`）就使用 Responses，否則使用 chat completions。自訂的 `LLM_API_BASE` 不會改變這項判斷，因此若你的閘道只提供 chat completions，請設 `STRIX_API_TYPE=chat_completions`。適用於不帶前綴與 `openai/` 前綴的模型名稱。也接受 `STRIX_FORCE_API`。
 </ParamField>
 
 <ParamField path="LLM_EXTRA_HEADERS" type="string">
-  Extra HTTP headers sent on every LLM request, as a JSON object (e.g.
-  `{"X-Feature-Key":"value","X-Tenant":"acme"}`). Useful for OpenAI-compatible
-  gateways that require attribution or routing headers in addition to the bearer
-  token. The bearer token itself still comes from `LLM_API_KEY`. Applies to both
-  the LiteLLM and native OpenAI routing paths.
+  隨每個 LLM 請求送出的額外 HTTP 標頭，以 JSON 物件表示（例如 `{"X-Feature-Key":"value","X-Tenant":"acme"}`）。適用於除 bearer 權杖外還需要歸屬或路由標頭的相容 OpenAI 閘道。bearer 權杖本身仍來自 `LLM_API_KEY`。LiteLLM 與原生 OpenAI 兩條路由路徑皆適用。
 </ParamField>
 
 <ParamField path="LLM_EXTRA_BODY" type="string">
-  Extra fields merged into the JSON body of every request to the main model, as a JSON object
-  (e.g. `{"service_tier":"flex","safety_identifier":"9f86d081..."}`). Use it
-  for provider parameters Strix doesn't expose, such as OpenAI's `service_tier`
-  or `safety_identifier`. Applies to both the LiteLLM and native OpenAI routing
-  paths. Fields are not validated, so the provider or gateway must accept them;
-  unknown fields are usually rejected. Extra fields can override fields Strix
-  sends and break requests, so don't set request-shaping fields such as `model`, `messages`, `input`,
-  `tools` or `stream`, and use `STRIX_REASONING_EFFORT` rather than
-  `reasoning_effort`.
+  合併到送往主模型每個請求 JSON 內容的額外欄位，以 JSON 物件表示（例如 `{"service_tier":"flex","safety_identifier":"9f86d081..."}`）。用於 Strix 未提供的供應商參數，例如 OpenAI 的 `service_tier` 或 `safety_identifier`。LiteLLM 與原生 OpenAI 兩條路由路徑皆適用。欄位不會被驗證，因此供應商或閘道必須接受它們；未知欄位通常會被拒絕。額外欄位可能覆寫 Strix 送出的欄位並破壞請求，因此不要設定會影響請求結構的欄位，例如 `model`、`messages`、`input`、`tools` 或 `stream`；並請改用 `STRIX_REASONING_EFFORT` 而非 `reasoning_effort`。
 </ParamField>
 
 <ParamField path="LLM_TIMEOUT" default="300" type="integer">
-  Request timeout in seconds for LLM calls.
+  LLM 呼叫的請求逾時秒數。
 </ParamField>
 
 <ParamField path="LLM_PREFLIGHT_TIMEOUT" default="30" type="integer">
-  Seconds the startup connection check waits for the model to answer before
-  failing with `LLM CONNECTION FAILED`. Scan requests use `LLM_TIMEOUT`.
+  啟動時的連線檢查在模型回應前等待的秒數，逾時會以 `LLM CONNECTION FAILED` 失敗。掃描請求使用 `LLM_TIMEOUT`。
 </ParamField>
 
 <ParamField path="STRIX_LLM_MAX_RETRIES" default="5" type="integer">
-  Maximum number of retries for LLM API calls on transient failures.
+  暫時性失敗時 LLM API 呼叫的最大重試次數。
 </ParamField>
 
 <ParamField path="STRIX_REASONING_EFFORT" default="high" type="string">
-  Control thinking effort for reasoning models. Valid values: `none`, `minimal`, `low`, `medium`, `high`, `xhigh`, `max`. Defaults to `medium` for quick scan mode.
+  控制推理模型的思考強度。有效值：`none`、`minimal`、`low`、`medium`、`high`、`xhigh`、`max`。快速掃描模式預設為 `medium`。
 </ParamField>
 
 <ParamField path="STRIX_MEMORY_COMPRESSOR_TIMEOUT" default="30" type="integer">
-  Timeout in seconds for memory compression operations (context summarization).
+  記憶體壓縮作業（上下文摘要）的逾時秒數。
 </ParamField>
 
 <ParamField path="STRIX_OPENROUTER_STICKY_SESSIONS" default="false" type="boolean">
-  Send a per-agent `session_id` on OpenRouter requests, so each agent's calls stay on one upstream provider and its prompt cache carries over between turns. When unset, OpenRouter routes every request freely.
+  在 OpenRouter 請求中送出每個代理專屬的 `session_id`，讓每個代理的呼叫都留在同一個上游供應商，其提示快取也能在回合間延續。未設定時，OpenRouter 會自由路由每個請求。
 </ParamField>
 
 <ParamField path="STRIX_CACHE_BLOCK_TOKENS" default="128" type="integer">
-  Token block size that providers cache prompts in. A turn counts as a cache miss in the run report only when the cached tokens fall at least this many tokens short of the previous prompt and the prompt did not shrink. Lower it for providers with smaller blocks (DeepSeek and GLM use 64; vLLM defaults to 16).
+  供應商快取提示詞的 token 區塊大小。只有當快取 token 比前一個提示詞少至少這麼多 token，且提示詞沒有縮短時，該回合才會在執行報告中計為快取未命中。若供應商區塊較小可調低（DeepSeek 與 GLM 使用 64；vLLM 預設 16）。
 </ParamField>
 
-### Dedicated deduplication model
+### 專用去重模型
 
-Finding deduplication is a cheap, structured classification task. By default it
-runs on the main model, but you can route it to a smaller/cheaper model without
-affecting the agents that do the actual testing.
+發現去重是一項便宜且結構化的分類任務。預設在主模型上執行，但你可以把它路由到較小／較便宜的模型，而不影響實際執行測試的代理。
 
 <ParamField path="STRIX_DEDUPE_MODEL" type="string">
-  Model used to judge whether a candidate finding duplicates an existing report.
-  Falls back to `STRIX_LLM` when unset.
+  用來判斷候選發現是否與既有報告重複的模型。未設定時回退到 `STRIX_LLM`。
 </ParamField>
 
 <ParamField path="DEDUPE_LLM_API_KEY" type="string">
-  Optional provider key for the deduplication model.
+  去重模型可選的供應商金鑰。
 </ParamField>
 
 <ParamField path="DEDUPE_LLM_API_BASE" type="string">
-  Optional custom API base URL for the deduplication model. Use when the dedupe
-  model runs on a different endpoint than the main model.
+  去重模型可選的自訂 API base URL。當去重模型跑在與主模型不同的端點時使用。
 </ParamField>
 
 <ParamField path="DEDUPE_LLM_EXTRA_HEADERS" type="string">
-  Optional JSON object of extra HTTP headers sent on every deduplication-model
-  request, e.g. `{"X-Feature-Key":"value"}`. A dedicated dedupe model never
-  inherits `LLM_EXTRA_HEADERS`; set this when its endpoint needs custom headers.
+  可選的 JSON 物件，指定隨每個去重模型請求送出的額外 HTTP 標頭，例如 `{"X-Feature-Key":"value"}`。專用去重模型不會繼承 `LLM_EXTRA_HEADERS`；若其端點需要自訂標頭，請設定此項。
 </ParamField>
 
 <ParamField path="DEDUPE_LLM_EXTRA_BODY" type="string">
-  Optional JSON object of extra request-body fields sent on every
-  deduplication-model request. A dedicated dedupe model never inherits
-  `LLM_EXTRA_BODY`; set this when its endpoint needs them too.
+  可選的 JSON 物件，指定隨每個去重模型請求送出的額外請求內容欄位。專用去重模型不會繼承 `LLM_EXTRA_BODY`；若其端點也需要，請設定此項。
 </ParamField>
 
 <ParamField path="STRIX_DEDUPE_REASONING_EFFORT" type="string">
-  Reasoning effort for the deduplication model. Defaults to the model's own
-  baseline when unset.
+  去重模型的推理強度。未設定時使用模型自身的基準值。
 </ParamField>
 
-## Optional Features
+## 選用功能
 
 <ParamField path="PERPLEXITY_API_KEY" type="string">
-  API key for Perplexity AI. Enables real-time web search during scans for OSINT and vulnerability research.
+  Perplexity AI 的 API 金鑰。可在掃描期間啟用即時網頁搜尋，用於 OSINT 與漏洞研究。
 </ParamField>
 
 <ParamField path="EXA_API_KEY" type="string">
-  API key for Exa. Enables real-time web search through the Exa `/search` endpoint. Exa also powers the `web_get_contents` tool, which fetches the full text of a page through the Exa `/contents` endpoint. This is the preferred web search provider.
+  Exa 的 API 金鑰。可透過 Exa 的 `/search` 端點啟用即時網頁搜尋。Exa 也支援 `web_get_contents` 工具，透過 `/contents` 端點取得頁面全文。這是偏好的網頁搜尋供應商。
 </ParamField>
 
 <ParamField path="STRIX_WEB_SEARCH_PROVIDER" default="auto" type="string">
-  Web search provider: `auto`, `perplexity`, or `exa`. With `auto`, Strix uses Exa when `EXA_API_KEY` is set, and Perplexity otherwise. Set an explicit provider to pin one when you configure both keys.
+  網頁搜尋供應商：`auto`、`perplexity` 或 `exa`。使用 `auto` 時，若設定了 `EXA_API_KEY` 就使用 Exa，否則使用 Perplexity。若兩個金鑰都設定，可明確指定供應商以固定使用其一。
 </ParamField>
 
 <ParamField path="STRIX_EXA_SEARCH_TYPE" default="auto" type="string">
-  Exa search mode: `auto`, `fast`, `instant`, `deep-lite`, `deep`, or `deep-reasoning`. Lower modes return results faster. Higher modes plan across more steps and take more time. This setting applies only to the Exa provider.
+  Exa 搜尋模式：`auto`、`fast`、`instant`、`deep-lite`、`deep` 或 `deep-reasoning`。較低的模式回傳較快；較高的模式會規劃更多步驟、耗時更久。此設定僅適用於 Exa 供應商。
 </ParamField>
 
 <ParamField path="STRIX_EXA_NUM_RESULTS" default="5" type="integer">
-  Number of Exa results to return, from `1` to `100`. Each result includes a title, a URL, and a short security-focused summary. To read a full page, the agent calls `web_get_contents` with the result URL. This setting applies only to the Exa provider.
+  Exa 回傳的結果數量，範圍 `1` 到 `100`。每筆結果包含標題、網址與簡短的安全導向摘要。若要閱讀完整頁面，代理會以結果網址呼叫 `web_get_contents`。此設定僅適用於 Exa 供應商。
 </ParamField>
 
 <ParamField path="POSTMAN_API_KEY" type="string">
-  Postman API key (`PMAK-…`). Enables fetching Postman collections by id as a target (`postman://<collection-uid>`), and Postman environments (`postman://<collection-uid>?env=<environment-uid>`) to resolve collection variables. Not needed when passing a local collection export file.
+  Postman API 金鑰（`PMAK-…`）。可讓目標以 id 取得 Postman collection（`postman://<collection-uid>`），並取得 Postman environment（`postman://<collection-uid>?env=<environment-uid>`）以解析 collection 變數。若傳入本機 collection 匯出檔則不需要。
 </ParamField>
 
 <ParamField path="STRIX_TELEMETRY" default="1" type="string">
-  Telemetry toggle. Set to `0`, `false`, `no`, or `off` to disable telemetry (PostHog, Scarf, OTEL).
+  遙測開關。設為 `0`、`false`、`no` 或 `off` 可停用遙測（PostHog、Scarf、OTEL）。
 </ParamField>
 
 <ParamField path="STRIX_RUN_RECORD_TIMINGS" default="false" type="boolean">
-  Record every LLM request's and tool call's timing in `run.json`, under `llm_requests` and `tool_calls`. Adds about 0.5 MB to a typical scan's `run.json`.
+  在 `run.json` 的 `llm_requests` 與 `tool_calls` 下記錄每個 LLM 請求與工具呼叫的耗時。會讓典型掃描的 `run.json` 增加約 0.5 MB。
 </ParamField>
 
 <ParamField path="TRACELOOP_BASE_URL" type="string">
-  OTLP/Traceloop base URL for remote OpenTelemetry export. If unset, Strix keeps traces local only.
+  用於遠端 OpenTelemetry 匯出的 OTLP/Traceloop base URL。未設定時，Strix 只在本機保留追蹤資料。
 </ParamField>
 
 <ParamField path="TRACELOOP_API_KEY" type="string">
-  API key used for remote trace export. Remote export is enabled only when both `TRACELOOP_BASE_URL` and `TRACELOOP_API_KEY` are set.
+  遠端追蹤匯出所用的 API 金鑰。只有同時設定 `TRACELOOP_BASE_URL` 與 `TRACELOOP_API_KEY` 時才會啟用遠端匯出。
 </ParamField>
 
 <ParamField path="TRACELOOP_HEADERS" type="string">
-  Optional custom OTEL headers (JSON object or `key=value,key2=value2`). Useful for Langfuse or custom/self-hosted OTLP gateways.
+  可選的自訂 OTEL 標頭（JSON 物件或 `key=value,key2=value2`）。適用於 Langfuse 或自訂／自架 OTLP 閘道。
 </ParamField>
 
-When remote OTEL vars are not set, Strix still writes complete run telemetry locally to:
+未設定遠端 OTEL 變數時，Strix 仍會在本機寫出完整的執行遙測：
 
 ```bash
 strix_runs/<run_name>/events.jsonl
 ```
 
-When remote vars are set, Strix dual-writes telemetry to both local JSONL and the remote OTEL endpoint.
+設定遠端變數時，Strix 會同時寫入本機 JSONL 與遠端 OTEL 端點。
 
-## Docker Configuration
+## Docker 設定
 
 <ParamField path="STRIX_IMAGE" default="ghcr.io/usestrix/strix-sandbox:1.4.1" type="string">
-  Docker image to use for the sandbox container.
+  沙箱容器使用的 Docker 映像。
 </ParamField>
 
 <ParamField path="DOCKER_HOST" type="string">
-  Docker daemon address, for example `unix:///var/run/docker.sock` or `tcp://10.0.0.5:2375`. When not set, Strix connects to the same daemon as the `docker` CLI: the current docker context (`docker context use`), then the default socket. Docker Desktop, OrbStack and Colima register their sockets as contexts, so no extra configuration is needed for them.
+  Docker daemon 位址，例如 `unix:///var/run/docker.sock` 或 `tcp://10.0.0.5:2375`。未設定時，Strix 會連到與 `docker` CLI 相同的 daemon：目前 docker context（`docker context use`），然後是預設 socket。Docker Desktop、OrbStack 與 Colima 會把各自的 socket 註冊為 context，因此不需額外設定。
 </ParamField>
 
 <ParamField path="STRIX_RUNTIME_BACKEND" default="docker" type="string">
-  Runtime backend for the sandbox environment.
+  沙箱環境的執行後端。
 </ParamField>
 
-## Sandbox Configuration
+## 沙箱設定
 
 <ParamField path="STRIX_SANDBOX_EXECUTION_TIMEOUT" default="120" type="integer">
-  Maximum execution time in seconds for sandbox operations.
+  沙箱作業的最長執行時間（秒）。
 </ParamField>
 
 <ParamField path="STRIX_SANDBOX_CONNECT_TIMEOUT" default="10" type="integer">
-  Timeout in seconds for connecting to the sandbox container.
+  連線沙箱容器的逾時秒數。
 </ParamField>
 
-## Config File
+## 設定檔
 
-Strix stores configuration in `~/.strix/cli-config.json`. You can also specify a custom config file:
+Strix 會把設定存在 `~/.strix/cli-config.json`。你也可以指定自訂設定檔：
 
 ```bash
 strix --target ./app --config /path/to/config.json
 ```
 
-**Config file format:**
+**設定檔格式：**
 
 ```json
 {
@@ -228,18 +202,18 @@ strix --target ./app --config /path/to/config.json
 }
 ```
 
-## Example Setup
+## 設定範例
 
 ```bash
-# Required
+# 必要
 export STRIX_LLM="openrouter/z-ai/glm-5.3"
 export LLM_API_KEY="sk-..."
 
-# Optional: Enable web search (Exa preferred, Perplexity supported)
+# 選用：啟用網頁搜尋（偏好 Exa，也支援 Perplexity）
 export EXA_API_KEY="..."
 export PERPLEXITY_API_KEY="pplx-..."
 
-# Optional: Custom timeouts
+# 選用：自訂逾時
 export LLM_TIMEOUT="600"
 export STRIX_SANDBOX_EXECUTION_TIMEOUT="300"
 
