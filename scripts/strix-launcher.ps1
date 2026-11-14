@@ -158,6 +158,38 @@ if ($isBareDomain) {
     Warn '網址或路徑 → 只會測試該目標本身'
 }
 
+# ---------- 4.5 輸出目錄掛載 ----------
+$mountRel = $null
+$isLocalTarget = ($target -like './*') -or ($target -like '.\*') -or ($target -like '/*')
+$isRecon = $instructionFile -and ((Split-Path -Leaf $instructionFile) -like '*recon*')
+
+if (-not $isLocalTarget) {
+    Title '輸出目錄（讓 agent 寫的檔案留在本機）'
+    if ($isRecon) {
+        Write-Host '  偵測到 recon 任務：建議掛載，否則產出的清單會隨容器消失。' -ForegroundColor Yellow
+        Write-Host '' -ForegroundColor Gray
+    }
+    $defaultAns = 'n'
+    if ($isRecon) { $defaultAns = 'Y' }
+    $ans = Read-Host "  要掛載本機輸出目錄嗎？(Y/n，預設 $defaultAns)"
+    if ([string]::IsNullOrWhiteSpace($ans)) { $ans = $defaultAns }
+
+    if ($ans -in @('y', 'Y')) {
+        $autoClient = ($target -replace '^https?://', '' -replace '[^a-zA-Z0-9]', '-').Trim('-')
+        if ([string]::IsNullOrWhiteSpace($autoClient)) { $autoClient = 'client' }
+        $client = Read-Host "  客戶代號（輸出到 engagements\<代號>\out，預設 $autoClient)"
+        if ([string]::IsNullOrWhiteSpace($client)) { $client = $autoClient }
+        $client = $client -replace '[^a-zA-Z0-9\-_]', ''
+
+        $mountRel = Join-Path 'engagements' (Join-Path $client 'out')
+        New-Item -ItemType Directory -Force (Join-Path $root $mountRel) | Out-Null
+        Ok "掛載目錄：$mountRel"
+        Write-Host '     agent 請把檔案寫到 /workspace/out/（掛載點）' -ForegroundColor DarkGray
+    } else {
+        Ok '不掛載（agent 寫的檔案會隨容器消失）'
+    }
+}
+
 # ---------- 5. 掃描模式 ----------
 Title '掃描模式'
 
@@ -184,6 +216,7 @@ Ok "上限：`$$b"
 Title '確認後開始'
 Write-Host "  目標：    $target" -ForegroundColor White
 Write-Host "  指令檔：  $(if ($instructionFile) { Split-Path -Leaf $instructionFile } else { '（不指定）' })" -ForegroundColor White
+if ($mountRel) { Write-Host "  輸出目錄：  $mountRel  →  容器內 /workspace/out/" -ForegroundColor White }
 Write-Host "  模式：    $scanMode" -ForegroundColor White
 Write-Host "  預算：    `$$b" -ForegroundColor White
 Write-Host ''
@@ -196,7 +229,9 @@ Write-Host '  首次執行會下載沙箱映像（數 GB），請耐心等待…
 Write-Host '  操作鍵：esc 停止｜ctrl+q 離開｜輸入框可給代理指示' -ForegroundColor DarkGray
 Write-Host ''
 
-$cliArgs = @('run', 'strix', '--target', $target, '--scan-mode', $scanMode, '--max-budget', $b)
+$cliArgs = @('run', 'strix')
+if ($mountRel) { $cliArgs += @('--target', ".\$mountRel") }
+$cliArgs += @('--target', $target, '--scan-mode', $scanMode, '--max-budget', $b)
 if ($instructionFile) { $cliArgs += @('--instruction-file', $instructionFile) }
 
 & uv @cliArgs
@@ -212,6 +247,17 @@ switch ($code) {
 }
 
 if ($code -eq 0 -or $code -eq 2) {
+    if ($mountRel) {
+        $absMount = Join-Path $root $mountRel
+        Write-Host ''
+        Ok 'agent 產出的檔案應在：'
+        Write-Host "    $absMount" -ForegroundColor White
+        if (Test-Path $absMount) {
+            $files = Get-ChildItem $absMount -Recurse -File -ErrorAction SilentlyContinue
+            if ($files.Count -gt 0) { Ok "已寫入 $($files.Count) 個檔案" }
+            else { Warn '目錄是空的 —— agent 可能寫到 /workspace 根目錄了，可在 TUI 補指示重寫' }
+        }
+    }
     Write-Host ''
     $v = Read-Host '  要開啟 Web 儀表板看結果嗎？(Y/n)'
     if ($v -notin @('n', 'N')) {
