@@ -59,9 +59,48 @@ if (Get-Command docker -ErrorAction SilentlyContinue) {
 }
 if (-not $dockerOk) {
     Write-Host ''
-    Write-Host '  仍要繼續嗎？（掃描時會失敗）' -ForegroundColor Yellow
+    Write-Host '  仍要繼續嗎？（掃描與本機 recon 會失敗）' -ForegroundColor Yellow
     $go = Read-Host '  繼續？(y/N)'
     if ($go -notin @('y', 'Y')) { exit 1 }
+}
+
+# ---------- 2.5 功能選單 ----------
+Title '你要做什麼？'
+
+Write-Host '  [1] 掃描（選任務 md + 輸入目標）' -ForegroundColor White
+Write-Host '  [2] 本機資產收集（免費，不需 AI，用 Docker 工具鏈）' -ForegroundColor White
+Write-Host '  [3] 上游同步分析（看落後多少、哪些檔案會衝突）' -ForegroundColor White
+Write-Host '  [4] 開啟 Web 儀表板（看上次掃描結果）' -ForegroundColor White
+Write-Host ''
+$mode = Read-Host '  輸入編號（預設 1）'
+if ([string]::IsNullOrWhiteSpace($mode)) { $mode = '1' }
+
+if ($mode -eq '2') {
+    Title '本機資產收集'
+    $dom = Read-Host '  網域（例如 kmsh.org.tw）'
+    if ([string]::IsNullOrWhiteSpace($dom)) { exit 0 }
+    $cl = Read-Host '  客戶代號（輸出資料夾，可留空）'
+    $reconScript = Join-Path $root 'scripts\recon-local.ps1'
+    if ([string]::IsNullOrWhiteSpace($cl)) {
+        & pwsh -NoProfile -ExecutionPolicy Bypass -File $reconScript -Domain $dom
+    } else {
+        & pwsh -NoProfile -ExecutionPolicy Bypass -File $reconScript -Domain $dom -Client $cl
+    }
+    if (-not $NoPause) { Read-Host '按 Enter 結束' }
+    exit 0
+}
+
+if ($mode -eq '3') {
+    $syncScript = Join-Path $root 'scripts\sync-upstream.ps1'
+    & pwsh -NoProfile -ExecutionPolicy Bypass -File $syncScript
+    if (-not $NoPause) { Read-Host '按 Enter 結束' }
+    exit 0
+}
+
+if ($mode -eq '4') {
+    Write-Host '  啟動 strix view（按 Ctrl+C 關閉）…' -ForegroundColor DarkGray
+    & uv run strix view
+    exit 0
 }
 
 # ---------- 3. 選擇指令檔 ----------
