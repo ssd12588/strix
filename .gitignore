@@ -98,3 +98,6 @@ schema.graphql
 /.benchmarks/
 /references/
 /strix_runs_main/
+
+v_out.txt
+v_err.txt

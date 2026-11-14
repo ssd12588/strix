@@ -1,6 +1,0 @@
-
-Serving run-84924cb4 (live) at:
-  http://127.0.0.1:8123/?token=bNXkvaevaumI3uDu-e46kGvf8M4IYfDkFMrsFS34YVY
-This link authorizes the browser; anyone you share it with can steer
-a live scan and browse history. Press Ctrl-C to stop the viewer.
-
