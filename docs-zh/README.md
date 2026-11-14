@@ -18,6 +18,9 @@
 | [`QUICKSTART.md`](QUICKSTART.md) | 從零到第一次掃描：Docker、選模型、設金鑰、看結果 |
 | [`TROUBLESHOOTING.md`](TROUBLESHOOTING.md) | 把中文錯誤訊息對照回原因與解法（含 Windows 專屬問題） |
 | [`glossary.md`](glossary.md) | 漢化術語對照表，確保譯法一致 |
+| [`CHEATSHEET.md`](CHEATSHEET.md) | 常用指令速查（掃描、查看、維護、排錯） |
+| [`LAUNCHER.md`](LAUNCHER.md) | Windows 啟動器：雙擊 → 選任務 → 貼站點 → 開始 |
+| [`PROJECT-STATUS.md`](PROJECT-STATUS.md) | 專案狀態與交接（給新對話／未來的自己） |
 
 ## 一鍵啟動（Windows）
 
