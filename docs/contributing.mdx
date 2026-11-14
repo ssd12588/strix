@@ -1,113 +1,109 @@
 ---
-title: "Contributing"
-description: "Contribute to Strix development"
+title: "參與貢獻"
+description: "參與 Strix 開發"
 ---
 
-## Development Setup
+## 開發環境設置
 
-### Prerequisites
+### 先決條件
 
 - Python 3.12+
-- Latest Go 1.24.x patch (only for Bubble Tea TUI development and release artifacts)
-- Docker (running)
+- 最新的 Go 1.24.x 修補版本（僅用於 Bubble Tea TUI 開發與發行產物）
+- Docker（需正在執行）
 - [uv](https://docs.astral.sh/uv/)
 - Git
 
-### Local Development
+### 本機開發
 
 <Steps>
-  <Step title="Clone the repository">
+  <Step title="複製儲存庫">
     ```bash
     git clone https://github.com/usestrix/strix.git
     cd strix
     ```
   </Step>
-  <Step title="Install dependencies">
+  <Step title="安裝相依套件">
     ```bash
     make setup-dev
 
-    # or manually:
+    # 或手動執行：
     uv sync
     uv run pre-commit install
     ```
   </Step>
-  <Step title="Configure LLM">
+  <Step title="設定 LLM">
     ```bash
     export STRIX_LLM="openrouter/z-ai/glm-5.3"
     export LLM_API_KEY="your-api-key"
     ```
   </Step>
-  <Step title="Run Strix">
+  <Step title="執行 Strix">
     ```bash
     uv run strix --target https://example.com
     ```
   </Step>
 </Steps>
 
-## Contributing Skills
+## 貢獻技能（Skills）
 
-Skills are specialized knowledge packages that enhance agent capabilities. They live in `strix/skills/`
+技能是能強化代理能力的專業知識包，放在 `strix/skills/`。
 
-### Creating a Skill
+### 建立技能
 
-1. Choose the right category
-2. Create a `.md` file with YAML frontmatter (`name` and `description` fields)
-3. Include practical examples—working payloads, commands, test cases
-4. Provide validation methods to confirm findings
-5. Submit via PR
+1. 選擇合適的分類
+2. 建立 `.md` 檔案，並加上 YAML frontmatter（`name` 與 `description` 欄位）
+3. 附上實用範例 —— 可用的 payload、指令、測試案例
+4. 提供驗證方法以確認發現
+5. 透過 PR 提交
 
-## Contributing Code
+## 貢獻程式碼
 
-### Pull Request Process
+### Pull Request 流程
 
-1. **Create an issue first** — Describe the problem or feature
-2. **Fork and branch** — Work from `main`
-3. **Make changes** — Follow existing code style
-4. **Write tests** — Ensure coverage for new features
-5. **Run checks** — `make check-all` should pass
-6. **Submit PR** — Link to issue and provide context
+1. **先建立 issue** —— 描述問題或功能
+2. **Fork 並開分支** —— 從 `main` 開始
+3. **進行修改** —— 遵循既有程式碼風格
+4. **撰寫測試** —— 確保新功能有涵蓋
+5. **執行檢查** —— `make check-all` 應通過
+6. **提交 PR** —— 連結 issue 並提供背景說明
 
-### Code Style
+### 程式碼風格
 
-- PEP 8 with 100-character line limit
-- Type hints for all functions
-- Docstrings for public methods
-- Small, focused functions
-- Meaningful variable names
+- 採 PEP 8，每行上限 100 字元
+- 所有函式都要有型別提示
+- 公開方法要有 docstring
+- 函式要小而專一
+- 變數名稱要有意義
 
-## Package Builds
+## 套件建置
 
-Editable installs do not require Go; they run the TUI from source (`go run`).
+可編輯安裝（editable install）不需要 Go，它會直接從原始碼執行 TUI（`go run`）。
 
-Wheels are intentionally strict: they always bundle the matching Go sidecar and
-are platform-specific.
+Wheel 則是刻意嚴格：一律捆綁對應的 Go sidecar，並且是平台專屬的。
 
 ```bash
 make wheel
 ```
 
-The build hook (`scripts/tui_sidecar_hook.py`) requires Go 1.24.x or newer, embeds
-the sidecar as `strix/bin/strix-tui`, and assigns the current platform tag.
-Frozen releases built by `scripts/build.sh` and `strix.spec` also require the
-sidecar.
+建置掛鉤（`scripts/tui_sidecar_hook.py`）需要 Go 1.24.x 或更新版本，會把 sidecar 內嵌為 `strix/bin/strix-tui`，並標上目前平台標籤。由 `scripts/build.sh` 與 `strix.spec` 建置的凍結發行版同樣需要該 sidecar。
 
-## Reporting Issues
+## 回報問題
 
-Include:
+請附上：
 
-- Python version and OS
-- Strix version (`strix --version`)
-- LLM being used
-- Full error traceback
-- Steps to reproduce
+- Python 版本與作業系統
+- Strix 版本（`strix --version`）
+- 使用的 LLM
+- 完整錯誤追蹤（traceback）
+- 重現步驟
 
-## Community
+## 社群
 
 <CardGroup cols={2}>
   <Card title="Discord" icon="discord" href="https://discord.gg/strix-ai">
-    Join the community for help and discussion.
+    加入社群尋求協助與討論。
   </Card>
   <Card title="GitHub Issues" icon="github" href="https://github.com/usestrix/strix/issues">
-    Report bugs and request features.
+    回報 bug 與提出功能需求。
   </Card>
 </CardGroup>

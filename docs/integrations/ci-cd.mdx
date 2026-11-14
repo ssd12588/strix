@@ -1,33 +1,33 @@
 ---
-title: "CI/CD Integration"
-description: "Run Strix in any CI/CD pipeline"
+title: "CI/CD 整合"
+description: "在任何 CI/CD 流程中執行 Strix"
 ---
 
-Strix runs in headless mode for automated pipelines.
+Strix 可用無介面模式在自動化流程中執行。
 
-## Headless Mode
+## 無介面模式
 
-Use the `-n` or `--non-interactive` flag:
+使用 `-n` 或 `--non-interactive` 旗標：
 
 ```bash
 strix -n --target ./app --scan-mode quick
 ```
 
-For pull-request style CI runs, Strix automatically scopes quick scans to changed files. You can force this behavior and set a base ref explicitly:
+對於 Pull Request 形式的 CI 執行，Strix 會自動把快速掃描範圍限定在變更的檔案。你也可以強制此行為並明確指定比較基準：
 
 ```bash
 strix -n --target ./app --scan-mode quick --scope-mode diff --diff-base origin/main
 ```
 
-## Exit Codes
+## 結束碼
 
-| Code | Meaning |
+| 代碼 | 意義 |
 |------|---------|
-| 0 | No vulnerabilities found (with `--fail-on`, none at or above the threshold) |
-| 1 | Execution error |
-| 2 | Vulnerabilities found (with `--fail-on`, at least one at or above the threshold) |
+| 0 | 未發現漏洞（使用 `--fail-on` 時，代表沒有達到或超過門檻的發現） |
+| 1 | 執行錯誤 |
+| 2 | 發現漏洞（使用 `--fail-on` 時，代表至少有一項達到或超過門檻） |
 
-To fail only on serious findings, pass `--fail-on` with a minimum severity. Lower findings are still reported but exit `0`, so a passing job does not mean the report is empty.:
+若只想在嚴重發現時失敗，請用 `--fail-on` 指定最低嚴重度。較輕微的發現仍會報告，但結束碼為 `0`，因此「通過」不代表報告是空的：
 
 ```bash
 strix -n --target ./app --scan-mode quick --fail-on high
@@ -88,9 +88,9 @@ jobs:
 ```
 
 <Note>
-All CI platforms require Docker access. Ensure your runner has Docker available.
+所有 CI 平台都需要能存取 Docker。請確認你的 runner 已可使用 Docker。
 </Note>
 
 <Tip>
-If diff-scope fails in CI, fetch full git history (for example, `fetch-depth: 0` in GitHub Actions) so merge-base and branch comparison can be resolved.
+若 CI 中的 diff 範圍解析失敗，請抓取完整的 git 歷史（例如 GitHub Actions 的 `fetch-depth: 0`），這樣才能解析 merge-base 與分支比較。
 </Tip>

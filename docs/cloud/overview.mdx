@@ -1,59 +1,59 @@
 ---
-title: "Introduction"
-description: "Managed security testing without local setup"
+title: "簡介"
+description: "免本機設定的受管安全測試"
 ---
 
-Skip the setup. Run Strix in the cloud at [app.strix.ai](https://app.strix.ai).
+跳過安裝步驟。直接在雲端 [app.strix.ai](https://app.strix.ai) 執行 Strix。
 
-## Features
+## 功能
 
 <CardGroup cols={2}>
-  <Card title="No Setup Required" icon="cloud">
-    No Docker, API keys, or local installation needed.
+  <Card title="免設定" icon="cloud">
+    不需要 Docker、API 金鑰或本機安裝。
   </Card>
-  <Card title="Full Reports" icon="file-lines">
-    Detailed findings with remediation guidance.
+  <Card title="完整報告" icon="file-lines">
+    詳細的發現與修補指引。
   </Card>
-  <Card title="Team Dashboards" icon="users">
-    Track vulnerabilities and fixes over time.
+  <Card title="團隊儀表板" icon="users">
+    長期追蹤漏洞與修補狀況。
   </Card>
-  <Card title="GitHub Integration" icon="github">
-    Automatic scans on pull requests.
+  <Card title="GitHub 整合" icon="github">
+    在 Pull Request 上自動掃描。
   </Card>
 </CardGroup>
 
-## What You Get
+## 你會得到什麼
 
-- **Penetration test reports** — Validated findings with PoCs
-- **Shareable dashboards** — Collaborate with your team
-- **CI/CD integration** — Block risky changes automatically
-- **Continuous monitoring** — Catch new vulnerabilities quickly
+- **滲透測試報告** —— 經驗證的發現與 PoC
+- **可分享的儀表板** —— 與團隊協作
+- **CI/CD 整合** —— 自動攔下有風險的變更
+- **持續監控** —— 快速捕捉新漏洞
 
-## Getting Started
+## 開始使用
 
-1. Sign up at [app.strix.ai](https://app.strix.ai)
-2. Connect your repository or enter a target URL
-3. Launch your first scan
+1. 在 [app.strix.ai](https://app.strix.ai) 註冊
+2. 連接你的儲存庫，或輸入目標網址
+3. 啟動第一次掃描
 
-## Scan Local Source
+## 掃描本機原始碼
 
-Send a local working tree to the managed white-box scanner without connecting a source-control provider:
+在不連接原始碼代管平台的情況下，把本機工作目錄送交受管的白箱掃描器：
 
 ```bash
-# Review the exact file manifest and capture source.archive_sha256. Nothing is uploaded.
+# 檢視確切的檔案清單並取得 source.archive_sha256，此時尚未上傳任何內容。
 strix cloud scans start --source . --dry-run --show-files --json
 SOURCE_SHA256="<reviewed source.archive_sha256>"
 
-# Repeat the same source-selection flags and approve that exact snapshot.
+# 重複相同來源選擇旗標，並核准該確切快照。
 strix cloud scans start --source . --approve-sha256 "$SOURCE_SHA256" --wait
 ```
 
-In a Git repository, Strix includes tracked files and untracked files that are not ignored. Hidden files, `.git`, symlinks, dependencies and build output, secret-like filenames, and nested archives are excluded by default. Use `.strixignore` or repeat `--exclude GLOB` for project-specific exclusions. `--include-hidden`, `--include-sensitive`, and `--include-archives` are explicit opt-ins.
+在 Git 儲存庫中，Strix 會納入已追蹤的檔案，以及未被忽略的未追蹤檔案。隱藏檔、`.git`、符號連結、相依套件與建置產物、看起來像機密的檔名，以及巢狀壓縮檔預設都會排除。專案專屬的排除規則可使用 `.strixignore`，或重複指定 `--exclude GLOB`。`--include-hidden`、`--include-sensitive` 與 `--include-archives` 必須明確開啟。
 
-The CLI limits individual files, total expanded bytes, archive bytes, and file count. For an agent or CI handoff, repeat the same `--source`, `--exclude`, and `--include-*` flags with `--approve-sha256`; Strix refuses the upload if the rebuilt archive differs from the reviewed digest. `--yes` is a one-invocation approval for the snapshot built at that moment, not a digest-bound two-step approval.
+CLI 會限制單一檔案大小、展開後的總位元組數、壓縮檔位元組數與檔案數量。若要把工作交給代理或 CI，請重複相同的 `--source`、`--exclude` 與 `--include-*` 旗標，並加上 `--approve-sha256`；若重建的壓縮檔與已檢視的摘要不同，Strix 會拒絕上傳。`--yes` 只代表對「當下建立的快照」核准一次，不是與摘要綁定的兩段式核准。
 
-The temporary local archive is always removed. After a definitive launch rejection, Strix also deletes the staged remote upload. If a network error, server error, or interruption makes the launch outcome ambiguous, it retains the upload and reports its ID; check `strix cloud scans list` before retrying, then delete an unlinked upload with `strix cloud uploads delete UPLOAD_ID`.
+暫存的本機壓縮檔一定會被刪除。若啟動被明確拒絕，Strix 也會刪除已暫存的遠端上傳。若因網路錯誤、伺服器錯誤或中斷導致啟動結果不明確，Strix 會保留該上傳並回報其 ID；重試前請先以 `strix cloud scans list` 確認，再用 `strix cloud uploads delete UPLOAD_ID` 刪除未連結的上傳。
 
-<Card title="Try Strix Cloud" icon="rocket" href="https://app.strix.ai">
-  Run your first pentest in minutes.
+<Card title="試用 Strix Cloud" icon="rocket" href="https://app.strix.ai">
+  幾分鐘內完成第一次滲透測試。
 </Card>

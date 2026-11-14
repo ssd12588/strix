@@ -1,67 +1,67 @@
 ---
-title: "Coding Agents"
-description: "Use Strix from Claude Code, Cursor, Codex, and other AI agents"
+title: "程式開發代理"
+description: "從 Claude Code、Cursor、Codex 等 AI 代理使用 Strix"
 ---
 
-Strix is built to be driven by AI coding agents. Install the official agent skills and your agent knows how to run pentests, remediate findings, and wire Strix into CI.
+Strix 天生適合由 AI 程式開發代理驅動。安裝官方代理技能後，你的代理就知道如何執行滲透測試、修補發現，並把 Strix 接進 CI。
 
-## Install the Skills
+## 安裝技能
 
-Works with any agent that supports the open [SKILL.md standard](https://agentskills.io) — Claude Code, Cursor, Codex, Gemini CLI, OpenCode, and dozens more:
+支援任何遵循開放 [SKILL.md 標準](https://agentskills.io) 的代理 —— Claude Code、Cursor、Codex、Gemini CLI、OpenCode 等數十種：
 
 ```bash
 npx skills add usestrix/strix
 ```
 
-| Skill | What your agent learns |
+| 技能 | 你的代理會學到什麼 |
 |-------|------------------------|
-| `penetration-testing-with-strix` | Run headless scans against code, URLs, domains, or IPs — self-hosted CLI or managed cloud — with budget caps, and read the results |
-| `managed-pentesting-with-strix` | Drive the managed [app.strix.ai](https://app.strix.ai) platform over REST — no local Docker or LLM key needed |
-| `fix-security-vulnerabilities-with-strix` | Triage findings, fix root causes, and re-run Strix to verify each fix |
-| `ci-security-scanning-with-strix` | Add PR security scanning to GitHub Actions or any CI (self-hosted CLI or managed app) |
-| `application-security-testing` | Assess a whole product: choose the right test for each asset, then rank the findings into one remediation plan |
-| `web-app-penetration-testing` | Black-box pentest of a live web app or staging site — scope, credentials, and multi-account access-control testing |
-| `api-security-testing` | Test a REST/GraphQL API against the OWASP API Security Top 10 — schema-driven enumeration, BOLA/IDOR, authz |
-| `owasp-top-10-testing` | Systematic OWASP Top 10 assessment with honest per-category coverage |
-| `find-security-vulnerabilities-in-code` | White-box security review of a repo or working tree, with exploits to confirm findings |
+| `penetration-testing-with-strix` | 對程式碼、URL、網域或 IP 執行無介面掃描 —— 自架 CLI 或受管雲端皆可 —— 支援預算上限，並讀取結果 |
+| `managed-pentesting-with-strix` | 透過 REST 操作受管的 [app.strix.ai](https://app.strix.ai) 平台 —— 不需要本機 Docker 或 LLM 金鑰 |
+| `fix-security-vulnerabilities-with-strix` | 分類發現、修正根本原因，並重跑 Strix 驗證每項修正 |
+| `ci-security-scanning-with-strix` | 把 PR 安全掃描加入 GitHub Actions 或任何 CI（自架 CLI 或受管平台） |
+| `application-security-testing` | 評估整個產品：為每個資產選擇合適的測試，再把發現整理成一份修補計畫 |
+| `web-app-penetration-testing` | 對線上 Web 應用或測試站做黑箱滲透測試 —— 範圍、帳號密碼與多帳號存取控制測試 |
+| `api-security-testing` | 依 OWASP API Security Top 10 測試 REST/GraphQL API —— 以結構描述驅動的列舉、BOLA/IDOR、授權 |
+| `owasp-top-10-testing` | 系統性 OWASP Top 10 評估，並誠實說明各類別的涵蓋程度 |
+| `find-security-vulnerabilities-in-code` | 對儲存庫或工作目錄做白箱安全檢視，並以利用程式確認發現 |
 
-Install a single skill with `npx skills add usestrix/strix --skill penetration-testing-with-strix`, or use one without installing:
+可用 `npx skills add usestrix/strix --skill penetration-testing-with-strix` 只安裝單一技能，或不安裝直接使用：
 
 ```bash
 npx skills use usestrix/strix@penetration-testing-with-strix | claude
 ```
 
-## Two ways to run — self-hosted or managed
+## 兩種執行方式 —— 自架或受管
 
-Both use the same engine and produce the same validated findings and SARIF, so agents can pick per situation or combine them:
+兩者使用相同引擎，產生的驗證結果與 SARIF 也相同，代理可依情況選擇或混用：
 
-- **Open-source CLI (self-hosted)** — runs locally in a Docker sandbox with your own LLM key. Free, fully local, air-gap capable. Best for local dev loops and full control.
-- **Managed cloud** — runs on Strix's infrastructure. Drive it with the `strix cloud` CLI (every REST operation has a `strix cloud <resource> <verb>` command) or the [app.strix.ai REST API](https://docs.app.strix.ai) directly. No Docker, no LLM key; adds team dashboards, scheduling, PR reviews, and downloadable PDF/DOCX reports (Enterprise plan). Best in sandboxed/CI environments and for teams. Sign in with `strix cloud login` (browser device sign-in, account created on first use) or create a token in the dashboard under **Settings → API Access**. The `managed-pentesting-with-strix` skill has the full flow.
+- **開源 CLI（自架）** —— 在你的 Docker 沙箱中本機執行，使用自己的 LLM 金鑰。免費、完全本機、可離線（air-gap）。最適合本機開發迴圈與完整掌控。
+- **受管雲端** —— 在 Strix 的基礎設施上執行。可用 `strix cloud` CLI（每個 REST 操作都有對應的 `strix cloud <resource> <verb>` 指令）或直接使用 [app.strix.ai REST API](https://docs.app.strix.ai)。不需要 Docker、不需要 LLM 金鑰；另外提供團隊儀表板、排程、PR 審查與可下載的 PDF/DOCX 報告（企業方案）。最適合沙箱／CI 環境與團隊使用。以 `strix cloud login` 登入（瀏覽器裝置登入，首次使用時建立帳號），或在儀表板的 **Settings → API Access** 建立權杖。`managed-pentesting-with-strix` 技能包含完整流程。
 
-## Agent-Friendly Interfaces
+## 易於代理操作的介面
 
-Everything an agent needs is machine-readable:
+代理所需的一切都是機器可讀的：
 
-- **Headless CLI** — `strix -n` runs without the TUI and exits with `0` (clean), `1` (error), or `2` (vulnerabilities found).
-- **Cloud CLI** — `strix cloud` prints JSON when stdout is not a terminal (or with `--json`), never prompts without a TTY, and exits with `0` (success), `1` (error), `2` (usage), `4` (authentication required), or `5` (payment required). Credit top-ups pay the Stripe machine-payment challenge with an agent wallet (`strix cloud billing topup --credits N --yes`). Account setup also runs from the CLI: `strix cloud workspaces list|create|use`, `strix cloud org members invite`, `strix cloud billing subscribe`, `strix cloud billing portal`, and `strix cloud integrations install github`. The last three print a hosted link the user opens to finish the payment or approve the installation.
-- **REST API** — the managed platform exposes a documented [OpenAPI](https://docs.app.strix.ai/openapi.json) at `https://app.strix.ai/api/v1` (scans, vulnerabilities, assets, PR reviews, schedules, webhooks) with bearer tokens and scopes.
-- **Structured results** — every run writes `vulnerabilities.json`, `vulnerabilities.csv`, `findings.sarif` (SARIF 2.1.0), and per-finding Markdown under `strix_runs/<run-name>/`; the cloud exposes the same as JSON plus SARIF export.
-- **Budget controls** — `--max-budget` and `--max-turns` give agents hard cost/time caps.
-- **`AGENTS.md`** — the [repository's agent guide](https://github.com/usestrix/strix/blob/main/AGENTS.md) with a quick reference.
-- **`llms.txt`** — this documentation is indexed at [docs.strix.ai/llms.txt](https://docs.strix.ai/llms.txt) and fully exported at [docs.strix.ai/llms-full.txt](https://docs.strix.ai/llms-full.txt); every page is also available as Markdown by appending `.md` to its URL.
+- **無介面 CLI** —— `strix -n` 不開啟 TUI 直接執行，結束碼為 `0`（正常）、`1`（錯誤）、`2`（發現漏洞）。
+- **雲端 CLI** —— 當 stdout 不是終端機（或加上 `--json`）時，`strix cloud` 會輸出 JSON，沒有 TTY 時絕不互動提示，結束碼為 `0`（成功）、`1`（錯誤）、`2`（用法錯誤）、`4`（需要驗證）、`5`（需要付款）。點數加值可透過代理錢包完成 Stripe 機器付款驗證（`strix cloud billing topup --credits N --yes`）。帳號設定也能用 CLI 完成：`strix cloud workspaces list|create|use`、`strix cloud org members invite`、`strix cloud billing subscribe`、`strix cloud billing portal`、`strix cloud integrations install github`。最後三個會印出託管連結，由使用者開啟以完成付款或核准安裝。
+- **REST API** —— 受管平台在 `https://app.strix.ai/api/v1` 提供有文件的 [OpenAPI](https://docs.app.strix.ai/openapi.json)（掃描、漏洞、資產、PR 審查、排程、webhook），支援 bearer 權杖與 scopes。
+- **結構化結果** —— 每次執行都會在 `strix_runs/<run-name>/` 下寫出 `vulnerabilities.json`、`vulnerabilities.csv`、`findings.sarif`（SARIF 2.1.0）與每項發現的 Markdown；雲端提供相同內容的 JSON 以及 SARIF 匯出。
+- **預算控制** —— `--max-budget` 與 `--max-turns` 可為代理設定硬性的成本／時間上限。
+- **`AGENTS.md`** —— [儲存庫的代理指南](https://github.com/usestrix/strix/blob/main/AGENTS.md)，含快速參考。
+- **`llms.txt`** —— 本文件已索引於 [docs.strix.ai/llms.txt](https://docs.strix.ai/llms.txt)，完整匯出於 [docs.strix.ai/llms-full.txt](https://docs.strix.ai/llms-full.txt)；每個頁面也可在網址後加上 `.md` 取得 Markdown 版本。
 
-## Example Prompts
+## 提示詞範例
 
-Once the skills are installed, prompts like these just work:
+技能安裝好之後，這類提示詞就能直接運作：
 
 ```text
-Pentest this repo with Strix (quick mode, $10 budget) and summarize the findings.
+用 Strix 對這個 repo 做滲透測試（快速模式，預算 $10），並摘要發現。
 ```
 
 ```text
-Fix all critical and high findings from the last Strix run, then re-scan to verify.
+修正上一次 Strix 執行中所有重大與高風險發現，然後重新掃描驗證。
 ```
 
 ```text
-Add Strix security scanning to our GitHub Actions so every PR gets tested.
+把 Strix 安全掃描加進我們的 GitHub Actions，讓每個 PR 都被測試。
 ```
