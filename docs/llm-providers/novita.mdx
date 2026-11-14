@@ -1,11 +1,11 @@
 ---
 title: "Novita AI"
-description: "Configure Strix with Novita AI models"
+description: "使用 Novita AI 模型設定 Strix"
 ---
 
-[Novita AI](https://novita.ai) provides fast, cost-efficient inference for open-source models via an OpenAI-compatible API.
+[Novita AI](https://novita.ai) 透過相容 OpenAI 的 API 提供快速、具成本效益的開源模型推論。
 
-## Setup
+## 設定
 
 ```bash
 export STRIX_LLM="openai/zai-org/glm-5.3"
@@ -13,9 +13,9 @@ export LLM_API_KEY="your-novita-api-key"
 export LLM_API_BASE="https://api.novita.ai/openai"
 ```
 
-## Available Models
+## 可用模型
 
-| Model | Configuration |
+| 模型 | 設定 |
 |-------|---------------|
 | GLM-5.3 | `openai/zai-org/glm-5.3` |
 | Kimi K3.1 Pro | `openai/moonshotai/kimi-k3.1-pro` |
@@ -25,15 +25,15 @@ export LLM_API_BASE="https://api.novita.ai/openai"
 | MiniMax M3.1 Flash | `openai/minimax/minimax-m3.1-flash` |
 | GLM-5.3 Flash | `openai/zai-org/glm-5.3-flash` |
 
-## Get API Key
+## 取得 API 金鑰
 
-1. Sign up at [novita.ai](https://novita.ai)
-2. Navigate to **API Keys** in your dashboard
-3. Create a new key and copy it
+1. 在 [novita.ai](https://novita.ai) 註冊
+2. 在儀表板進入 **API Keys**
+3. 建立新金鑰並複製
 
-## Benefits
+## 優勢
 
-- **Cost-efficient** — Competitive pricing with per-token billing
-- **OpenAI-compatible** — Drop-in replacement using `LLM_API_BASE`
-- **Large context** — Models support up to 262k token context windows
-- **Function calling** — All listed models support tool/function calling
+- **成本效益** —— 具競爭力的價格，依 token 計費
+- **相容 OpenAI** —— 透過 `LLM_API_BASE` 即可直接替換使用
+- **大上下文** —— 模型支援最高 262k token 的上下文視窗
+- **函式呼叫** —— 表列模型皆支援工具／函式呼叫

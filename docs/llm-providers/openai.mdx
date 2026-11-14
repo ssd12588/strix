@@ -1,38 +1,38 @@
 ---
 title: "OpenAI"
-description: "Configure Strix with OpenAI models"
+description: "使用 OpenAI 模型設定 Strix"
 ---
 
-## Setup
+## 設定
 
 ```bash
 export STRIX_LLM="openai/gpt-6.1-sol"
 export LLM_API_KEY="sk-..."
 ```
 
-## Available Models
+## 可用模型
 
-| Model | Description |
+| 模型 | 說明 |
 |-------|-------------|
-| `openai/gpt-6.1-sol` | Best balance of capability and cost for agentic security work |
-| `openai/gpt-6-astra` | Flagship, maximum capability |
-| `openai/gpt-6-luna` | Fast and cheap |
+| `openai/gpt-6.1-sol` | 代理式安全工作在能力與成本間的最佳平衡 |
+| `openai/gpt-6-astra` | 旗艦款，最大能力 |
+| `openai/gpt-6-luna` | 快速且便宜 |
 
-See [OpenAI Models Documentation](https://platform.openai.com/docs/models) for the full list.
+完整清單請見 [OpenAI 模型文件](https://platform.openai.com/docs/models)。
 
 <Note>
-Security testing with OpenAI models needs [Daybreak](https://openai.com/daybreak/) (Trusted Access for Cyber). Without it the models refuse most offensive tasks. [Request access](https://openai.com/form/enterprise-trusted-access-for-cyber/).
+使用 OpenAI 模型進行安全測試需要 [Daybreak](https://openai.com/daybreak/)（Trusted Access for Cyber）。沒有它，模型會拒絕大多數攻擊性任務。[申請存取](https://openai.com/form/enterprise-trusted-access-for-cyber/)。
 </Note>
 
-## Get API Key
+## 取得 API 金鑰
 
-1. Go to [platform.openai.com](https://platform.openai.com)
-2. Navigate to API Keys
-3. Create a new secret key
+1. 前往 [platform.openai.com](https://platform.openai.com)
+2. 進入 API Keys
+3. 建立新的密鑰
 
-## Custom Base URL
+## 自訂 Base URL
 
-For OpenAI-compatible APIs:
+適用於相容 OpenAI 的 API：
 
 ```bash
 export STRIX_LLM="openai/gpt-6.1-sol"

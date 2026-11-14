@@ -1,28 +1,28 @@
 ---
 title: "Anthropic"
-description: "Configure Strix with Claude models"
+description: "使用 Claude 模型設定 Strix"
 ---
 
-## Setup
+## 設定
 
 ```bash
 export STRIX_LLM="anthropic/claude-sonnet-5-5"
 export LLM_API_KEY="sk-ant-..."
 ```
 
-## Available Models
+## 可用模型
 
-| Model | Description |
+| 模型 | 說明 |
 |-------|-------------|
-| `anthropic/claude-sonnet-5-5` | Best balance of intelligence and speed |
-| `anthropic/claude-opus-5-5` | Maximum capability for deep analysis |
+| `anthropic/claude-sonnet-5-5` | 智慧與速度的最佳平衡 |
+| `anthropic/claude-opus-5-5` | 深度分析的最大能力 |
 
 <Note>
-Security testing with Claude needs the [Cyber Verification Program](https://support.claude.com/en/articles/14604842-cyber-verification-program) (CVP). Without it the safety classifiers block most offensive tasks. Red Team Access covers authorized penetration testing.
+使用 Claude 進行安全測試需要[網路安全驗證計畫](https://support.claude.com/en/articles/14604842-cyber-verification-program)（CVP）。沒有它，安全分類器會阻擋大多數攻擊性任務。Red Team Access 涵蓋已授權的滲透測試。
 </Note>
 
-## Get API Key
+## 取得 API 金鑰
 
-1. Go to [console.anthropic.com](https://console.anthropic.com)
-2. Navigate to API Keys
-3. Create a new key
+1. 前往 [console.anthropic.com](https://console.anthropic.com)
+2. 進入 API Keys
+3. 建立新的金鑰

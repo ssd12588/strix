@@ -1,49 +1,49 @@
 ---
 title: "Google Vertex AI"
-description: "Configure Strix with Gemini models via Google Cloud"
+description: "透過 Google Cloud 使用 Gemini 模型設定 Strix"
 ---
 
-## Setup
+## 設定
 
 ```bash
 export STRIX_LLM="vertex_ai/gemini-4-argon"
 ```
 
-No API key required—uses Google Cloud Application Default Credentials.
+不需要 API 金鑰 —— 會使用 Google Cloud 應用程式預設憑證（ADC）。
 
-## Authentication
+## 驗證方式
 
-### Option 1: gcloud CLI
+### 選項 1：gcloud CLI
 
 ```bash
 gcloud auth application-default login
 ```
 
-### Option 2: Service Account
+### 選項 2：服務帳戶
 
 ```bash
 export GOOGLE_APPLICATION_CREDENTIALS="/path/to/service-account.json"
 ```
 
-## Available Models
+## 可用模型
 
-| Model | Description |
+| 模型 | 說明 |
 |-------|-------------|
-| `vertex_ai/gemini-4-argon` | Best overall performance for security testing |
-| `vertex_ai/gemini-3.8-flash` | Faster and cheaper |
+| `vertex_ai/gemini-4-argon` | 安全測試的整體最佳表現 |
+| `vertex_ai/gemini-3.8-flash` | 更快且更便宜 |
 
 <Note>
-Security testing with Gemini needs the [Fairwind Program](https://deepmind.google/fairwind-program/). Without it the cyber guardrails block most offensive tasks.
+使用 Gemini 進行安全測試需要 [Fairwind 計畫](https://deepmind.google/fairwind-program/)。沒有它，網路安全防護機制會阻擋大多數攻擊性任務。
 </Note>
 
-## Project Configuration
+## 專案設定
 
 ```bash
 export VERTEXAI_PROJECT="your-project-id"
 export VERTEXAI_LOCATION="global"
 ```
 
-## Prerequisites
+## 先決條件
 
-1. Enable the Vertex AI API in your Google Cloud project
-2. Ensure your account has the `Vertex AI User` role
+1. 在 Google Cloud 專案中啟用 Vertex AI API
+2. 確認你的帳號具有 `Vertex AI User` 角色

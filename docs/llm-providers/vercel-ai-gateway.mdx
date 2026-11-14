@@ -1,28 +1,28 @@
 ---
 title: "Vercel AI Gateway"
-description: "Configure Strix with models through Vercel AI Gateway"
+description: "透過 Vercel AI Gateway 使用模型設定 Strix"
 ---
 
-[Vercel AI Gateway](https://vercel.com/docs/ai-gateway) provides access to 100+ models from multiple providers through one OpenAI-compatible API.
+[Vercel AI Gateway](https://vercel.com/docs/ai-gateway) 透過一個相容 OpenAI 的 API，提供來自多個供應商的 100 多種模型。
 
-## Setup
+## 設定
 
-Create an [AI Gateway API key](https://vercel.com/docs/ai-gateway/authentication-and-byok), then configure Strix:
+建立 [AI Gateway API 金鑰](https://vercel.com/docs/ai-gateway/authentication-and-byok)，然後設定 Strix：
 
 ```bash
 export STRIX_LLM="vercel_ai_gateway/zai/glm-5.3"
 export LLM_API_KEY="your-ai-gateway-api-key"
 ```
 
-The `vercel_ai_gateway/` prefix selects the Gateway. The remaining value is the [AI Gateway model ID](https://vercel.com/docs/ai-gateway/models-and-providers).
+`vercel_ai_gateway/` 前綴會選用 Gateway，其餘部分則是 [AI Gateway 模型 ID](https://vercel.com/docs/ai-gateway/models-and-providers)。
 
-## Available Models
+## 可用模型
 
-Access any model on the Gateway using the format `vercel_ai_gateway/<provider>/<model>`:
+使用 `vercel_ai_gateway/<provider>/<model>` 格式即可存取 Gateway 上的任何模型：
 
-| Model | Configuration |
+| 模型 | 設定 |
 |-------|---------------|
-| GLM-5.3 (recommended) | `vercel_ai_gateway/zai/glm-5.3` |
+| GLM-5.3（建議） | `vercel_ai_gateway/zai/glm-5.3` |
 | GPT-6.1 Sol | `vercel_ai_gateway/openai/gpt-6.1-sol` |
 | GPT-6 Astra | `vercel_ai_gateway/openai/gpt-6-astra` |
 | Claude Opus 5.5 | `vercel_ai_gateway/anthropic/claude-opus-5.5` |
@@ -34,22 +34,22 @@ Access any model on the Gateway using the format `vercel_ai_gateway/<provider>/<
 | Kimi K3.1 Pro | `vercel_ai_gateway/moonshotai/kimi-k3.1-pro` |
 | GLM-5.3 Flash | `vercel_ai_gateway/zai/glm-5.3-flash` |
 
-OpenAI, Anthropic and Gemini models keep their provider safeguards on the Gateway. Security testing with them needs [Daybreak](https://openai.com/daybreak/), [CVP](https://support.claude.com/en/articles/14604842-cyber-verification-program) or [Fairwind](https://deepmind.google/fairwind-program/) access.
+OpenAI、Anthropic 與 Gemini 模型在 Gateway 上仍保留各供應商的安全防護。以它們進行安全測試需要 [Daybreak](https://openai.com/daybreak/)、[CVP](https://support.claude.com/en/articles/14604842-cyber-verification-program) 或 [Fairwind](https://deepmind.google/fairwind-program/) 存取權。
 
-The full list is at the [AI Gateway models page](https://vercel.com/ai-gateway/models) or the models endpoint:
+完整清單請見 [AI Gateway 模型頁](https://vercel.com/ai-gateway/models)或模型端點：
 
 ```text
 https://ai-gateway.vercel.sh/v1/models
 ```
 
-## Get API Key
+## 取得 API 金鑰
 
-1. Open the [AI Gateway API key settings](https://vercel.com/docs/ai-gateway/authentication-and-byok)
-2. Create an API key
-3. Set the key as `LLM_API_KEY`
+1. 開啟 [AI Gateway API 金鑰設定](https://vercel.com/docs/ai-gateway/authentication-and-byok)
+2. 建立 API 金鑰
+3. 將金鑰設為 `LLM_API_KEY`
 
-## Benefits
+## 優勢
 
-- **Single API** — Access models from OpenAI, Anthropic, Google, Z.ai, and more
-- **Bring your own keys** — Route through your own provider accounts when you want
-- **Cost tracking** — Monitor Gateway usage and cost in Vercel
+- **單一 API** —— 可存取 OpenAI、Anthropic、Google、Z.ai 等供應商的模型
+- **自備金鑰** —— 需要時可走自己的供應商帳號
+- **成本追蹤** —— 在 Vercel 中監控 Gateway 用量與成本

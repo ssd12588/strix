@@ -1,18 +1,18 @@
 ---
-title: "Overview"
-description: "Configure your AI model for Strix"
+title: "總覽"
+description: "為 Strix 設定你的 AI 模型"
 ---
 
-Strix uses [LiteLLM](https://docs.litellm.ai/docs/providers) for model compatibility, supporting 100+ LLM providers.
+Strix 透過 [LiteLLM](https://docs.litellm.ai/docs/providers) 支援 100 多種 LLM 供應商。
 
-## Configuration
+## 設定
 
-Set your model and API key:
+設定你的模型與 API 金鑰：
 
-| Model                 | Provider                  | Configuration                    |
+| 模型                 | 供應商                  | 設定                    |
 | --------------------- | ------------------------- | -------------------------------- |
-| GLM-5.3 (recommended) | Vercel AI Gateway         | `vercel_ai_gateway/zai/glm-5.3`  |
-| GLM-5.3 (recommended) | OpenRouter                | `openrouter/z-ai/glm-5.3`        |
+| GLM-5.3（建議） | Vercel AI Gateway         | `vercel_ai_gateway/zai/glm-5.3`  |
+| GLM-5.3（建議） | OpenRouter                | `openrouter/z-ai/glm-5.3`        |
 | GPT-6.1 Sol           | OpenAI                    | `openai/gpt-6.1-sol`             |
 | Claude Opus 5.5       | Anthropic                 | `anthropic/claude-opus-5-5`      |
 | Claude Sonnet 5.5     | Anthropic                 | `anthropic/claude-sonnet-5-5`    |
@@ -22,7 +22,7 @@ Set your model and API key:
 | Kimi K3.1 Pro         | Moonshot                  | `moonshot/kimi-k3.1-pro`         |
 
 <Note>
-Frontier OpenAI, Anthropic and Gemini models need a cyber access program for security testing: [Daybreak](https://openai.com/daybreak/) for OpenAI, the [Cyber Verification Program](https://support.claude.com/en/articles/14604842-cyber-verification-program) for Anthropic, and the [Fairwind Program](https://deepmind.google/fairwind-program/) for Gemini.
+頂尖的 OpenAI、Anthropic 與 Gemini 模型需要網路安全存取計畫才能進行安全測試：OpenAI 需 [Daybreak](https://openai.com/daybreak/)，Anthropic 需[網路安全驗證計畫](https://support.claude.com/en/articles/14604842-cyber-verification-program)，Gemini 需 [Fairwind 計畫](https://deepmind.google/fairwind-program/)。
 </Note>
 
 <CodeGroup>
@@ -37,49 +37,49 @@ export LLM_API_KEY="your-api-key"
 ```
 </CodeGroup>
 
-## Local Models
+## 本機模型
 
-Run models locally with [Ollama](https://ollama.com), [LM Studio](https://lmstudio.ai), or any OpenAI-compatible server:
+用 [Ollama](https://ollama.com)、[LM Studio](https://lmstudio.ai)，或任何相容 OpenAI 的伺服器在本機執行模型：
 
 ```bash
 export STRIX_LLM="ollama/llama4"
 export LLM_API_BASE="http://localhost:11434"
 ```
 
-See the [Local Models guide](/llm-providers/local) for setup instructions and recommended models.
+設定步驟與建議模型請見[本機模型指南](/llm-providers/local)。
 
-## Provider Guides
+## 供應商指南
 
 <CardGroup cols={2}>
   <Card title="OpenAI" href="/llm-providers/openai">
-    GPT-5.4 models.
+    GPT-5.4 系列模型。
   </Card>
   <Card title="Anthropic" href="/llm-providers/anthropic">
-    Claude Opus, Sonnet, and Haiku.
+    Claude Opus、Sonnet 與 Haiku。
   </Card>
   <Card title="OpenRouter" href="/llm-providers/openrouter">
-    Access 100+ models through a single API.
+    透過單一 API 存取 100 多種模型。
   </Card>
   <Card title="Vercel AI Gateway" href="/llm-providers/vercel-ai-gateway">
-    Access 100+ models through one OpenAI-compatible endpoint.
+    透過一個相容 OpenAI 的端點存取 100 多種模型。
   </Card>
   <Card title="Google Vertex AI" href="/llm-providers/vertex">
-    Gemini 3 models via Google Cloud.
+    透過 Google Cloud 使用 Gemini 3 系列模型。
   </Card>
   <Card title="AWS Bedrock" href="/llm-providers/bedrock">
-    Claude and Titan models via AWS.
+    透過 AWS 使用 Claude 與 Titan 模型。
   </Card>
   <Card title="Azure OpenAI" href="/llm-providers/azure">
-    GPT-5.4 via Azure.
+    透過 Azure 使用 GPT-5.4。
   </Card>
-  <Card title="Local Models" href="/llm-providers/local">
-    Llama 4, Mistral, and self-hosted models.
+  <Card title="本機模型" href="/llm-providers/local">
+    Llama 4、Mistral 與自架模型。
   </Card>
 </CardGroup>
 
-## Model Format
+## 模型格式
 
-Use LiteLLM's `provider/model-name` format:
+使用 LiteLLM 的 `provider/model-name` 格式：
 
 ```
 openrouter/z-ai/glm-5.3

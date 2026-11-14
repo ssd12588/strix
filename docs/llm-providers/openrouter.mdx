@@ -1,24 +1,24 @@
 ---
 title: "OpenRouter"
-description: "Configure Strix with models via OpenRouter"
+description: "透過 OpenRouter 使用模型設定 Strix"
 ---
 
-[OpenRouter](https://openrouter.ai) provides access to 100+ models from multiple providers through a single API.
+[OpenRouter](https://openrouter.ai) 透過單一 API 提供來自多個供應商的 100 多種模型。
 
-## Setup
+## 設定
 
 ```bash
 export STRIX_LLM="openrouter/z-ai/glm-5.3"
 export LLM_API_KEY="sk-or-..."
 ```
 
-## Available Models
+## 可用模型
 
-Access any model on OpenRouter using the format `openrouter/<provider>/<model>`:
+使用 `openrouter/<provider>/<model>` 格式即可存取 OpenRouter 上的任何模型：
 
-| Model | Configuration |
+| 模型 | 設定 |
 |-------|---------------|
-| GLM-5.3 (recommended) | `openrouter/z-ai/glm-5.3` |
+| GLM-5.3（建議） | `openrouter/z-ai/glm-5.3` |
 | GPT-6.1 Sol | `openrouter/openai/gpt-6.1-sol` |
 | GPT-6 Astra | `openrouter/openai/gpt-6-astra` |
 | Claude Opus 5.5 | `openrouter/anthropic/claude-opus-5.5` |
@@ -30,17 +30,17 @@ Access any model on OpenRouter using the format `openrouter/<provider>/<model>`:
 | Kimi K3.1 Pro | `openrouter/moonshotai/kimi-k3.1-pro` |
 | GLM-5.3 Flash | `openrouter/z-ai/glm-5.3-flash` |
 
-OpenAI, Anthropic and Gemini models keep their provider safeguards on OpenRouter. Security testing with them needs [Daybreak](https://openai.com/daybreak/), [CVP](https://support.claude.com/en/articles/14604842-cyber-verification-program) or [Fairwind](https://deepmind.google/fairwind-program/) access.
+OpenAI、Anthropic 與 Gemini 模型在 OpenRouter 上仍保留各供應商的安全防護。以它們進行安全測試需要 [Daybreak](https://openai.com/daybreak/)、[CVP](https://support.claude.com/en/articles/14604842-cyber-verification-program) 或 [Fairwind](https://deepmind.google/fairwind-program/) 存取權。
 
-## Get API Key
+## 取得 API 金鑰
 
-1. Go to [openrouter.ai](https://openrouter.ai)
-2. Sign in and navigate to Keys
-3. Create a new API key
+1. 前往 [openrouter.ai](https://openrouter.ai)
+2. 登入並進入 Keys
+3. 建立新的 API 金鑰
 
-## Benefits
+## 優勢
 
-- **Single API** — Access models from OpenAI, Anthropic, Google, Meta, and more
-- **Fallback routing** — Automatic failover between providers
-- **Cost tracking** — Monitor usage across all models
-- **Higher rate limits** — OpenRouter handles provider limits for you
+- **單一 API** —— 可存取 OpenAI、Anthropic、Google、Meta 等供應商的模型
+- **備援路由** —— 供應商之間自動容錯切換
+- **成本追蹤** —— 監控所有模型的使用量
+- **更高的速率上限** —— OpenRouter 會代你處理供應商限制
