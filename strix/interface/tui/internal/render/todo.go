@@ -18,12 +18,12 @@ var todoTitles = map[string]struct {
 	loading string
 	errMsg  string
 }{
-	"create_todo":       {"Todo", Lavender, "Creating...", "Failed to create todo"},
-	"list_todos":        {"Todos", Lavender, "Loading...", "Unable to list todos"},
-	"update_todo":       {"Todo Updated", Lavender, "Updating...", "Failed to update todo"},
-	"mark_todo_done":    {"Todo Completed", Lavender, "Marking done...", "Failed to mark todo done"},
-	"mark_todo_pending": {"Todo Reopened", AmberY, "Reopening...", "Failed to reopen todo"},
-	"delete_todo":       {"Todo Removed", Slate, "Removing...", "Failed to remove todo"},
+	"create_todo":       {"待辦事項", Lavender, "建立中...", "建立待辦事項失敗"},
+	"list_todos":        {"Todos", Lavender, "載入中...", "無法列出待辦事項"},
+	"update_todo":       {"待辦事項已更新", Lavender, "更新中...", "更新待辦事項失敗"},
+	"mark_todo_done":    {"待辦事項已完成", Lavender, "標記完成中...", "標記待辦事項完成失敗"},
+	"mark_todo_pending": {"待辦事項已重新開啟", AmberY, "重新開啟中...", "重新開啟待辦事項失敗"},
+	"delete_todo":       {"待辦事項已移除", Slate, "移除中...", "移除待辦事項失敗"},
 }
 
 func renderTodo(name string, result any) string {
@@ -53,7 +53,7 @@ func renderTodo(name string, result any) string {
 func formatTodoLines(b *strings.Builder, result map[string]any) {
 	todos, ok := result["todos"].([]any)
 	if !ok || len(todos) == 0 {
-		b.WriteString("\n  " + Dim().Render("No todos"))
+		b.WriteString("\n  " + Dim().Render("沒有待辦事項"))
 		return
 	}
 	for _, t := range todos {

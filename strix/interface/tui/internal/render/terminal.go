@@ -71,7 +71,7 @@ func cleanShellOutput(output string) string {
 		if len(filtered) == 0 && strings.TrimSpace(line) == "" {
 			continue
 		}
-		if strings.TrimSpace(line) == "Output:" {
+		if strings.TrimSpace(line) == "輸出:" {
 			continue
 		}
 		filtered = append(filtered, line)
@@ -147,7 +147,7 @@ func renderTerminal(prompt string, promptColor lipgloss.Color, command string, r
 	var b strings.Builder
 	b.WriteString(Dim().Render(">_") + " ")
 	if strings.TrimSpace(command) == "" {
-		b.WriteString(Dim().Render("getting logs..."))
+		b.WriteString(Dim().Render("正在取得日誌..."))
 	} else {
 		b.WriteString(Col(promptColor).Render(prompt) + " " + command)
 	}

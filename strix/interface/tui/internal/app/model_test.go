@@ -362,10 +362,10 @@ func TestStartedSnapshotTransitionsToLiveView(t *testing.T) {
 	model.handleEnvelope(stateEnvelope(t, 2, runningState))
 	model.handleEnvelope(bootstrapEnvelope(t, "agents", 1, protocol.Agent{ID: "one", Name: "LIVE_AGENT", Status: "running"}))
 	view := model.View()
-	if !strings.Contains(view, "LIVE_AGENT") || !strings.Contains(view, "Send a message") || strings.Contains(view, "Configure your pentest") {
+	if !strings.Contains(view, "LIVE_AGENT") || !strings.Contains(view, "傳送訊息") || strings.Contains(view, "Configure your pentest") {
 		t.Fatalf("started snapshot did not switch to the live view: %s", view)
 	}
-	if model.input.Placeholder != "Send a message" {
+	if model.input.Placeholder != "傳送訊息" {
 		t.Fatalf("live input placeholder was not updated: %q", model.input.Placeholder)
 	}
 }
@@ -495,7 +495,7 @@ func TestModalKeepsBackgroundVisible(t *testing.T) {
 	if !strings.Contains(view, "UNIQUE_AGENT") {
 		t.Fatalf("modal overlay hid the background agent tree")
 	}
-	if !strings.Contains(view, "Strix Help") {
+	if !strings.Contains(view, "Strix 說明") {
 		t.Fatalf("modal content missing")
 	}
 }
@@ -507,7 +507,7 @@ func TestChatWrapsWithinChatWidth(t *testing.T) {
 	model.ready = true
 	long := strings.Repeat("word ", 200)
 	model.snapshot = protocol.Snapshot{
-		Agents: []protocol.Agent{{ID: "one", Name: "Agent", Status: "running"}},
+		Agents: []protocol.Agent{{ID: "one", Name: "代理", Status: "running"}},
 		Events: []protocol.Event{{ID: "1", AgentID: "one", Type: "chat", Data: map[string]any{"role": "assistant", "content": long}}},
 	}
 	model.resizeViewport()
@@ -549,7 +549,7 @@ func TestVulnerabilityDetailScrollsWithoutHidingFooter(t *testing.T) {
 	model.openModal(modalVulnerability)
 
 	view := model.modalView()
-	if !strings.Contains(view, "Done") {
+	if !strings.Contains(view, "完成") {
 		t.Fatalf("finding footer is not visible before scrolling: %s", view)
 	}
 	_, wantHeight := model.vulnerabilityDialogSize()
@@ -562,7 +562,7 @@ func TestVulnerabilityDetailScrollsWithoutHidingFooter(t *testing.T) {
 	if model.modal != modalVulnerability || model.vulnViewport.YOffset == 0 {
 		t.Fatalf("page down dismissed or did not scroll finding: modal=%v offset=%d", model.modal, model.vulnViewport.YOffset)
 	}
-	if view = model.modalView(); !strings.Contains(view, "Done") {
+	if view = model.modalView(); !strings.Contains(view, "完成") {
 		t.Fatalf("finding footer disappeared after scrolling: %s", view)
 	}
 
@@ -612,7 +612,7 @@ func TestVulnerabilityCopySupportsKeyboardAndMouse(t *testing.T) {
 	if len(copied) != 1 || !strings.Contains(copied[0], "Copy me") || !strings.Contains(copied[0], "Finding detail") {
 		t.Fatalf("keyboard Copy wrote unexpected report: %#v", copied)
 	}
-	if !model.vulnerabilityCopied || !strings.Contains(ansi.Strip(model.modalView()), "Copied!") {
+	if !model.vulnerabilityCopied || !strings.Contains(ansi.Strip(model.modalView()), "已複製！") {
 		t.Fatal("successful keyboard Copy was not reflected in the dialog")
 	}
 
@@ -622,7 +622,7 @@ func TestVulnerabilityCopySupportsKeyboardAndMouse(t *testing.T) {
 	copyX, copyY := -1, -1
 	for row, line := range strings.Split(view, "\n") {
 		plain := ansi.Strip(line)
-		if index := strings.Index(plain, "Copy"); index >= 0 {
+		if index := strings.Index(plain, "複製"); index >= 0 {
 			copyX, copyY = left+ansi.StringWidth(plain[:index]), top+row
 		}
 	}
@@ -733,7 +733,7 @@ func TestVulnerabilityDetailFitsNarrowTerminal(t *testing.T) {
 	model.openModal(modalVulnerability)
 	view := model.modalView()
 
-	if !strings.Contains(view, "Done") {
+	if !strings.Contains(view, "完成") {
 		t.Fatalf("finding footer is missing in narrow terminal: %s", view)
 	}
 	if got := len(strings.Split(view, "\n")); got > model.height {
@@ -1119,10 +1119,10 @@ func TestTerminalSnapshotWithoutAgentsDoesNotKeepLoading(t *testing.T) {
 		error string
 		want  string
 	}{
-		{state: "failed", error: "authentication rejected", want: "Scan failed"},
-		{state: "stopped", want: "Scan stopped"},
-		{state: "completed", want: "Scan completed"},
-		{state: "preparing", want: "Preparing scan..."},
+		{state: "failed", error: "authentication rejected", want: "掃描失敗"},
+		{state: "stopped", want: "掃描已停止"},
+		{state: "completed", want: "掃描完成"},
+		{state: "preparing", want: "正在準備掃描..."},
 	}
 
 	for _, tt := range tests {
@@ -1135,7 +1135,7 @@ func TestTerminalSnapshotWithoutAgentsDoesNotKeepLoading(t *testing.T) {
 			}
 
 			content := model.chatContent()
-			if !strings.Contains(content, tt.want) || strings.Contains(content, "Loading...") {
+			if !strings.Contains(content, tt.want) || strings.Contains(content, "載入中...") {
 				t.Fatalf("terminal state rendered incorrectly: %s", content)
 			}
 			if tt.error != "" && !strings.Contains(content, tt.error) {
@@ -1158,12 +1158,12 @@ func TestCrashedAndBudgetPausedAgentStatusParity(t *testing.T) {
 		t.Fatalf("agent status icons do not match Textual: %s", tree)
 	}
 	crashed := ansi.Strip(model.statusView(100))
-	if !strings.Contains(crashed, "provider failed") || !strings.Contains(crashed, "Send message to resume") {
+	if !strings.Contains(crashed, "provider failed") || !strings.Contains(crashed, "傳送訊息以繼續") {
 		t.Fatalf("crashed status lacks recovery guidance: %s", crashed)
 	}
 	model.selectedAgent = 1
 	paused := ansi.Strip(model.statusView(100))
-	if !strings.Contains(paused, "Budget limit reached") || !strings.Contains(paused, "Send a message to continue") || !strings.Contains(paused, "ctrl-q") {
+	if !strings.Contains(paused, "已達預算上限") || !strings.Contains(paused, "傳送訊息以繼續") || !strings.Contains(paused, "ctrl-q") {
 		t.Fatalf("budget-paused status lacks Textual guidance: %s", paused)
 	}
 }
@@ -1184,7 +1184,7 @@ func TestStopDialogAndCommandAreLimitedToActiveAgents(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.status, func(t *testing.T) {
 			model := New(nil)
-			model.snapshot.Agents = []protocol.Agent{{ID: "agent", Name: "Agent", Status: tt.status}}
+			model.snapshot.Agents = []protocol.Agent{{ID: "agent", Name: "代理", Status: tt.status}}
 			updated, _ := model.updateMain(tea.KeyMsg{Type: tea.KeyEsc})
 			result := updated.(Model)
 			if got := result.modal == modalStop; got != tt.active {
@@ -1194,7 +1194,7 @@ func TestStopDialogAndCommandAreLimitedToActiveAgents(t *testing.T) {
 	}
 
 	model, connection := newCommandTestModel(t)
-	model.snapshot.Agents = []protocol.Agent{{ID: "agent", Name: "Agent", Status: "running"}}
+	model.snapshot.Agents = []protocol.Agent{{ID: "agent", Name: "代理", Status: "running"}}
 	model.modal, model.modalChoice = modalStop, 0
 	model.snapshot.Agents[0].Status = "completed"
 	updated, cmd := model.updateModal(tea.KeyMsg{Type: tea.KeyEnter})
@@ -1209,7 +1209,7 @@ func TestBudgetPauseShowsOneWarningToastUntilResumed(t *testing.T) {
 	if cmd := model.notifyBudgetPause(); cmd == nil {
 		t.Fatal("expected a toast command on first budget pause")
 	}
-	if !strings.Contains(model.toast, "Budget limit reached") {
+	if !strings.Contains(model.toast, "已達預算上限") {
 		t.Fatalf("toast %q missing budget warning", model.toast)
 	}
 	if cmd := model.notifyBudgetPause(); cmd != nil {
@@ -1231,7 +1231,7 @@ func TestStatsViewShowsSubscription(t *testing.T) {
 	model.snapshot.Subscription = true
 	model.snapshot.Usage = map[string]any{"total_tokens": float64(1200), "cost": 3.5}
 	stats := ansi.Strip(model.statsView())
-	if !strings.Contains(stats, "ChatGPT subscription") {
+	if !strings.Contains(stats, "ChatGPT 訂閱") {
 		t.Fatalf("stats missing subscription line: %q", stats)
 	}
 	if strings.Contains(stats, "$") {
@@ -1249,8 +1249,8 @@ func TestVulnerabilityMarkdownReport(t *testing.T) {
 		"remediation_steps": "Use bound parameters.",
 	})
 	for _, want := range []string{
-		"# SQLi in login", "**Severity:** HIGH", "**CVSS:** 8.1",
-		"## Description", "```python\nprint('x')\n```", "## Remediation",
+		"# SQLi in login", "**嚴重度:** HIGH", "**CVSS 分數:** 8.1",
+		"## 說明", "```python\nprint('x')\n```", "## 修補建議",
 	} {
 		if !strings.Contains(report, want) {
 			t.Fatalf("report missing %q:\n%s", want, report)
@@ -1273,7 +1273,7 @@ func TestChatContentCachesBlocksUntilEventChanges(t *testing.T) {
 		},
 	}
 	model.snapshot = protocol.Snapshot{
-		Agents: []protocol.Agent{{ID: "one", Name: "Agent", Status: "running"}},
+		Agents: []protocol.Agent{{ID: "one", Name: "代理", Status: "running"}},
 		Events: []protocol.Event{event},
 	}
 	model.resizeViewport()
@@ -1303,7 +1303,7 @@ func TestChatContentRerendersOnWidthAndExpansionChange(t *testing.T) {
 	model.showSplash = false
 	model.ready = true
 	model.snapshot = protocol.Snapshot{
-		Agents: []protocol.Agent{{ID: "one", Name: "Agent", Status: "running"}},
+		Agents: []protocol.Agent{{ID: "one", Name: "代理", Status: "running"}},
 		Events: []protocol.Event{{
 			ID: "1", AgentID: "one", Type: "tool", Version: 1,
 			Data: map[string]any{

@@ -14,9 +14,9 @@ var threatModelTitles = map[string]struct {
 	loading string
 	errMsg  string
 }{
-	"get_threat_model":   {"Threat Model", "Loading...", "Unable to read threat model"},
-	"save_threat_model":  {"Threat Model Saved", "Saving...", "Failed to save threat model"},
-	"amend_threat_model": {"Threat Model Amended", "Amending...", "Failed to amend threat model"},
+	"get_threat_model":   {"威脅模型", "載入中...", "無法讀取威脅模型"},
+	"save_threat_model":  {"威脅模型已儲存", "儲存中...", "儲存威脅模型失敗"},
+	"amend_threat_model": {"威脅模型已修訂", "修訂中...", "修訂威脅模型失敗"},
 }
 
 func renderThreatModel(name string, args map[string]any, result any) string {
@@ -69,7 +69,7 @@ func renderThreatModel(name string, args map[string]any, result any) string {
 
 func threatModelReadBody(b *strings.Builder, result map[string]any) {
 	if !truthy(result["found"]) {
-		b.WriteString("\n  " + Dim().Render("No model derived for this target yet"))
+		b.WriteString("\n  " + Dim().Render("此目標尚未推導出威脅模型"))
 		return
 	}
 	if amendments, ok := result["amendments"].([]any); ok && len(amendments) > 0 {
@@ -79,7 +79,7 @@ func threatModelReadBody(b *strings.Builder, result map[string]any) {
 			amendment, _ := a.(map[string]any)
 			who := strings.TrimSpace(StringValue(amendment["agent_name"]))
 			if who == "" {
-				who = "unknown agent"
+				who = "未知代理"
 			}
 			b.WriteString("\n    - " + Dim().Render(who+": ") +
 				psanitize(strings.TrimSpace(StringValue(amendment["content"])), 120))

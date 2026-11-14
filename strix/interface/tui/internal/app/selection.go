@@ -18,7 +18,7 @@ type selectionCopiedMsg struct{ err error }
 
 type toastExpiredMsg struct{ id int }
 
-// toastDuration matches the old Textual notify("Copied to clipboard", timeout=2).
+// toastDuration matches the old Textual notify("已複製到剪貼簿", timeout=2).
 const toastDuration = 2 * time.Second
 
 // showToast displays a transient notification and schedules its dismissal;

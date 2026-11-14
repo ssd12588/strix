@@ -17,10 +17,10 @@ func TestRecordCoverageRendersSurfaceAndOutcome(t *testing.T) {
 		map[string]any{"success": true, "entry_id": "a1b2c3", "outcome": "ruled_out"},
 		"completed")))
 	requireContains(t, out,
-		"Coverage Recorded",
+		"已記錄涵蓋範圍",
 		"POST /api/v1/invoices",
 		"object-level authorization",
-		"ruled out",
+		"已排除",
 		"tenant B token returns 403",
 	)
 }
@@ -32,10 +32,10 @@ func TestUpdateCoverageShowsStateTransition(t *testing.T) {
 			"success":          true,
 			"entry_id":         "a1b2c3",
 			"previous_outcome": "needs_follow_up",
-			"outcome":          "reported",
+			"outcome":          "已回報",
 		},
 		"completed")))
-	requireContains(t, out, "Coverage Updated", "needs follow-up", "→", "reported")
+	requireContains(t, out, "已更新涵蓋範圍", "需要後續追蹤", "→", "已回報")
 }
 
 func TestListCoverageRendersCountsHistoryAndAuthor(t *testing.T) {
@@ -66,22 +66,22 @@ func TestListCoverageRendersCountsHistoryAndAuthor(t *testing.T) {
 		},
 		"completed")))
 	requireContains(t, out,
-		"/admin/export", "IDOR", "no issue found",
-		"was needs follow-up", "AuthzAgent",
-		"/graphql", "needs follow-up", "you",
-		"no issue found: 1", "needs follow-up: 1",
+		"/admin/export", "IDOR", "未發現問題",
+		"（原為 需要後續追蹤", "AuthzAgent",
+		"/graphql", "需要後續追蹤", "you",
+		"未發現問題: 1", "需要後續追蹤: 1",
 	)
 }
 
 func TestListCoverageEmptyLedgerReadsAsUnrecorded(t *testing.T) {
 	out := ansi.Strip(Tool(tool("list_coverage", nil,
 		map[string]any{"success": true, "entries": []any{}, "total_count": 0}, "completed")))
-	requireContains(t, out, "No surfaces recorded yet")
+	requireContains(t, out, "尚未記錄任何介面")
 
 	filtered := ansi.Strip(Tool(tool("list_coverage",
-		map[string]any{"outcome": "reported"},
+		map[string]any{"outcome": "已回報"},
 		map[string]any{"success": true, "entries": []any{}, "total_count": 4}, "completed")))
-	requireContains(t, filtered, "No surfaces match this filter")
+	requireContains(t, filtered, "沒有符合此篩選條件的介面")
 }
 
 func TestCoverageDuplicateRejectionSurfacesTheError(t *testing.T) {
@@ -113,7 +113,7 @@ func TestGetThreatModelRendersAmendments(t *testing.T) {
 		},
 		"completed")))
 	requireContains(t, out,
-		"Threat Model", "https://app.example.com",
+		"威脅模型", "https://app.example.com",
 		"1 amendment(s)", "ReconAgent", "staging host shares the production database",
 		"Multi-tenant billing app.", "Overview", "Trust Boundaries and Assumptions",
 	)
@@ -123,7 +123,7 @@ func TestGetThreatModelMissingModelIsExplicit(t *testing.T) {
 	out := ansi.Strip(Tool(tool("get_threat_model",
 		map[string]any{"target": "10.0.0.5"},
 		map[string]any{"success": true, "found": false}, "completed")))
-	requireContains(t, out, "No model derived for this target yet")
+	requireContains(t, out, "此目標尚未推導出威脅模型")
 }
 
 func TestSaveThreatModelWarnsWhenAmendmentsAreCleared(t *testing.T) {
@@ -134,7 +134,7 @@ func TestSaveThreatModelWarnsWhenAmendmentsAreCleared(t *testing.T) {
 			"amendments_cleared": 2,
 		},
 		"completed")))
-	requireContains(t, out, "Threat Model Saved", "saved", "cleared 2 amendment(s)")
+	requireContains(t, out, "威脅模型已儲存", "saved", "cleared 2 amendment(s)")
 }
 
 func TestAmendThreatModelRendersAddendum(t *testing.T) {
@@ -144,7 +144,7 @@ func TestAmendThreatModelRendersAddendum(t *testing.T) {
 			"addendum": "The admin role is assignable by any org member via PATCH /members.",
 		},
 		map[string]any{"success": true, "amendment_count": 3}, "completed")))
-	requireContains(t, out, "Threat Model Amended", "amendment recorded", "(3 total)",
+	requireContains(t, out, "威脅模型已修訂", "amendment recorded", "(3 total)",
 		"admin role is assignable")
 }
 
@@ -188,10 +188,10 @@ func TestVulnerabilityReportRendersCalibrationFields(t *testing.T) {
 		map[string]any{"success": true, "severity": "high", "cvss_score": 7.5},
 		"completed")))
 	requireContains(t, out,
-		"Confidence", "MEDIUM", "no authenticated instance to replay against",
-		"Counterevidence", "gateway may strip the id parameter",
-		"Severity Would Change If", "other tenants' bank details",
-		"Fix Verification", "bypass review reasoned only",
+		"信心度", "MEDIUM", "no authenticated instance to replay against",
+		"反證", "gateway may strip the id parameter",
+		"嚴重度會改變的情況", "other tenants' bank details",
+		"修正驗證", "bypass review reasoned only",
 	)
 }
 
@@ -212,7 +212,7 @@ func TestVulnerabilityReportUpdateRendersReportAndReason(t *testing.T) {
 		},
 		"completed")))
 	requireContains(t, out,
-		"Vulnerability Report Updated",
+		"漏洞報告已更新",
 		"vuln-0009",
 		"built a working unauthenticated file write",
 		"CRITICAL",

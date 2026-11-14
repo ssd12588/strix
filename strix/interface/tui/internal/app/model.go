@@ -180,9 +180,9 @@ const (
 // Composer placeholders. The launch screen falls back to the short prompt when
 // the column is too narrow to show the full one without clipping it.
 const (
-	setupPlaceholder      = "Describe what to test, or name a target"
-	setupPlaceholderShort = "What should Strix test?"
-	chatPlaceholder       = "Send a message"
+	setupPlaceholder      = "描述要測試的內容，或指定目標"
+	setupPlaceholderShort = "Strix 要測試什麼？"
+	chatPlaceholder       = "傳送訊息"
 )
 
 // The composer opens at minInputLines rows for breathing room and grows with
@@ -203,7 +203,7 @@ func newChatInput() textarea.Model {
 	input.SetHeight(1)
 	input.KeyMap.InsertNewline = key.NewBinding(
 		key.WithKeys("shift+enter", "alt+enter", "ctrl+j"),
-		key.WithHelp("shift+enter", "insert newline"),
+		key.WithHelp("shift+enter", "插入換行"),
 	)
 	plain := lipgloss.NewStyle()
 	text := lipgloss.NewStyle().Foreground(textColor)
@@ -290,7 +290,7 @@ func New(client *Client) Model {
 
 func (m Model) Init() tea.Cmd { return tea.Batch(readWire(m.client), splashTick(), sweepTick()) }
 
-// splashTick drives the splash "Starting Strix Agent" shimmer at Python's 0.1s cadence.
+// splashTick drives the splash "正在啟動 Strix 代理" shimmer at Python's 0.1s cadence.
 func splashTick() tea.Cmd {
 	return tea.Tick(100*time.Millisecond, func(t time.Time) tea.Msg { return splashTickMsg(t) })
 }
@@ -341,8 +341,8 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.ensureVulnerabilityVisible()
 	case wireErrMsg:
 		if !m.quitting {
-			m.errorText = "Backend disconnected: " + msg.err.Error()
-			m.fatalError = fmt.Errorf("backend disconnected: %w", msg.err)
+			m.errorText = "後端已中斷連線: " + msg.err.Error()
+			m.fatalError = fmt.Errorf("後端已中斷連線: %w", msg.err)
 		}
 		return m, tea.Quit
 	case wireMsg:
@@ -368,9 +368,9 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 		}
 	case selectionCopiedMsg:
-		text := "Copied to clipboard"
+		text := "已複製到剪貼簿"
 		if msg.err != nil {
-			text = "Copy failed: " + msg.err.Error()
+			text = "複製失敗: " + msg.err.Error()
 		}
 		return m, m.showToast(text)
 	case toastExpiredMsg:

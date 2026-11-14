@@ -17,7 +17,7 @@ func (m Model) submit(value string) (tea.Model, tea.Cmd) {
 		return m.submitSetupPrompt(value)
 	}
 	if len(m.snapshot.Agents) == 0 {
-		m.errorText = "No agent is available"
+		m.errorText = "沒有可用的代理"
 		return m, nil
 	}
 	if m.selectedAgent >= len(m.snapshot.Agents) {
@@ -371,7 +371,7 @@ func (m Model) setupHeaderView(fit setupFit) string {
 		rows = append(rows, center.Render(lipgloss.NewStyle().Bold(true).Foreground(brightGreen).Render("STRIX")))
 	}
 	if fit.tagline {
-		rows = append(rows, center.Render(render.Dim().Render("Open-source AI hackers for your apps")))
+		rows = append(rows, center.Render(render.Dim().Render("為你的應用程式而生的開源 AI 駭客")))
 	}
 	return strings.Join(rows, "\n")
 }
@@ -468,12 +468,12 @@ func (m Model) targetsView(width, maxRows int) string {
 	if visible < total {
 		visible = min(visible, maxRows-2)
 	}
-	rows := []string{render.Bold(green).Render("Targets") + render.Dim().Render(fmt.Sprintf(" %d", total))}
+	rows := []string{render.Bold(green).Render("目標") + render.Dim().Render(fmt.Sprintf(" %d", total))}
 	for _, target := range m.snapshot.Targets[:visible] {
 		rows = append(rows, render.Col(dim).Render("▸ ")+render.Col(white).Render(truncate(target, max(1, width-2))))
 	}
 	if hidden := total - visible; hidden > 0 {
-		rows = append(rows, render.Dim().Render(fmt.Sprintf("+%d more", hidden)))
+		rows = append(rows, render.Dim().Render(fmt.Sprintf("還有 %d 項", hidden)))
 	}
 	return strings.Join(rows, "\n")
 }
@@ -503,9 +503,9 @@ func (m Model) setupHintsView(width int) string {
 	key := lipgloss.NewStyle().Foreground(white).Render
 	label := render.Dim().Render
 	hint := func(k, text string) string { return key(k) + label(" "+text) }
-	left := hint("enter", "launch scan") + label("   ") + hint("ctrl+c", "quit")
+	left := hint("enter", "開始掃描") + label("   ") + hint("ctrl+c", "離開")
 	if lipgloss.Width(left) > inner {
-		left = hint("enter", "launch scan")
+		left = hint("enter", "開始掃描")
 	}
 	right := label("v" + appVersion)
 	gap := inner - lipgloss.Width(left) - lipgloss.Width(right)

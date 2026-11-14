@@ -11,15 +11,15 @@ import (
 func statusIcon(status string) (string, lipgloss.Style) {
 	switch status {
 	case "running":
-		return "● In progress...", Col(AmberY)
+		return "● 進行中...", Col(AmberY)
 	case "completed":
-		return "✓ Done", Col(Green)
+		return "✓ 完成", Col(Green)
 	case "failed":
-		return "✗ Failed", Col(SevCrit)
+		return "✗ 失敗", Col(SevCrit)
 	case "error":
-		return "✗ Error", Col(SevCrit)
+		return "✗ 錯誤", Col(SevCrit)
 	}
-	return "○ Unknown", Dim()
+	return "○ 未知", Dim()
 }
 
 // renderGenericTool ports registry._render_default_tool_widget. It shows the
@@ -30,7 +30,7 @@ func statusIcon(status string) (string, lipgloss.Style) {
 // data, the run log, and the `strix view` viewer.
 func renderGenericTool(name string, args map[string]any, status string) string {
 	var b strings.Builder
-	b.WriteString(Dim().Render("→ Using tool ") + Bold(Blue).Render(name) + "\n")
+	b.WriteString(Dim().Render("→ 使用工具 ") + Bold(Blue).Render(name) + "\n")
 	for _, k := range SortedKeys(args) {
 		b.WriteString("  " + Dim().Render(k) + ": " + StringValue(args[k]) + "\n")
 	}

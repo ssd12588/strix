@@ -11,11 +11,11 @@ import (
 func renderThink(args map[string]any) string {
 	thought := StringValue(args["thought"])
 	var b strings.Builder
-	b.WriteString("🧠 " + Bold(Purple).Render("Thinking") + "\n  ")
+	b.WriteString("🧠 " + Bold(Purple).Render("思考") + "\n  ")
 	if thought != "" {
 		b.WriteString(Dim().Italic(true).Render(thought))
 	} else {
-		b.WriteString(Dim().Italic(true).Render("Thinking..."))
+		b.WriteString(Dim().Italic(true).Render("思考中..."))
 	}
 	return b.String()
 }
@@ -23,7 +23,7 @@ func renderThink(args map[string]any) string {
 func renderWebSearch(args map[string]any) string {
 	query := StringValue(args["query"])
 	var b strings.Builder
-	b.WriteString("🌐 " + Bold(InfoBlue).Render("Searching the web..."))
+	b.WriteString("🌐 " + Bold(InfoBlue).Render("正在搜尋網路..."))
 	if query != "" {
 		b.WriteString("\n  " + Dim().Render(query))
 	}
@@ -42,11 +42,11 @@ func renderLoadSkill(args map[string]any, result any) string {
 		requested = StringValue(args["skills"])
 	}
 	var b strings.Builder
-	b.WriteString(Col(Emerald).Render("◇ ") + Dim().Render("loading skill"))
+	b.WriteString(Col(Emerald).Render("◇ ") + Dim().Render("載入技能"))
 	if requested != "" {
 		b.WriteString(" " + Col(Emerald).Render(requested))
 	} else if result == nil {
-		b.WriteString("\n  " + Dim().Render("Loading..."))
+		b.WriteString("\n  " + Dim().Render("載入中..."))
 	}
 	return b.String()
 }

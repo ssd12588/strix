@@ -93,7 +93,7 @@ func TestToolDispatchCoversKnownTools(t *testing.T) {
 				map[string]any{"title": "SQL injection in login", "target": "https://x.test"},
 				map[string]any{"severity": "critical", "cvss_score": 9.8},
 				"completed"),
-			[]string{"Vulnerability Report", "SQL injection in login", "CRITICAL", "9.8"},
+			[]string{"漏洞報告", "SQL injection in login", "CRITICAL", "9.8"},
 		},
 		{
 			"create_dependency_report",
@@ -118,7 +118,7 @@ func TestToolDispatchCoversKnownTools(t *testing.T) {
 		{
 			"list_reports empty",
 			tool("list_reports", nil, map[string]any{"success": true, "total_count": 0}, "completed"),
-			[]string{"reports", "(0)", "No reports filed yet"},
+			[]string{"reports", "(0)", "尚未提交任何報告"},
 		},
 		{
 			"get_report",
@@ -138,27 +138,27 @@ func TestToolDispatchCoversKnownTools(t *testing.T) {
 		{
 			"wait_for_user",
 			tool("wait_for_user", map[string]any{}, nil, "completed"),
-			[]string{"waiting for your reply"},
+			[]string{"等待你的回覆"},
 		},
 		{
 			"respond_to_user (recorded runs)",
 			tool("respond_to_user", map[string]any{"message": "Here is the answer"}, nil, "completed"),
-			[]string{"Here is the answer", "waiting for your reply"},
+			[]string{"Here is the answer", "等待你的回覆"},
 		},
 		{
 			"finish_scan",
 			tool("finish_scan", map[string]any{"executive_summary": "All done"}, nil, "completed"),
-			[]string{"Penetration test completed", "All done"},
+			[]string{"滲透測試完成", "All done"},
 		},
 		{
 			"think",
 			tool("think", map[string]any{"thought": "checking auth flow"}, nil, "running"),
-			[]string{"Thinking", "checking auth flow"},
+			[]string{"思考", "checking auth flow"},
 		},
 		{
 			"web_search",
 			tool("web_search", map[string]any{"query": "CVE-2024-1234"}, nil, "running"),
-			[]string{"Searching the web", "CVE-2024-1234"},
+			[]string{"正在搜尋網路", "CVE-2024-1234"},
 		},
 		{
 			"load_skill",
@@ -183,7 +183,7 @@ func TestToolDispatchCoversKnownTools(t *testing.T) {
 		{
 			"create_agent",
 			tool("create_agent", map[string]any{"name": "ReconAgent", "task": "map the site"}, nil, "running"),
-			[]string{"spawning", "ReconAgent", "map the site"},
+			[]string{"生成", "ReconAgent", "map the site"},
 		},
 		{
 			"wait_for_agents",
@@ -193,12 +193,12 @@ func TestToolDispatchCoversKnownTools(t *testing.T) {
 		{
 			"stop_agent",
 			tool("stop_agent", map[string]any{"target_agent_id": "agent-2"}, nil, "completed"),
-			[]string{"stopping", "agent-2"},
+			[]string{"停止中", "agent-2"},
 		},
 		{
 			"view_agent_graph",
 			tool("view_agent_graph", nil, nil, "completed"),
-			[]string{"viewing agents graph"},
+			[]string{"檢視代理關係圖"},
 		},
 		{
 			"list_requests",
@@ -208,7 +208,7 @@ func TestToolDispatchCoversKnownTools(t *testing.T) {
 		{
 			"unknown tool falls back to generic",
 			tool("brand_new_tool", map[string]any{"alpha": "1"}, "done", "completed"),
-			[]string{"brand_new_tool", "alpha", "Done"},
+			[]string{"brand_new_tool", "alpha", "完成"},
 		},
 	}
 
@@ -225,7 +225,7 @@ func TestGenericToolOmitsRawResult(t *testing.T) {
 	long := strings.Repeat("x", 5000)
 	out := ansi.Strip(Tool(tool("db_query", map[string]any{"query": "select 1"}, long, "completed")))
 
-	requireContains(t, out, "db_query", "query", "Done")
+	requireContains(t, out, "db_query", "query", "完成")
 	if strings.Contains(out, "Result:") || strings.Contains(out, strings.Repeat("x", 20)) {
 		t.Fatalf("generic result body must not be rendered:\n%s", out)
 	}
@@ -244,7 +244,7 @@ func TestMcpToolLeadsWithActionAndNamesTheServer(t *testing.T) {
 	if !strings.HasPrefix(out, mcpIcon+"read_file") {
 		t.Fatalf("MCP render must lead with the tool's own name:\n%s", out)
 	}
-	requireContains(t, out, "local_fs", "path", "/etc/hosts", "Done")
+	requireContains(t, out, "local_fs", "path", "/etc/hosts", "完成")
 	// Untrusted server output stays off the terminal, as for the generic render.
 	if strings.Contains(out, "file body") {
 		t.Fatalf("MCP result body must not be rendered:\n%s", out)
@@ -257,7 +257,7 @@ func TestMcpToolWithoutTaggedToolFallsBackToDispatchName(t *testing.T) {
 	data := tool("call_mcp", nil, nil, "running")
 	data["mcp_connection"] = "local_fs"
 
-	requireContains(t, ansi.Strip(Tool(data)), mcpIcon+"call_mcp", "local_fs", "In progress")
+	requireContains(t, ansi.Strip(Tool(data)), mcpIcon+"call_mcp", "local_fs", "進行中")
 }
 
 func TestMcpDescribeInspectsConnection(t *testing.T) {
@@ -267,7 +267,7 @@ func TestMcpDescribeInspectsConnection(t *testing.T) {
 	data["mcp_connection"] = "local_fs"
 
 	out := ansi.Strip(Tool(data))
-	requireContains(t, out, mcpIcon, "Inspecting MCP server", "local_fs", "Done")
+	requireContains(t, out, mcpIcon, "正在檢查 MCP 伺服器", "local_fs", "完成")
 	if strings.Contains(out, "describe_mcp") {
 		t.Fatalf("describe_mcp must read as inspecting the connection, not name the dispatch tool:\n%s", out)
 	}
@@ -285,7 +285,7 @@ func TestMcpListMarksDeadConnectionsOffline(t *testing.T) {
 	data := tool("list_mcps", nil, result, "completed")
 
 	out := ansi.Strip(Tool(data))
-	requireContains(t, out, "Listing MCP servers", "supabase", "vercel", "offline")
+	requireContains(t, out, "列出 MCP 伺服器", "supabase", "vercel", "offline")
 	if strings.Count(out, "offline") != 1 {
 		t.Fatalf("only the dead connection should read offline:\n%s", out)
 	}

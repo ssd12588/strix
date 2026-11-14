@@ -10,7 +10,7 @@ import "strings"
 // carries no text: whatever the agent had to say was already shown as its
 // own prose.
 func renderWaitForUser() string {
-	return Col(Gray).Render("○ ") + Dim().Render("waiting for your reply")
+	return Col(Gray).Render("○ ") + Dim().Render("等待你的回覆")
 }
 
 // renderRespondToUser renders the retired respond_to_user call from recorded

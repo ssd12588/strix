@@ -19,11 +19,11 @@ var coverageOutcomes = map[string]struct {
 	label  string
 	color  lipgloss.Color
 }{
-	"reported":        {"!", "reported", SevHigh},
-	"no_issue_found":  {"✓", "no issue found", Green},
-	"ruled_out":       {"✓", "ruled out", Mint},
-	"not_applicable":  {"–", "not applicable", Slate},
-	"needs_follow_up": {"?", "needs follow-up", AmberY},
+	"已回報":        {"!", "已回報", SevHigh},
+	"no_issue_found":  {"✓", "未發現問題", Green},
+	"ruled_out":       {"✓", "已排除", Mint},
+	"not_applicable":  {"–", "不適用", Slate},
+	"needs_follow_up": {"?", "需要後續追蹤", AmberY},
 }
 
 func coverageOutcome(outcome string) (string, string, lipgloss.Color) {
@@ -41,9 +41,9 @@ var coverageTitles = map[string]struct {
 	loading string
 	errMsg  string
 }{
-	"record_coverage": {"Coverage Recorded", "Recording...", "Failed to record coverage"},
-	"update_coverage": {"Coverage Updated", "Updating...", "Failed to update coverage"},
-	"list_coverage":   {"Coverage", "Loading...", "Unable to list coverage"},
+	"record_coverage": {"已記錄涵蓋範圍", "記錄中...", "記錄涵蓋範圍失敗"},
+	"update_coverage": {"已更新涵蓋範圍", "更新中...", "更新涵蓋範圍失敗"},
+	"list_coverage":   {"涵蓋範圍", "載入中...", "無法列出涵蓋範圍"},
 }
 
 func renderCoverage(name string, args map[string]any, result any) string {
@@ -108,7 +108,7 @@ func coverageSubject(args map[string]any, result map[string]any) string {
 		return risk
 	}
 	if id := StringValue(result["entry_id"]); id != "" {
-		return Dim().Render("entry " + id)
+		return Dim().Render("項目 " + id)
 	}
 	return Dim().Render("(unnamed surface)")
 }
@@ -133,9 +133,9 @@ func coverageListBody(b *strings.Builder, result map[string]any) {
 	total, _ := NumericValue(result["total_count"])
 	if len(entries) == 0 {
 		if int(total) == 0 {
-			b.WriteString("\n  " + Dim().Render("No surfaces recorded yet"))
+			b.WriteString("\n  " + Dim().Render("尚未記錄任何介面"))
 		} else {
-			b.WriteString("\n  " + Dim().Render("No surfaces match this filter"))
+			b.WriteString("\n  " + Dim().Render("沒有符合此篩選條件的介面"))
 		}
 		return
 	}
@@ -143,7 +143,7 @@ func coverageListBody(b *strings.Builder, result map[string]any) {
 	if counts, ok := result["outcome_counts"].(map[string]any); ok && len(counts) > 0 {
 		var parts []string
 		for _, outcome := range []string{
-			"reported", "no_issue_found", "ruled_out", "not_applicable", "needs_follow_up",
+			"已回報", "no_issue_found", "ruled_out", "not_applicable", "needs_follow_up",
 		} {
 			count, ok := NumericValue(counts[outcome])
 			if !ok || count == 0 {
@@ -179,7 +179,7 @@ func coverageListBody(b *strings.Builder, result map[string]any) {
 				}
 			}
 			if len(was) > 0 {
-				b.WriteString(Dim().Render(" (was " + strings.Join(was, " → ") + ")"))
+				b.WriteString(Dim().Render("（原為 " + strings.Join(was, " → ") + "）"))
 			}
 		}
 		// Whose row this is matters for reconciliation: an agent needs to see

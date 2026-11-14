@@ -14,13 +14,13 @@ func renderAgentGraphTool(name string, args map[string]any, result any) string {
 	var b strings.Builder
 	switch name {
 	case "view_agent_graph":
-		b.WriteString(Col(Lavender).Render("◇ ") + Dim().Render("viewing agents graph"))
+		b.WriteString(Col(Lavender).Render("◇ ") + Dim().Render("檢視代理關係圖"))
 	case "create_agent":
 		agentName := StringValue(args["name"])
 		if agentName == "" {
-			agentName = "Agent"
+			agentName = "代理"
 		}
-		b.WriteString(Col(Lavender).Render("◈ ") + Dim().Render("spawning ") + Bold(Lavender).Render(agentName))
+		b.WriteString(Col(Lavender).Render("◈ ") + Dim().Render("生成 ") + Bold(Lavender).Render(agentName))
 		if task := StringValue(args["task"]); task != "" {
 			b.WriteString("\n  " + Dim().Render(task))
 		}
@@ -29,7 +29,7 @@ func renderAgentGraphTool(name string, args map[string]any, result any) string {
 		if target := StringValue(args["target_agent_id"]); target != "" {
 			b.WriteString(Dim().Render("to " + target))
 		} else {
-			b.WriteString(Dim().Render("sending message"))
+			b.WriteString(Dim().Render("傳送訊息"))
 		}
 		if msg := StringValue(args["message"]); msg != "" {
 			b.WriteString("\n  " + Dim().Render(msg))
@@ -40,9 +40,9 @@ func renderAgentGraphTool(name string, args map[string]any, result any) string {
 			success = v
 		}
 		if success {
-			b.WriteString(Col(Green).Render("◆ ") + Bold(Green).Render("Agent completed"))
+			b.WriteString(Col(Green).Render("◆ ") + Bold(Green).Render("代理已完成"))
 		} else {
-			b.WriteString(Col(Red).Render("◆ ") + Bold(Red).Render("Agent failed"))
+			b.WriteString(Col(Red).Render("◆ ") + Bold(Red).Render("代理失敗"))
 		}
 		if summary := StringValue(args["result_summary"]); summary != "" {
 			b.WriteString("\n  " + lipgloss.NewStyle().Bold(true).Render(summary))
@@ -52,7 +52,7 @@ func renderAgentGraphTool(name string, args map[string]any, result any) string {
 				}
 			}
 		} else {
-			b.WriteString("\n  " + Dim().Render("Completing task..."))
+			b.WriteString("\n  " + Dim().Render("正在完成任務..."))
 		}
 	case "wait_for_agents":
 		// The chat pane animates the marker while the agent is parked here.
@@ -61,7 +61,7 @@ func renderAgentGraphTool(name string, args map[string]any, result any) string {
 			b.WriteString("\n  " + Dim().Render(reason))
 		}
 	case "stop_agent":
-		b.WriteString(Col(Red).Render("◼ ") + Dim().Render("stopping"))
+		b.WriteString(Col(Red).Render("◼ ") + Dim().Render("停止中"))
 		if target := StringValue(args["target_agent_id"]); target != "" {
 			b.WriteString(Bold(Red).Render(" " + target))
 		}

@@ -12,7 +12,7 @@ func TestParkedWaitSpins(t *testing.T) {
 	model := New(nil)
 	model.width, model.height, model.showSplash, model.ready = 130, 30, false, true
 	model.snapshot = protocol.Snapshot{
-		Agents: []protocol.Agent{{ID: "one", Name: "Agent", Status: "waiting"}},
+		Agents: []protocol.Agent{{ID: "one", Name: "代理", Status: "waiting"}},
 		Events: []protocol.Event{{ID: "1", AgentID: "one", Type: "tool", Data: map[string]any{"tool_name": "wait_for_agents"}}},
 	}
 	model.resizeViewport()

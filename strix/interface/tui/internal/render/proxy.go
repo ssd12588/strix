@@ -76,7 +76,7 @@ func renderListRequests(args map[string]any, result any, status string) string {
 		meta = append(meta, s)
 	}
 	if s := StringValue(args["scope_id"]); s != "" {
-		meta = append(meta, "scope:"+truncStr(s, 8))
+		meta = append(meta, "範圍:"+truncStr(s, 8))
 	}
 	if len(meta) > 0 {
 		b.WriteString(Dim().Render("  (" + strings.Join(meta, ", ") + ")"))
@@ -249,7 +249,7 @@ func renderRepeatRequest(args map[string]any, result any, status string) string 
 		b.WriteString(Dim().Italic(true).Render("\n  modifications:"))
 		arrow := Col(Blue).Render("  >> ")
 		if url, ok := mods["url"]; ok {
-			b.WriteString("\n" + arrow + Dim().Render("url: "+ptrunc(StringValue(url), 180)))
+			b.WriteString("\n" + arrow + Dim().Render("網址: "+ptrunc(StringValue(url), 180)))
 		}
 		writeKV := func(key, prefix string, valMax int) {
 			if kv, ok := mods[key].(map[string]any); ok {
@@ -330,7 +330,7 @@ func renderListSitemap(args map[string]any, result any, status string) string {
 	}
 	var meta []string
 	if s := StringValue(args["scope_id"]); s != "" {
-		meta = append(meta, "scope:"+truncStr(s, 8))
+		meta = append(meta, "範圍:"+truncStr(s, 8))
 	}
 	if d := StringValue(args["depth"]); d != "" && d != "DIRECT" {
 		meta = append(meta, strings.ToLower(d))
@@ -531,10 +531,10 @@ func renderScopeRules(args map[string]any, result any, status string) string {
 			case m["scope"] != nil:
 				if scope, ok := m["scope"].(map[string]any); ok {
 					if allow, ok := scope["allowlist"].([]any); ok && len(allow) > 0 {
-						b.WriteString("\n  " + Dim().Render("allow: "+joinTrunc(allow, 40, 5)))
+						b.WriteString("\n  " + Dim().Render("允許: "+joinTrunc(allow, 40, 5)))
 					}
 					if deny, ok := scope["denylist"].([]any); ok && len(deny) > 0 {
-						b.WriteString("\n  " + Dim().Render("deny: "+joinTrunc(deny, 40, 5)))
+						b.WriteString("\n  " + Dim().Render("拒絕: "+joinTrunc(deny, 40, 5)))
 					}
 				}
 			case m["message"] != nil:

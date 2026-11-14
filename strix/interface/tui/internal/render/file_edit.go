@@ -124,7 +124,7 @@ func renderApplyPatch(args map[string]any, result any, status string) string {
 		if s, ok := result.(string); ok && strings.TrimSpace(s) != "" {
 			b.WriteString("\n  " + Dim().Render(strings.TrimSpace(s)))
 		} else if result == nil {
-			b.WriteString(" " + Dim().Render("Processing..."))
+			b.WriteString(" " + Dim().Render("處理中..."))
 		}
 		return b.String()
 	}

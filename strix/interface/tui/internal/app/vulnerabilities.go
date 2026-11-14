@@ -76,7 +76,7 @@ func (m Model) vulnerabilityListWidth() int {
 func (m Model) vulnerabilityTitle(index int) string {
 	title := render.StringValue(m.snapshot.Vulnerabilities[index]["title"])
 	if title == "" {
-		title = "Unknown Vulnerability"
+		title = "未知漏洞"
 	}
 	return title
 }
@@ -191,13 +191,13 @@ func (m *Model) keepVulnerabilitySelectionInWindow() {
 func (m Model) modalView() string {
 	switch m.modal {
 	case modalHelp:
-		title := lipgloss.NewStyle().Bold(true).Foreground(green).Width(34).Align(lipgloss.Center).Render("Strix Help")
+		title := lipgloss.NewStyle().Bold(true).Foreground(green).Width(34).Align(lipgloss.Center).Render("Strix 說明")
 		body := lipgloss.NewStyle().Foreground(textColor).Render("F1        Help\nCtrl+O    Open viewer\nCtrl+Q/C  Quit\nESC       Stop Agent\nEnter     Send / expand node\nCtrl+J    Newline in message\nTab       Switch panels\n↑/↓       Navigate tree\nDrag      Select & copy text\nClick     Expand/collapse tool\nClick ▾/⤢ Collapse / zoom panel\nClick »/« Hide / show sidebar")
 		content := title + "\n\n" + body
 		return lipgloss.NewStyle().Width(38).Border(lipgloss.RoundedBorder()).BorderForeground(green).Background(black).Padding(1, 2).Render(content)
 	case modalQuit:
 		// #quit_dialog: width 24, border round #333333, title #d4d4d4.
-		return m.confirmView("Quit Strix?", 24, dark, textColor)
+		return m.confirmView("要離開 Strix 嗎？", 24, dark, textColor)
 	case modalStop:
 		name := "agent"
 		if len(m.snapshot.Agents) > 0 {
@@ -223,8 +223,8 @@ func (m Model) confirmView(title string, width int, border, titleColor lipgloss.
 // The mount prompt's buttons, named so the renderer and the click test cannot
 // drift apart.
 const (
-	mountConfirmLabel = "Mount"
-	mountCancelLabel  = "Skip"
+	mountConfirmLabel = "掛載"
+	mountCancelLabel  = "略過"
 )
 
 // mountConfirmView asks before a target-less scan mounts the working directory.
@@ -235,7 +235,7 @@ func (m Model) mountConfirmView() string {
 	width := min(52, max(20, m.width-4))
 	dir := strings.TrimSpace(m.snapshot.PendingMount)
 	if dir == "" {
-		dir = "the current directory"
+		dir = "目前目錄"
 	}
 	title := render.Bold(amber).Render("△ Mount working directory?")
 	body := render.Col(white).Render(truncatePath(dir, width-4)) + "\n" +
@@ -320,42 +320,42 @@ func (m Model) confirmDialog(
 func vulnerabilityBody(v map[string]any) string {
 	fieldStyle := render.Bold(render.Field)
 	var b strings.Builder
-	b.WriteString("🐞 " + render.Bold(render.ReportHdr).Render("Vulnerability Report"))
+	b.WriteString("🐞 " + render.Bold(render.ReportHdr).Render("漏洞報告"))
 
 	field := func(label, value string) {
 		if value != "" {
 			b.WriteString("\n\n" + fieldStyle.Render(label+": ") + value)
 		}
 	}
-	field("Agent", render.StringValue(v["agent_name"]))
+	field("代理", render.StringValue(v["agent_name"]))
 	field("Title", render.StringValue(v["title"]))
 	if sev := render.StringValue(v["severity"]); sev != "" {
-		b.WriteString("\n\n" + fieldStyle.Render("Severity: ") +
+		b.WriteString("\n\n" + fieldStyle.Render("嚴重度: ") +
 			lipgloss.NewStyle().Bold(true).Foreground(render.SeverityColor(sev)).Render(strings.ToUpper(sev)))
 	}
 	if score, ok := render.NumericValue(v["cvss"]); ok {
-		b.WriteString("\n\n" + fieldStyle.Render("CVSS Score: ") +
+		b.WriteString("\n\n" + fieldStyle.Render("CVSS 分數: ") +
 			lipgloss.NewStyle().Bold(true).Foreground(render.CVSSColor(score)).Render(render.StringValue(v["cvss"])))
 	}
-	field("Target", render.StringValue(v["target"]))
+	field("目標", render.StringValue(v["target"]))
 	if dep, ok := v["dependency_metadata"].(map[string]any); ok {
-		field("Package", render.StringValue(dep["package_name"]))
-		field("Ecosystem", render.StringValue(dep["package_ecosystem"]))
-		field("Installed Version", render.StringValue(dep["installed_version"]))
-		field("Fixed Version", render.StringValue(dep["fixed_version"]))
-		field("Introduced By", render.StringValue(dep["introduced_by"]))
-		field("Dependency Chain", render.StringValue(dep["dependency_path"]))
+		field("套件", render.StringValue(dep["package_name"]))
+		field("生態系", render.StringValue(dep["package_ecosystem"]))
+		field("已安裝版本", render.StringValue(dep["installed_version"]))
+		field("修正版本", render.StringValue(dep["fixed_version"]))
+		field("引入來源", render.StringValue(dep["introduced_by"]))
+		field("相依鏈", render.StringValue(dep["dependency_path"]))
 	}
-	field("Endpoint", render.StringValue(v["endpoint"]))
+	field("端點", render.StringValue(v["endpoint"]))
 	field("Method", render.StringValue(v["method"]))
 	field("CVE", render.StringValue(v["cve"]))
 	field("CWE", render.StringValue(v["cwe"]))
 	if fe := render.StringValue(v["fix_effort"]); fe != "" {
-		field("Fix Effort", titleCase(fe))
+		field("修正難度", titleCase(fe))
 	}
 	if bd, ok := v["cvss_breakdown"].(map[string]any); ok && len(bd) > 0 {
 		if parts := render.CVSSVectorParts(bd); len(parts) > 0 {
-			b.WriteString("\n\n" + fieldStyle.Render("CVSS Vector: ") + render.Dim().Render(strings.Join(parts, "/")))
+			b.WriteString("\n\n" + fieldStyle.Render("CVSS 向量: ") + render.Dim().Render(strings.Join(parts, "/")))
 		}
 	}
 
@@ -364,17 +364,17 @@ func vulnerabilityBody(v map[string]any) string {
 			b.WriteString("\n\n" + fieldStyle.Render(label) + "\n" + value)
 		}
 	}
-	section("Description", render.StringValue(v["description"]))
+	section("說明", render.StringValue(v["description"]))
 	section("Impact", render.StringValue(v["impact"]))
-	section("Technical Analysis", render.StringValue(v["technical_analysis"]))
+	section("技術分析", render.StringValue(v["technical_analysis"]))
 	section("Evidence", render.StringValue(v["evidence"]))
-	section("PoC Description", render.StringValue(v["poc_description"]))
+	section("PoC 說明", render.StringValue(v["poc_description"]))
 	if poc := render.StringValue(v["poc_script_code"]); poc != "" {
 		pocLang, pocCode := render.ParseFencedCode(poc)
-		b.WriteString("\n\n" + fieldStyle.Render("PoC Code") + "\n" + render.HighlightCode(pocCode, pocLang))
+		b.WriteString("\n\n" + fieldStyle.Render("PoC 程式碼") + "\n" + render.HighlightCode(pocCode, pocLang))
 	}
-	section("Remediation", render.StringValue(v["remediation_steps"]))
-	section("Assumptions", render.StringValue(v["assumptions"]))
+	section("修補建議", render.StringValue(v["remediation_steps"]))
+	section("前提假設", render.StringValue(v["assumptions"]))
 	return b.String()
 }
 
@@ -461,8 +461,8 @@ func (m *Model) showVulnerability(index int) {
 const (
 	reportPrev = "‹ Prev"
 	reportNext = "Next ›"
-	reportCopy = "Copy"
-	reportDone = "Done"
+	reportCopy = "複製"
+	reportDone = "完成"
 )
 
 // reportButtons is the row as it stands, left to right. Stepping is offered only
@@ -516,9 +516,9 @@ func (m Model) reportButton(label string, focused bool) string {
 	if label == reportCopy {
 		switch {
 		case m.vulnerabilityCopied:
-			label = "Copied!"
+			label = "已複製！"
 		case m.vulnerabilityCopyError != "":
-			label = "Copy failed"
+			label = "複製失敗"
 		}
 	}
 	if focused {

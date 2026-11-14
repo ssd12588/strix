@@ -10,7 +10,7 @@ import (
 
 func renderFinishScan(args map[string]any) string {
 	var b strings.Builder
-	b.WriteString(Col(Green).Render("◆ ") + Bold(Green).Render("Penetration test completed"))
+	b.WriteString(Col(Green).Render("◆ ") + Bold(Green).Render("滲透測試完成"))
 	section := func(label, value string) {
 		if value != "" {
 			b.WriteString("\n\n" + Bold(Field).Render(label) + "\n" + renderAssistantMarkdown(value))
@@ -20,12 +20,12 @@ func renderFinishScan(args map[string]any) string {
 	me := StringValue(args["methodology"])
 	ta := StringValue(args["technical_analysis"])
 	re := StringValue(args["recommendations"])
-	section("Executive Summary", es)
+	section("執行摘要", es)
 	section("Methodology", me)
-	section("Technical Analysis", ta)
+	section("技術分析", ta)
 	section("Recommendations", re)
 	if es == "" && me == "" && ta == "" && re == "" {
-		b.WriteString("\n  " + Dim().Render("Generating final report..."))
+		b.WriteString("\n  " + Dim().Render("正在產生最終報告..."))
 	}
 	return "\n\n" + b.String() + "\n\n"
 }

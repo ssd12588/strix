@@ -58,7 +58,7 @@ func TestSidebarPanelsRenderHeadersWithControls(t *testing.T) {
 	m := panelsModel(t)
 	_, sidebarWidth, _, _ := m.layout()
 	view := ansi.Strip(m.sidebarView(sidebarWidth, m.height))
-	for _, want := range []string{"▾ Agents (31)", "▾ Findings (1)", "▾ MCP (12)", "⤢"} {
+	for _, want := range []string{"▾ 代理 (31)", "▾ 發現 (1)", "▾ MCP 連線 (12)", "⤢"} {
 		if !strings.Contains(view, want) {
 			t.Fatalf("sidebar missing %q:\n%s", want, view)
 		}
@@ -84,7 +84,7 @@ func TestClickingPanelHeaderCollapsesAndExpands(t *testing.T) {
 	}
 	_, sidebarWidth, _, _ := m.layout()
 	view := ansi.Strip(m.sidebarView(sidebarWidth, m.height))
-	if !strings.Contains(view, "▸ Findings (1)") || strings.Contains(view, "Finding one") {
+	if !strings.Contains(view, "▸ 發現 (1)") || strings.Contains(view, "Finding one") {
 		t.Fatalf("collapsed panel should be a one-line header without its rows:\n%s", view)
 	}
 
@@ -338,7 +338,7 @@ func TestLonePanelHasNoControls(t *testing.T) {
 	m.snapshot.Connections = nil
 	_, sidebarWidth, _, _ := m.layout()
 	view := ansi.Strip(m.sidebarView(sidebarWidth, m.height))
-	if strings.ContainsAny(view, "▾▸⤢⤡") || !strings.Contains(view, "Agents (31)") {
+	if strings.ContainsAny(view, "▾▸⤢⤡") || !strings.Contains(view, "代理 (31)") {
 		t.Fatalf("a lone Agents panel should carry no collapse or zoom controls:\n%s", view)
 	}
 	rect := panelRectOf(t, m, panelAgents)
@@ -351,7 +351,7 @@ func TestLonePanelHasNoControls(t *testing.T) {
 		t.Fatalf("lone Agents panel should take the spare rows, gap=%d", m.sidebarGap())
 	}
 	m.snapshot.Connections = panelsModel(t).snapshot.Connections
-	if !strings.Contains(ansi.Strip(m.sidebarView(sidebarWidth, m.height)), "▾ Agents (31)") {
+	if !strings.Contains(ansi.Strip(m.sidebarView(sidebarWidth, m.height)), "▾ 代理 (31)") {
 		t.Fatalf("controls should return once a second panel exists")
 	}
 }
@@ -367,12 +367,12 @@ func TestTargetsBoxSitsUnderViewer(t *testing.T) {
 		t.Fatalf("sidebar renders %d rows, want %d", len(rows), m.height)
 	}
 	top := m.viewerHeight()
-	for i, want := range []string{"Targets 2", "▸ https://example.com", "▸ ./app"} {
+	for i, want := range []string{"目標 2", "▸ https://example.com", "▸ ./app"} {
 		if !strings.Contains(rows[top+1+i], want) {
 			t.Fatalf("row %d missing %q:\n%s", top+1+i, want, strings.Join(rows, "\n"))
 		}
 	}
-	if !strings.Contains(rows[panelRectOf(t, m, panelAgents).top+1], "Agents") {
+	if !strings.Contains(rows[panelRectOf(t, m, panelAgents).top+1], "代理") {
 		t.Fatalf("agents panel not where its rect says:\n%s", strings.Join(rows, "\n"))
 	}
 }
@@ -419,10 +419,10 @@ func TestTargetsViewCountsTheTargetsItCannotShow(t *testing.T) {
 	m.snapshot.Targets = []string{"a", "b", "c", "d", "e"}
 	m.snapshot.TargetCount = 5
 	for rows, want := range map[int]string{
-		2: "Targets 5\n+5 more",
-		3: "Targets 5\n▸ a\n+4 more",
-		6: "Targets 5\n▸ a\n▸ b\n▸ c\n▸ d\n+1 more",
-		9: "Targets 5\n▸ a\n▸ b\n▸ c\n▸ d\n+1 more",
+		2: "目標 5\n還有 5 項",
+		3: "目標 5\n▸ a\n還有 4 項",
+		6: "目標 5\n▸ a\n▸ b\n▸ c\n▸ d\n還有 1 項",
+		9: "目標 5\n▸ a\n▸ b\n▸ c\n▸ d\n還有 1 項",
 	} {
 		if got := ansi.Strip(m.targetsView(20, rows)); got != want {
 			t.Fatalf("%d rows:\n%s\nwant:\n%s", rows, got, want)

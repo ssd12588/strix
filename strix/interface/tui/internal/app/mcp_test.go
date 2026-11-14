@@ -27,12 +27,12 @@ func mcpModel(t *testing.T) Model {
 func TestMcpPanelShowsHealthyAndOffline(t *testing.T) {
 	m := mcpModel(t)
 	out := ansi.Strip(m.mcpConnectionsView(40, 6))
-	for _, want := range []string{"supabase", "3 tools", "vercel", "offline"} {
+	for _, want := range []string{"supabase", "3 個工具", "vercel", "離線"} {
 		if !strings.Contains(out, want) {
 			t.Fatalf("panel missing %q:\n%s", want, out)
 		}
 	}
-	if sidebar := ansi.Strip(m.sidebarView(26, 40)); !strings.Contains(sidebar, "MCP (2)") {
+	if sidebar := ansi.Strip(m.sidebarView(26, 40)); !strings.Contains(sidebar, "MCP 連線 (2)") {
 		t.Fatalf("sidebar header did not carry the connection count:\n%s", sidebar)
 	}
 }
@@ -50,7 +50,7 @@ func TestMcpPanelWindowsLargeRosterAndCountsAll(t *testing.T) {
 	m.snapshot.Connections = conns
 
 	out := ansi.Strip(m.mcpConnectionsView(40, 6))
-	if !strings.Contains(ansi.Strip(m.sidebarView(26, 40)), "MCP (12)") {
+	if !strings.Contains(ansi.Strip(m.sidebarView(26, 40)), "MCP 連線 (12)") {
 		t.Fatalf("header did not carry the full connection count:\n%s", out)
 	}
 	if !strings.Contains(out, "conn-00") {

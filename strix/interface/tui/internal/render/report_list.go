@@ -71,7 +71,7 @@ func renderListReports(result any) string {
 	resultMap, _ := result.(map[string]any)
 	success, _ := resultMap["success"].(bool)
 	if !success {
-		b.WriteString("\n  " + Dim().Render("Loading..."))
+		b.WriteString("\n  " + Dim().Render("載入中..."))
 		return b.String()
 	}
 
@@ -89,7 +89,7 @@ func renderListReports(result any) string {
 
 	reports, _ := resultMap["reports"].([]any)
 	if len(reports) == 0 {
-		b.WriteString("\n  " + Dim().Render("No reports filed yet"))
+		b.WriteString("\n  " + Dim().Render("尚未提交任何報告"))
 		return b.String()
 	}
 	for _, raw := range reports {
@@ -115,7 +115,7 @@ func renderGetReport(result any) string {
 			detail = StringValue(resultMap["error"])
 		}
 		if detail == "" {
-			detail = "Loading..."
+			detail = "載入中..."
 		}
 		b.WriteString("\n  " + Dim().Render(detail))
 		return b.String()

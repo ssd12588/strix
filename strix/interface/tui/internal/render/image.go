@@ -7,7 +7,7 @@ import (
 func renderViewImage(args map[string]any, result any) string {
 	path := strings.TrimSpace(StringValue(args["path"]))
 	var b strings.Builder
-	b.WriteString(Col(Emerald).Render("◇ ") + Dim().Render("view image"))
+	b.WriteString(Col(Emerald).Render("◇ ") + Dim().Render("檢視圖片"))
 	if path != "" {
 		if len(path) > 60 {
 			path = path[len(path)-60:]
@@ -16,9 +16,9 @@ func renderViewImage(args map[string]any, result any) string {
 	}
 	if s, ok := result.(string); ok {
 		low := strings.ToLower(strings.TrimSpace(s))
-		if strings.HasPrefix(low, "image path ") || strings.HasPrefix(low, "unable to read image") ||
-			strings.HasPrefix(low, "manifest path") || strings.HasPrefix(low, "exceeded the allowed size") ||
-			strings.Contains(low, "not a supported image") {
+		if strings.HasPrefix(low, "圖片路徑 ") || strings.HasPrefix(low, "無法讀取圖片") ||
+			strings.HasPrefix(low, "manifest path") || strings.HasPrefix(low, "超過允許的大小") ||
+			strings.Contains(low, "不支援的圖片格式") {
 			b.WriteString("\n  " + Col(Red).Render(strings.TrimSpace(s)))
 			return b.String()
 		}

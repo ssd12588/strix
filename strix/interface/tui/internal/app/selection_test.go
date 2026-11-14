@@ -67,10 +67,10 @@ func TestDragSelectionCopiesPlainText(t *testing.T) {
 
 	updated, tick := model.Update(msg)
 	model = updated.(Model)
-	if model.toast != "Copied to clipboard" {
+	if model.toast != "已複製到剪貼簿" {
 		t.Fatalf("toast %q after copy", model.toast)
 	}
-	if !strings.Contains(model.View(), "Copied to clipboard") {
+	if !strings.Contains(model.View(), "已複製到剪貼簿") {
 		t.Fatal("toast is not rendered")
 	}
 	if tick == nil {

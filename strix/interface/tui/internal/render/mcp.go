@@ -40,7 +40,7 @@ func renderMcpTool(connection, toolName string, args map[string]any, status stri
 // call so the two read as one family while scrolling a transcript.
 func renderMcpInspect(connection, status string) string {
 	var b strings.Builder
-	b.WriteString(mcpIcon + Dim().Render("Inspecting MCP server ") + Bold(Mint).Render(connection) + "\n")
+	b.WriteString(mcpIcon + Dim().Render("正在檢查 MCP 伺服器 ") + Bold(Mint).Render(connection) + "\n")
 	icon, style := statusIcon(status)
 	b.WriteString(style.Render(icon))
 	return b.String()
@@ -53,7 +53,7 @@ func renderMcpInspect(connection, status string) string {
 // so they are short and never an outside server's payload.
 func renderMcpList(result any, status string) string {
 	var b strings.Builder
-	b.WriteString(mcpIcon + Dim().Render("Listing MCP servers") + "\n")
+	b.WriteString(mcpIcon + Dim().Render("列出 MCP 伺服器") + "\n")
 	for _, conn := range mcpConnectionEntries(result) {
 		b.WriteString("  " + Col(Slate).Render(conn.name))
 		if conn.dead {

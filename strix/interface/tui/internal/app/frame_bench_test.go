@@ -52,7 +52,7 @@ func BenchmarkChatContentWithImages(b *testing.B) {
 		})
 	}
 	model.snapshot = protocol.Snapshot{
-		Agents: []protocol.Agent{{ID: "one", Name: "Agent", Status: "running"}},
+		Agents: []protocol.Agent{{ID: "one", Name: "代理", Status: "running"}},
 		Events: events,
 	}
 	model.resizeViewport()
@@ -85,7 +85,7 @@ func BenchmarkFrameWithImagesAfterUpdate(b *testing.B) {
 		})
 	}
 	model.snapshot = protocol.Snapshot{
-		Agents: []protocol.Agent{{ID: "one", Name: "Agent", Status: "running"}},
+		Agents: []protocol.Agent{{ID: "one", Name: "代理", Status: "running"}},
 		Events: events,
 	}
 	model.resizeViewport()

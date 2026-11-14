@@ -12,13 +12,13 @@ import (
 // ---------------------------------------------------------------------------
 
 func renderVulnerabilityReport(args map[string]any, result any) string {
-	return renderReport(args, result, "Vulnerability Report", "Creating report...")
+	return renderReport(args, result, "漏洞報告", "正在建立報告...")
 }
 
 // A revision names the report it changes and carries only the fields it
 // replaces, so it renders the same sections with the ones it left alone absent.
 func renderVulnerabilityReportUpdate(args map[string]any, result any) string {
-	return renderReport(args, result, "Vulnerability Report Updated", "Updating report...")
+	return renderReport(args, result, "漏洞報告已更新", "正在更新報告...")
 }
 
 // A deletion names the report it withdraws and the reason; the result carries
@@ -26,27 +26,27 @@ func renderVulnerabilityReportUpdate(args map[string]any, result any) string {
 func renderVulnerabilityReportDelete(args map[string]any, result any) string {
 	resultMap, _ := result.(map[string]any)
 	var b strings.Builder
-	b.WriteString("🐞 " + Bold(ReportHdr).Render("Vulnerability Report Deleted"))
+	b.WriteString("🐞 " + Bold(ReportHdr).Render("漏洞報告已刪除"))
 
 	reportID := StringValue(args["report_id"])
 	if reportID != "" {
-		b.WriteString("\n\n" + Bold(Field).Render("Report: ") + reportID)
+		b.WriteString("\n\n" + Bold(Field).Render("報告: ") + reportID)
 	}
 	if title := StringValue(resultMap["title"]); title != "" {
-		b.WriteString("\n\n" + Bold(Field).Render("Title: ") + title)
+		b.WriteString("\n\n" + Bold(Field).Render("標題: ") + title)
 	}
 	if sev := StringValue(resultMap["severity"]); sev != "" {
-		b.WriteString("\n\n" + Bold(Field).Render("Severity: ") +
+		b.WriteString("\n\n" + Bold(Field).Render("嚴重度: ") +
 			lipgloss.NewStyle().Bold(true).Foreground(SeverityColor(sev)).Render(strings.ToUpper(sev)))
 	}
 	if reason := StringValue(args["delete_reason"]); reason != "" {
-		b.WriteString("\n\n" + Bold(Field).Render("Reason") + "\n" + reason)
+		b.WriteString("\n\n" + Bold(Field).Render("原因") + "\n" + reason)
 	}
 	if errMsg := StringValue(resultMap["error"]); errMsg != "" {
 		b.WriteString("\n\n" + Col(SevHigh).Render(errMsg))
 	}
 	if reportID == "" {
-		b.WriteString("\n  " + Dim().Render("Deleting report..."))
+		b.WriteString("\n  " + Dim().Render("正在刪除報告..."))
 	}
 	return "\n\n" + b.String() + "\n\n"
 }
@@ -62,28 +62,28 @@ func renderReport(args map[string]any, result any, heading, pending string) stri
 		}
 	}
 	reportID := StringValue(args["report_id"])
-	field("Report", reportID)
+	field("報告", reportID)
 	title := StringValue(args["title"])
 	field("Title", title)
 
 	if sev := StringValue(resultMap["severity"]); sev != "" {
-		b.WriteString("\n\n" + Bold(Field).Render("Severity: ") +
+		b.WriteString("\n\n" + Bold(Field).Render("嚴重度: ") +
 			lipgloss.NewStyle().Bold(true).Foreground(SeverityColor(sev)).Render(strings.ToUpper(sev)))
 	}
 	if score, ok := NumericValue(resultMap["cvss_score"]); ok {
-		b.WriteString("\n\n" + Bold(Field).Render("CVSS Score: ") +
+		b.WriteString("\n\n" + Bold(Field).Render("CVSS 分數: ") +
 			lipgloss.NewStyle().Bold(true).Foreground(CVSSColor(score)).Render(StringValue(resultMap["cvss_score"])))
 	}
 	field("Target", StringValue(args["target"]))
 	field("Endpoint", StringValue(args["endpoint"]))
-	field("Method", StringValue(args["method"]))
+	field("方法", StringValue(args["method"]))
 	field("CVE", StringValue(args["cve"]))
 	field("CWE", StringValue(args["cwe"]))
 
 	if bd, ok := args["cvss_breakdown"].(map[string]any); ok && len(bd) > 0 {
 		parts := CVSSVectorParts(bd)
 		if len(parts) > 0 {
-			b.WriteString("\n\n" + Bold(Field).Render("CVSS Vector: ") + Dim().Render(strings.Join(parts, "/")))
+			b.WriteString("\n\n" + Bold(Field).Render("CVSS 向量: ") + Dim().Render(strings.Join(parts, "/")))
 		}
 	}
 
@@ -93,7 +93,7 @@ func renderReport(args map[string]any, result any, heading, pending string) stri
 		}
 	}
 	if confidence := StringValue(args["confidence"]); confidence != "" {
-		b.WriteString("\n\n" + Bold(Field).Render("Confidence: ") +
+		b.WriteString("\n\n" + Bold(Field).Render("信心度: ") +
 			lipgloss.NewStyle().Bold(true).Foreground(confidenceColor(confidence)).
 				Render(strings.ToUpper(confidence)))
 		if rationale := StringValue(args["confidence_rationale"]); rationale != "" {
@@ -101,23 +101,23 @@ func renderReport(args map[string]any, result any, heading, pending string) stri
 		}
 	}
 
-	section("Reason", StringValue(args["update_reason"]))
+	section("原因", StringValue(args["update_reason"]))
 	section("Description", StringValue(args["description"]))
 	section("Impact", StringValue(args["impact"]))
-	section("Technical Analysis", StringValue(args["technical_analysis"]))
+	section("技術分析", StringValue(args["technical_analysis"]))
 	// The case against the finding travels with the case for it: a reader
 	// triaging this needs both to judge whether to act.
-	section("Counterevidence", StringValue(args["counterevidence"]))
-	section("Severity Would Change If", StringValue(args["severity_change_conditions"]))
+	section("反證", StringValue(args["counterevidence"]))
+	section("嚴重度會改變的情況", StringValue(args["severity_change_conditions"]))
 	renderCodeLocations(&b, args["code_locations"])
-	section("PoC Description", StringValue(args["poc_description"]))
+	section("PoC 說明", StringValue(args["poc_description"]))
 	if poc := StringValue(args["poc_script_code"]); poc != "" {
-		b.WriteString("\n\n" + Bold(Field).Render("PoC Code") + "\n" + Col(Text).Render(poc))
+		b.WriteString("\n\n" + Bold(Field).Render("PoC 程式碼") + "\n" + Col(Text).Render(poc))
 	}
-	section("Remediation", StringValue(args["remediation_steps"]))
+	section("修補建議", StringValue(args["remediation_steps"]))
 	// Any applyable fix above is one click from the user's codebase, so how it
 	// was verified belongs next to it rather than in the artifact alone.
-	section("Fix Verification", StringValue(args["fix_verification"]))
+	section("修正驗證", StringValue(args["fix_verification"]))
 
 	if title == "" && reportID == "" {
 		b.WriteString("\n  " + Dim().Render(pending))
@@ -160,7 +160,7 @@ func renderCodeLocations(b *strings.Builder, raw any) {
 	if !ok || len(locs) == 0 {
 		return
 	}
-	b.WriteString("\n\n" + Bold(Field).Render("Code Locations"))
+	b.WriteString("\n\n" + Bold(Field).Render("程式碼位置"))
 	for i, l := range locs {
 		loc, ok := l.(map[string]any)
 		if !ok {
@@ -187,7 +187,7 @@ func renderCodeLocations(b *strings.Builder, raw any) {
 		}
 		before, after := StringValue(loc["fix_before"]), StringValue(loc["fix_after"])
 		if before != "" || after != "" {
-			b.WriteString("\n  " + Dim().Render("Fix:"))
+			b.WriteString("\n  " + Dim().Render("修正:"))
 			if before != "" {
 				b.WriteString("\n  " + Col(Red).Render("- ") + Col(Red).Render(before))
 			}
