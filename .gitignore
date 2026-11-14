@@ -101,3 +101,11 @@ schema.graphql
 
 v_out.txt
 v_err.txt
+
+# 客戶專案資料（禁止提交到公開倉庫）
+engagements/
+instructions/local-*.md
+sqlmap-out/
+strix_runs/
+v_out.txt
+v_err.txt
