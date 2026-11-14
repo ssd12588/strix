@@ -20,15 +20,15 @@ interface CoverageEntry {
  * its own icon and color rather than a shared neutral row.
  */
 const OUTCOMES: Record<string, { label: string; color: string; Icon: typeof Circle }> = {
-  reported: { label: "reported", color: "text-orange-400", Icon: AlertTriangle },
-  no_issue_found: { label: "no issue found", color: "text-emerald-400", Icon: CheckCircle2 },
-  ruled_out: { label: "ruled out", color: "text-emerald-400/70", Icon: CheckCircle2 },
-  not_applicable: { label: "not applicable", color: "text-[#777]", Icon: CircleSlash },
-  needs_follow_up: { label: "needs follow-up", color: "text-yellow-400", Icon: HelpCircle },
+  reported: { label: "已回報", color: "text-orange-400", Icon: AlertTriangle },
+  no_issue_found: { label: "未發現問題", color: "text-emerald-400", Icon: CheckCircle2 },
+  ruled_out: { label: "已排除", color: "text-emerald-400/70", Icon: CheckCircle2 },
+  not_applicable: { label: "不適用", color: "text-[#777]", Icon: CircleSlash },
+  needs_follow_up: { label: "需要後續追蹤", color: "text-yellow-400", Icon: HelpCircle },
 };
 
 const OUTCOME_ORDER = [
-  "reported", "needs_follow_up", "no_issue_found", "ruled_out", "not_applicable",
+  "已回報", "needs_follow_up", "no_issue_found", "ruled_out", "not_applicable",
 ] as const;
 
 function outcomeMeta(outcome: string | undefined) {

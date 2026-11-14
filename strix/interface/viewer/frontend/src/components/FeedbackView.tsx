@@ -56,7 +56,7 @@ export default function FeedbackView({
 
       <div className="flex items-center gap-2">
         <IoChatbubblesOutline className="h-5 w-5 text-[#888]" aria-hidden="true" />
-        <h1 className="text-2xl font-semibold text-white">Feedback &amp; support</h1>
+        <h1 className="text-2xl font-semibold text-white">意見回饋與支援</h1>
       </div>
 
       <div
@@ -67,7 +67,7 @@ export default function FeedbackView({
           <div className="flex items-start gap-3">
             <CheckCircle2 className="mt-0.5 h-5 w-5 flex-shrink-0 text-emerald-400" aria-hidden="true" />
             <div className="min-w-0">
-              <p className="text-sm font-semibold text-white">Thanks, we got it.</p>
+              <p className="text-sm font-semibold text-white">謝謝，我們收到了。</p>
               <p className="mt-1 text-xs text-[#888]">
                 We read every message. If it needs a reply, we&apos;ll reach out to the email you gave.
               </p>
@@ -96,7 +96,7 @@ export default function FeedbackView({
             )}
 
             <label className="block">
-              <span className="mb-1.5 block text-xs text-[#888]">Your feedback</span>
+              <span className="mb-1.5 block text-xs text-[#888]">你的意見</span>
               <textarea
                 autoFocus
                 value={message}
@@ -109,7 +109,7 @@ export default function FeedbackView({
             </label>
 
             <label className="mt-4 block">
-              <span className="mb-1.5 block text-xs text-[#888]">Your work email</span>
+              <span className="mb-1.5 block text-xs text-[#888]">你的公司電子郵件</span>
               <input
                 type="email"
                 value={email}

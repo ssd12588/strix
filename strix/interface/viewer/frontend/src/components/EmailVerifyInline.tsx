@@ -96,7 +96,7 @@ export default function EmailVerifyInline({ onVerified }: { onVerified: () => vo
           }}
         >
           <label className="block">
-            <span className="mb-1.5 block text-xs text-[#888]">Your work email</span>
+            <span className="mb-1.5 block text-xs text-[#888]">你的公司電子郵件</span>
             <input
               type="email"
               autoFocus
@@ -106,7 +106,7 @@ export default function EmailVerifyInline({ onVerified }: { onVerified: () => vo
               className="w-full rounded-lg bg-black px-3 py-2.5 text-sm text-white outline-none transition-colors focus:border-[#444]"
               style={{ border: "1px solid #2a2a2a" }}
             />
-            <span className="mt-1.5 block text-[11px] text-[#666]">Use your work email.</span>
+            <span className="mt-1.5 block text-[11px] text-[#666]">請使用你的公司電子郵件。</span>
           </label>
           <button
             type="submit"

@@ -13,14 +13,14 @@ export default function FileEditRenderer({ toolName, args }: ToolRendererProps) 
   const regex = (args.regex as string) ?? "";
 
   let label: string;
-  if (toolName === "list_files") label = "list";
-  else if (toolName === "search_files") label = "search";
-  else if (command === "view") label = "view";
-  else if (command === "create") label = "create";
-  else if (command === "str_replace") label = "edit";
-  else if (command === "undo_edit") label = "undo";
-  else if (command === "insert") label = "insert";
-  else label = "file";
+  if (toolName === "list_files") label = "列出";
+  else if (toolName === "search_files") label = "搜尋";
+  else if (command === "檢視") label = "檢視";
+  else if (command === "建立") label = "建立";
+  else if (command === "str_replace") label = "編輯";
+  else if (command === "undo_edit") label = "復原";
+  else if (command === "插入") label = "插入";
+  else label = "檔案";
 
   const pathDisplay = filePath ? shortPath(filePath) : "";
   const regexDisplay = regex ? ` /${regex}/` : "";

@@ -103,7 +103,7 @@ export default function ApplyPatchRenderer({ args, result, status }: ToolRendere
   if (ops.length === 0) {
     return (
       <div>
-        <span className="text-sky-400/80 font-semibold text-sm">patch</span>
+        <span className="text-sky-400/80 font-semibold text-sm">修補</span>
         {status === "failed" && typeof result === "string" && result.trim() && (
           <div className="text-red-400/70 text-[13px] mt-1">{result.trim()}</div>
         )}

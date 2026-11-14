@@ -27,11 +27,11 @@ interface ScanPromptComposerProps {
 
 /**
  * Faithful port of the pro app's ScanPromptComposer for the local viewer.
- * Collapsed by default into a "Guide the agent" pill; expands into a card with
+ * Collapsed by default into a "引導代理" pill; expands into a card with
  * an auto-resizing textarea and a target control. The viewer's steering is
  * immediate (no Enterprise lock, no bridge-connecting state), so this is only
  * rendered by callers when steering is available. Sends via steerAgent, which
- * requires a concrete agent id, so "Root agent" resolves to the root agent's id.
+ * requires a concrete agent id, so "根代理" resolves to the root agent's id.
  */
 export function ScanPromptComposer({
   agents,
@@ -85,13 +85,13 @@ export function ScanPromptComposer({
     if (selectedTarget === ROOT_TARGET_VALUE) {
       return {
         targetId: rootAgent?.id ?? null,
-        targetName: "Root agent",
+        targetName: "根代理",
       };
     }
     const agent = agents.find((a) => a.id === selectedTarget) ?? null;
     return {
       targetId: agent?.id ?? rootAgent?.id ?? null,
-      targetName: agent?.name ?? "Root agent",
+      targetName: agent?.name ?? "根代理",
     };
   }, [agents, fixedAgentId, isModal, rootAgent, selectedTarget]);
 
@@ -147,11 +147,11 @@ export function ScanPromptComposer({
           className
         )}
         aria-expanded={false}
-        aria-label="Expand live prompt composer"
+        aria-label="展開即時提示面板"
       >
         <div className="flex min-w-0 items-center gap-2">
           <Sparkles className="h-4 w-4 shrink-0 text-[#666]" />
-          <span className="truncate text-sm font-medium text-white">Guide the agent</span>
+          <span className="truncate text-sm font-medium text-white">引導代理</span>
         </div>
         <ChevronUp className="h-4 w-4 shrink-0 text-[#777]" />
       </button>
@@ -170,9 +170,9 @@ export function ScanPromptComposer({
         <div className="min-w-0">
           <div className="flex items-center gap-2">
             <Sparkles className="h-4 w-4 text-[#666]" />
-            <p className="text-sm font-medium text-white">Live prompt</p>
+            <p className="text-sm font-medium text-white">即時提示</p>
           </div>
-          <p className="mt-0.5 text-xs text-[#777]">Connected</p>
+          <p className="mt-0.5 text-xs text-[#777]">已連線</p>
         </div>
         <div className="flex shrink-0 items-center gap-2">
           {isModal ? (
@@ -181,7 +181,7 @@ export function ScanPromptComposer({
             </div>
           ) : (
             <div className="flex items-center gap-1.5">
-              <span className="text-xs text-[#aaa]">Target:</span>
+              <span className="text-xs text-[#aaa]">目標：</span>
               <div className="relative">
                 <button
                   type="button"
@@ -200,7 +200,7 @@ export function ScanPromptComposer({
                     role="listbox"
                   >
                     <TargetMenuItem
-                      label="Root agent"
+                      label="根代理"
                       active={selectedTarget === ROOT_TARGET_VALUE}
                       onSelect={() => {
                         setSelectedTarget(ROOT_TARGET_VALUE);
@@ -227,7 +227,7 @@ export function ScanPromptComposer({
             type="button"
             onClick={handleCollapse}
             className="inline-flex h-7 w-7 items-center justify-center rounded-full text-[#777] transition-colors hover:bg-white/[0.06] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20"
-            aria-label="Collapse live prompt composer"
+            aria-label="收合即時提示面板"
           >
             <ChevronDown className="h-4 w-4" />
           </button>
@@ -276,7 +276,7 @@ export function ScanPromptComposer({
           ) : (
             <ArrowUp className="h-4 w-4" strokeWidth={2.5} />
           )}
-          <span>Send prompt</span>
+          <span>送出提示</span>
         </button>
       </div>
     </div>

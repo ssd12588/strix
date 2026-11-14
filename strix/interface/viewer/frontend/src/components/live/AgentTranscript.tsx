@@ -240,7 +240,7 @@ export function AgentTranscript({
       )}
 
       {mine.length === 0 ? (
-        <p className="text-sm text-[#666]">No recorded activity for this agent.</p>
+        <p className="text-sm text-[#666]">此代理沒有已記錄的活動。</p>
       ) : (
         <div className="py-1">
           {mine.map((event, i) => {

@@ -22,7 +22,7 @@ const SEV = [
 function SeverityChips({ counts }: { counts: RunSeverityCounts }) {
   const shown = SEV.filter((s) => counts[s.key] > 0);
   if (shown.length === 0) {
-    return <span className="text-xs text-[#555]">No findings</span>;
+    return <span className="text-xs text-[#555]">沒有發現</span>;
   }
   return (
     <div className="flex items-center gap-3">
@@ -94,7 +94,7 @@ export default function PastRunsView({
         >
           <History className="h-5 w-5 text-[#888]" aria-hidden="true" />
         </div>
-        <h2 className="text-base font-semibold text-white">Browse every run on this machine</h2>
+        <h2 className="text-base font-semibold text-white">瀏覽本機上的所有執行</h2>
         <p className="mx-auto mt-1.5 max-w-md text-sm text-[#888]">
           You have {count} past {count === 1 ? "run" : "runs"} on this machine.
         </p>

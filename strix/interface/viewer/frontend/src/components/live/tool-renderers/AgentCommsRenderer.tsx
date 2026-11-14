@@ -10,7 +10,7 @@ export default function AgentCommsRenderer({ toolName, args }: ToolRendererProps
     return (
       <div>
         <div className="flex items-center gap-2">
-          <span className="text-cyan-400/80 font-semibold text-sm">spawning</span>
+          <span className="text-cyan-400/80 font-semibold text-sm">生成</span>
           {name && <span className="text-cyan-400 font-semibold text-sm">{name}</span>}
         </div>
         {task && <div className="mt-1.5"><TruncatedText text={task} maxLines={15} /></div>}
@@ -46,7 +46,7 @@ export default function AgentCommsRenderer({ toolName, args }: ToolRendererProps
     return (
       <div>
         <div className="flex items-center gap-2">
-          <span className="text-cyan-400/80 font-semibold text-sm">message</span>
+          <span className="text-cyan-400/80 font-semibold text-sm">訊息</span>
           {agentId && <span className="text-[#888] text-[13px]">to {agentId.slice(0, 16)}</span>}
         </div>
         {message && <div className="mt-1.5"><TruncatedText text={message} maxLines={20} /></div>}
@@ -58,7 +58,7 @@ export default function AgentCommsRenderer({ toolName, args }: ToolRendererProps
     const reason = (args.reason as string) ?? "";
     return (
       <div className="flex items-center gap-2">
-        <span className="text-cyan-400/80 font-semibold text-sm">waiting</span>
+        <span className="text-cyan-400/80 font-semibold text-sm">等待中</span>
         {reason && <span className="text-[#888] text-[13px] truncate">{reason}</span>}
       </div>
     );
@@ -71,7 +71,7 @@ export default function AgentCommsRenderer({ toolName, args }: ToolRendererProps
     return (
       <div>
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-red-400/80 font-semibold text-sm">stopping</span>
+          <span className="text-red-400/80 font-semibold text-sm">停止中</span>
           {targetAgentId && <span className="text-[#888] text-[13px]">{targetAgentId.slice(0, 16)}</span>}
           {cascade && <span className="text-[#555] text-[13px] italic">+ descendants</span>}
         </div>
@@ -82,7 +82,7 @@ export default function AgentCommsRenderer({ toolName, args }: ToolRendererProps
 
   if (toolName === "view_agent_graph") {
     return (
-      <span className="text-cyan-400/80 font-semibold text-sm">viewing agents graph</span>
+      <span className="text-cyan-400/80 font-semibold text-sm">檢視代理關係圖</span>
     );
   }
 

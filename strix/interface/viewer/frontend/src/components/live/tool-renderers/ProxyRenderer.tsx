@@ -43,7 +43,7 @@ function ListRequests({ args, result }: ToolRendererProps) {
   return (
     <div>
       <div className="flex items-center gap-2">
-        <span className="text-purple-400/80 font-semibold text-sm">listing requests</span>
+        <span className="text-purple-400/80 font-semibold text-sm">列出請求</span>
         {filter && <span className="text-[#888] text-[13px]">{trunc(filter, 150)}</span>}
       </div>
       {requests.length > 0 && (
@@ -71,7 +71,7 @@ function ListRequests({ args, result }: ToolRendererProps) {
 
 function ViewRequest({ args, result }: ToolRendererProps) {
   const requestId = args.request_id as number | undefined;
-  const part = (args.part as string) ?? "request";
+  const part = (args.part as string) ?? "請求";
   const searchPattern = (args.search_pattern as string) ?? "";
   const res = result as Record<string, unknown> | null;
   const rawMatches = res ? res.matches : null;
@@ -132,7 +132,7 @@ function SendRequest({ args, result }: ToolRendererProps) {
 
   return (
     <div>
-      <span className="text-purple-400/80 font-semibold text-sm">request</span>
+      <span className="text-purple-400/80 font-semibold text-sm">請求</span>
       <div className="mt-1.5 font-mono text-[13px] space-y-0.5">
         <div>
           <span className="text-[#555] select-none mr-1">&gt;&gt;</span>
@@ -173,7 +173,7 @@ function RepeatRequest({ args, result }: ToolRendererProps) {
   return (
     <div>
       <div className="flex items-center gap-2">
-        <span className="text-purple-400/80 font-semibold text-sm">repeating request</span>
+        <span className="text-purple-400/80 font-semibold text-sm">重送請求</span>
         {requestId != null && <span className="text-[#888] text-[13px]">#{requestId}</span>}
       </div>
       {modifications && typeof modifications === "object" && Object.keys(modifications).length > 0 && (
@@ -217,7 +217,7 @@ function ListSitemap({ args }: ToolRendererProps) {
   const parentId = args.parent_id as string | undefined;
   return (
     <div className="flex items-center gap-2">
-      <span className="text-purple-400/80 font-semibold text-sm">listing sitemap</span>
+      <span className="text-purple-400/80 font-semibold text-sm">列出網站地圖</span>
       {parentId && <span className="text-[#888] text-[13px]">under #{trunc(String(parentId), 20)}</span>}
     </div>
   );
@@ -227,7 +227,7 @@ function ViewSitemapEntry({ args }: ToolRendererProps) {
   const entryId = args.entry_id as string | undefined;
   return (
     <div className="flex items-center gap-2">
-      <span className="text-purple-400/80 font-semibold text-sm">viewing sitemap entry</span>
+      <span className="text-purple-400/80 font-semibold text-sm">檢視網站地圖項目</span>
       {entryId && <span className="text-[#888] text-[13px]">#{trunc(String(entryId), 20)}</span>}
     </div>
   );

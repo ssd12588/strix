@@ -27,7 +27,7 @@ interface ReportEntry {
 
 function authorTag(r: ReportEntry) {
   if (!r.agent_name && !r.by_you) return null;
-  const label = r.by_you ? "you" : r.agent_name;
+  const label = r.by_you ? "你" : r.agent_name;
   return <span className="text-[#666] text-xs ml-1.5">({label})</span>;
 }
 
@@ -45,7 +45,7 @@ export default function ReportListRenderer({ toolName, result }: ToolRendererPro
     const report = ok ? (res.report as ReportEntry | undefined) : undefined;
     return (
       <div>
-        <span className="text-red-400/80 font-semibold text-sm">report</span>
+        <span className="text-red-400/80 font-semibold text-sm">報告</span>
         {report ? (
           <div className="mt-1.5 space-y-2">
             <div className="flex items-center gap-2 flex-wrap">
@@ -55,7 +55,7 @@ export default function ReportListRenderer({ toolName, result }: ToolRendererPro
               {report.cve && <span className="text-[#888] font-mono text-[13px]">{report.cve}</span>}
               {report.cwe && <span className="text-[#888] font-mono text-[13px]">{report.cwe}</span>}
               {(report.agent_name || report.by_you) && (
-                <span className="text-[#666] text-[13px]">{report.by_you ? "you" : report.agent_name}</span>
+                <span className="text-[#666] text-[13px]">{report.by_you ? "你" : report.agent_name}</span>
               )}
             </div>
             {report.title && <div className="text-[15px] text-white/80 font-semibold">{report.title}</div>}
@@ -68,7 +68,7 @@ export default function ReportListRenderer({ toolName, result }: ToolRendererPro
           </div>
         ) : (
           <div className="mt-1 text-[#555] text-xs">
-            {(res && typeof res === "object" && (res.error as string)) || "Report not found"}
+            {(res && typeof res === "object" && (res.error as string)) || "找不到報告"}
           </div>
         )}
       </div>
@@ -87,7 +87,7 @@ export default function ReportListRenderer({ toolName, result }: ToolRendererPro
   return (
     <div>
       <div className="flex items-center gap-2 flex-wrap">
-        <span className="text-red-400/80 font-semibold text-sm">reports</span>
+        <span className="text-red-400/80 font-semibold text-sm">報告清單</span>
         <span className="text-[#555] text-[13px]">({total})</span>
         {countEntries.map(([sev, n]) => (
           <span key={sev} className="text-[13px]">
@@ -115,7 +115,7 @@ export default function ReportListRenderer({ toolName, result }: ToolRendererPro
             </div>
           ))}
         </div>
-      ) : <div className="mt-1 text-[#555] text-xs">No reports filed yet</div>}
+      ) : <div className="mt-1 text-[#555] text-xs">尚未提交任何報告</div>}
     </div>
   );
 }

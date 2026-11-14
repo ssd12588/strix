@@ -295,7 +295,7 @@ export default function App() {
               rel="noopener noreferrer"
               onClick={() => trackCta("logo", "topbar")}
               className="flex items-center gap-1.5 opacity-90 transition-opacity hover:opacity-100 lg:hidden"
-              title="Open Strix Cloud"
+              title="開啟 Strix Cloud"
             >
               <img src="./logo.png" alt="Strix" className="w-10 h-8 object-cover" />
               <div className="text-base text-white font-medium tracking-tight">Strix</div>
@@ -359,7 +359,7 @@ export default function App() {
             <div className="space-y-4">
               <div className="flex items-center gap-2">
                 <History className="w-5 h-5 text-[#888]" aria-hidden="true" />
-                <h1 className="text-2xl font-semibold text-white">Past runs</h1>
+                <h1 className="text-2xl font-semibold text-white">過往執行</h1>
               </div>
               <PastRunsView
                 runs={runs}
@@ -371,7 +371,7 @@ export default function App() {
           ) : !run && !error ? (
             <div className="rounded-xl border border-[#222] bg-[rgba(255,255,255,0.02)] p-10 text-center">
               <div className="w-6 h-6 mx-auto mb-3 rounded-full border-2 border-[#333] border-t-white animate-spin" />
-              <p className="text-sm text-[#888]">Loading run data…</p>
+              <p className="text-sm text-[#888]">正在載入執行資料…</p>
             </div>
           ) : run && counts ? (
             <>
@@ -450,11 +450,11 @@ function RunSwitcher({
       <button
         onClick={() => setOpen((o) => !o)}
         onBlur={() => setTimeout(() => setOpen(false), 150)}
-        aria-label="Switch pentest"
+        aria-label="切換滲透測試"
         className="flex items-center gap-2 rounded-lg border border-[#3a3a3a] bg-[rgba(255,255,255,0.05)] px-3 py-2 text-sm text-white transition-colors hover:border-[#555] hover:bg-[rgba(255,255,255,0.09)]"
       >
         <History className="h-4 w-4 flex-shrink-0 text-[#888]" aria-hidden="true" />
-        <span className="flex-shrink-0 text-[#888]">Pentest</span>
+        <span className="flex-shrink-0 text-[#888]">滲透測試</span>
         <span className="max-w-[260px] truncate font-medium">{current}</span>
         <ChevronDown className="h-4 w-4 flex-shrink-0 text-[#aaa]" aria-hidden="true" />
       </button>
@@ -567,12 +567,12 @@ function FindingsList({
         </div>
         {finished && (
           <div className="rounded-xl border border-[#222] bg-[rgba(255,255,255,0.02)] p-5">
-            <p className="text-sm font-medium text-white">Stay ahead of new exposures</p>
+            <p className="text-sm font-medium text-white">搶先掌握新出現的曝險</p>
             <p className="mt-0.5 mb-3 text-xs text-[#666]">
               Attack surface monitoring catches new exposures for your org over time.
             </p>
             <ProInlineCta
-              label="Attack surface monitoring"
+              label="攻擊面監控"
               desc="Continuous coverage for your whole org."
               slug="asm"
               surface="empty_state"
@@ -646,7 +646,7 @@ function EmailReportCta({ onOpenEmail }: { onOpenEmail: () => void }) {
           <Mail className="h-4 w-4 text-emerald-400" aria-hidden="true" />
         </div>
         <div className="min-w-0 flex-1">
-          <p className="text-sm font-semibold text-white">Email an encrypted PDF report of this run</p>
+          <p className="text-sm font-semibold text-white">以電子郵件寄送本次執行的加密 PDF 報告</p>
           <p className="mt-0.5 text-xs text-[#888]">
             Encrypted with a key only you can see, email verified with a one-time code before sending.
           </p>
@@ -710,10 +710,10 @@ function OverviewTab({
       {finished && (
         <div className="animate-card-in rounded-xl border border-[#222] bg-[rgba(255,255,255,0.02)] p-5">
           <p className="text-sm font-semibold text-white">Strix Cloud</p>
-          <p className="mt-0.5 text-xs text-[#666]">Run your next pentest in Strix Cloud.</p>
+          <p className="mt-0.5 text-xs text-[#666]">在 Strix Cloud 執行下一次滲透測試。</p>
           <div className="mt-3 flex flex-wrap gap-2.5">
             <ProInlineCta
-              label="Run a pentest in Strix Cloud"
+              label="在 Strix Cloud 執行滲透測試"
               desc="Validated findings, autofix, and PR reviews."
               slug="overview_cloud"
               surface="overview"
@@ -721,7 +721,7 @@ function OverviewTab({
               primary
             />
             <ProInlineCta
-              label="Try Strix Enterprise"
+              label="試用 Strix Enterprise"
               desc="SSO, compliance-ready reports, VPC or self-hosted deployment."
               slug="book_demo"
               surface="overview"
@@ -744,7 +744,7 @@ function OverviewTab({
         </div>
       ) : (
         total === 0 && (
-          <p className="text-sm text-[#888]">No summary available for this run yet.</p>
+          <p className="text-sm text-[#888]">此執行尚無可用的摘要。</p>
         )
       )}
 
@@ -789,7 +789,7 @@ function AgentsTab({ run, canSteer }: { run: LoadedRun; canSteer: boolean }) {
       <div className="rounded-xl border border-[#222] bg-[rgba(255,255,255,0.02)] p-5">
         <div className="flex items-center gap-2">
           <Bot className="w-4 h-4 text-[#888]" aria-hidden="true" />
-          <h2 className="text-sm font-semibold text-white">Agent graph</h2>
+          <h2 className="text-sm font-semibold text-white">代理關係圖</h2>
           <span className="text-xs text-[#666]">
             {agents.length} agent{agents.length === 1 ? "" : "s"}
           </span>
@@ -814,11 +814,11 @@ function AgentsTab({ run, canSteer }: { run: LoadedRun; canSteer: boolean }) {
 
       {/* Re-run always routes to Strix Cloud. */}
       <div className="rounded-xl border border-[#222] bg-[rgba(255,255,255,0.02)] p-5">
-        <p className="text-sm font-semibold text-white">Run this pentest with more depth</p>
-        <p className="mt-0.5 text-xs text-[#666]">Run this pentest again in Strix Cloud.</p>
+        <p className="text-sm font-semibold text-white">以更高深度重新執行這次滲透測試</p>
+        <p className="mt-0.5 text-xs text-[#666]">在 Strix Cloud 重新執行這次滲透測試。</p>
         <div className="mt-3 flex flex-wrap gap-2.5">
           <ProInlineCta
-            label="Re-run in Strix Pro with more depth"
+            label="以更高深度在 Strix Pro 重新執行"
             desc="More depth, validated findings, and autofix."
             slug="live_scan"
             surface="agents"
@@ -826,7 +826,7 @@ function AgentsTab({ run, canSteer }: { run: LoadedRun; canSteer: boolean }) {
             primary
           />
           <ProInlineCta
-            label="Try Strix Enterprise"
+            label="試用 Strix Enterprise"
             desc="SSO, compliance-ready reports, VPC or self-hosted deployment."
             slug="book_demo"
             surface="agents"

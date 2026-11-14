@@ -11,7 +11,7 @@ function ScanStartInfo({ args }: ToolRendererProps) {
   return (
     <div>
       <div className="flex items-center gap-2">
-        <span className="text-emerald-400/80 font-semibold text-sm">Starting penetration test</span>
+        <span className="text-emerald-400/80 font-semibold text-sm">正在啟動滲透測試</span>
         {targetNames.length === 1 && <span className="text-[#888] text-[13px]">on {targetNames[0]}</span>}
       </div>
       {targetNames.length > 1 && (
@@ -32,7 +32,7 @@ function SubagentStartInfo({ args }: ToolRendererProps) {
   return (
     <div>
       <div className="flex items-center gap-2">
-        <span className="text-[#888] text-[13px]">subagent</span>
+        <span className="text-[#888] text-[13px]">子代理</span>
         <span className="text-purple-400 font-semibold text-sm">{name}</span>
       </div>
       {task && <div className="mt-1.5"><TruncatedText text={task} maxLines={15} /></div>}

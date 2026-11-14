@@ -176,7 +176,7 @@ export default function Sidebar({
         <div
           className="fixed left-0 top-0 z-40 hidden h-full w-4 cursor-pointer transition-colors hover:bg-[rgba(255,255,255,0.08)] lg:block"
           onClick={expandSidebar}
-          title="Expand sidebar"
+          title="展開側欄"
         />
       )}
 
@@ -197,7 +197,7 @@ export default function Sidebar({
                 rel="noopener noreferrer"
                 onClick={() => trackCta("logo", "sidebar")}
                 className="flex flex-1 flex-row items-center gap-2 rounded-md py-2 pl-2.5 pr-1 min-w-0 transition-colors hover:bg-[rgba(255,255,255,0.06)]"
-                title="Open Strix Cloud"
+                title="開啟 Strix Cloud"
               >
                 <span
                   className="flex flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-cyan-500"
@@ -218,7 +218,7 @@ export default function Sidebar({
                 rel="noopener noreferrer"
                 onClick={() => trackCta("logo", "sidebar")}
                 className="flex flex-none items-center rounded-md px-1.5 py-2 transition-colors hover:bg-[rgba(255,255,255,0.06)]"
-                aria-label="Open Strix Cloud"
+                aria-label="開啟 Strix Cloud"
               >
                 <ChevronsUpDown className="h-4 w-4 text-[#666]" />
               </a>
@@ -231,13 +231,13 @@ export default function Sidebar({
           <div className="relative flex flex-col gap-px px-2">
             <NavItem
               icon={<ProjectsIcon />}
-              label="Pentest Overview"
+              label="滲透測試總覽"
               active={view === "overview"}
               onClick={() => onSelectView("overview")}
             />
             <NavItem
               icon={<AlertTriangle className="h-4 w-4" />}
-              label="Issues"
+              label="問題"
               count={issuesCount > 0 ? issuesCount : undefined}
               active={view === "issues"}
               onClick={() => onSelectView("issues")}
@@ -245,7 +245,7 @@ export default function Sidebar({
             {agentCount > 0 && (
               <NavItem
                 icon={<Bot className="h-4 w-4" />}
-                label="Agents"
+                label="代理"
                 count={agentCount}
                 active={view === "agents"}
                 onClick={() => onSelectView("agents")}
@@ -256,7 +256,7 @@ export default function Sidebar({
             )}
             <NavItem
               icon={<History className="h-4 w-4" />}
-              label="Past runs"
+              label="過往執行"
               count={runCount > 0 ? runCount : undefined}
               active={view === "history"}
               onClick={onOpenHistory}
@@ -264,14 +264,14 @@ export default function Sidebar({
             {finished && (
               <NavItem
                 icon={<Mail className="h-4 w-4" />}
-                label="Export report"
+                label="匯出報告"
                 active={view === "email"}
                 onClick={onOpenEmail}
               />
             )}
             <NavItem
               icon={<IoChatbubblesOutline className="h-4 w-4" />}
-              label="Feedback & support"
+              label="意見回饋與支援"
               active={view === "feedback"}
               onClick={() => onSelectView("feedback")}
             />
@@ -280,7 +280,7 @@ export default function Sidebar({
 
             <NavItem
               icon={<LuGitPullRequestArrow className="h-4 w-4" />}
-              label="PR Security Reviews"
+              label="PR 安全審查"
               active={false}
               onClick={() =>
                 openUpgrade(
@@ -291,7 +291,7 @@ export default function Sidebar({
             />
             <NavItem
               icon={<VscExtensions className="h-4 w-4" />}
-              label="Integrations"
+              label="整合"
               active={false}
               onClick={() =>
                 openUpgrade(
@@ -302,7 +302,7 @@ export default function Sidebar({
             />
             <NavItem
               icon={<Users className="h-4 w-4" />}
-              label="Members"
+              label="成員"
               active={false}
               onClick={() =>
                 openUpgrade(
@@ -332,7 +332,7 @@ export default function Sidebar({
                 </span>
                 <span className="flex min-w-0 flex-1 flex-col text-left">
                   <span className="truncate text-[13px] font-medium text-[#ededed]">{email}</span>
-                  <span className="truncate text-[11px] text-[#555]">Linked to this machine</span>
+                  <span className="truncate text-[11px] text-[#555]">已連結至本機</span>
                 </span>
               </button>
             ) : (
@@ -344,7 +344,7 @@ export default function Sidebar({
                   <span className="text-[9px] font-semibold text-white">S</span>
                 </span>
                 <span className="flex min-w-0 flex-1 flex-col text-left">
-                  <span className="truncate text-[13px] font-medium text-[#ededed]">Local viewer</span>
+                  <span className="truncate text-[13px] font-medium text-[#ededed]">本機檢視器</span>
                 </span>
               </div>
             )}
@@ -352,7 +352,7 @@ export default function Sidebar({
             {showUserMenu && verified && email && (
               <div className="absolute bottom-full left-2 right-2 z-50 mb-1 overflow-hidden rounded-lg border border-[#333] bg-black shadow-xl">
                 <div className="border-b border-[#333] px-3 py-2">
-                  <p className="truncate text-[13px] font-medium text-white">Linked email</p>
+                  <p className="truncate text-[13px] font-medium text-white">已連結的電子郵件</p>
                   <p className="truncate text-[11px] text-[#666]">{email}</p>
                 </div>
                 <button
@@ -438,10 +438,10 @@ const SWEEP_MS = 220;
  * The MCP connections panel: a compact roster of the run's connected MCP
  * servers, matching the terminal UI's sidebar panel. A header carries the
  * total count; each row shows a status glyph, the connection name, and its
- * tool count (or "offline"):
+ * tool count (or "離線"):
  *   - solid green dot: attached and idle;
  *   - green cycling quarter-circle (◐◓◑◒): a tool call is running against it;
- *   - red dot + "offline": the connection's live session has died.
+ *   - red dot + "離線": the connection's live session has died.
  *
  * "In use" is derived by the caller from the connection-tagged tool events, not
  * carried on the roster, so a call in flight shows motion with no extra signal.
@@ -493,7 +493,7 @@ function McpConnectionsPanel({
                 {conn.name}
               </span>
               {conn.dead ? (
-                <span className="flex-none text-[11px] text-red-400">offline</span>
+                <span className="flex-none text-[11px] text-red-400">離線</span>
               ) : (
                 <span className="flex-none text-[11px] tabular-nums text-[#666]">
                   {conn.toolCount} {conn.toolCount === 1 ? "tool" : "tools"}

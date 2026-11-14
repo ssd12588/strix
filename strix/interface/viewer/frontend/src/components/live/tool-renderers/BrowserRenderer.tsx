@@ -99,7 +99,7 @@ export default function BrowserRenderer({ args }: ToolRendererProps) {
   return (
     <div>
       <div className="flex items-center gap-2 min-w-0">
-        <span className="text-blue-400/80 font-semibold text-sm shrink-0">Browser</span>
+        <span className="text-blue-400/80 font-semibold text-sm shrink-0">瀏覽器</span>
         <span className="min-w-0 truncate text-[#888] text-[13px]">
           {typeof description === "string" ? description : description}
         </span>

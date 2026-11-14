@@ -3,7 +3,7 @@ import { ChevronDown, ChevronUp, Info } from "lucide-react";
 import { formatNumber } from "@/lib/display-number";
 
 /**
- * "Run details" card for the Overview tab: the launch configuration the run was
+ * "執行詳情" card for the Overview tab: the launch configuration the run was
  * started with (targets, instruction, scope, mode) and its LLM usage + cost.
  * Everything is read defensively from the raw run.json record, which may be
  * partial while a scan is still live.
@@ -115,7 +115,7 @@ export function RunDetails({
         className="flex w-full cursor-pointer items-center gap-2 text-left"
       >
         <Info className="h-4 w-4 text-[#888]" aria-hidden="true" />
-        <h2 className="text-sm font-semibold text-white">Run details</h2>
+        <h2 className="text-sm font-semibold text-white">執行詳情</h2>
         {open ? (
           <ChevronUp className="ml-auto h-4 w-4 text-[#666]" aria-hidden="true" />
         ) : (
@@ -131,7 +131,7 @@ export function RunDetails({
           </h3>
           <dl className="space-y-2.5">
             {targets.length > 0 && (
-              <Field label="Targets">
+              <Field label="目標">
                 <div className="space-y-1">
                   {targets.map((t, i) => (
                     <div key={i} className="flex flex-wrap items-center gap-2">
@@ -146,18 +146,18 @@ export function RunDetails({
                 </div>
               </Field>
             )}
-            <Field label="Instruction">
+            <Field label="指令">
               {instruction ? (
                 <span className="whitespace-pre-wrap">{instruction}</span>
               ) : (
-                <span className="text-[#666]">None</span>
+                <span className="text-[#666]">無</span>
               )}
             </Field>
-            {scanMode && <Field label="Pentest mode">{scanMode}</Field>}
-            <Field label="Scope">{scope}</Field>
-            <Field label="Mode">{nonInteractive ? "Non-interactive" : "Interactive"}</Field>
+            {scanMode && <Field label="滲透測試模式">{scanMode}</Field>}
+            <Field label="範圍">{scope}</Field>
+            <Field label="模式">{nonInteractive ? "Non-interactive" : "Interactive"}</Field>
             {localSources.length > 0 && (
-              <Field label="Local sources">
+              <Field label="本機來源">
                 <div className="space-y-0.5 font-mono text-[#ddd]">
                   {localSources.map((s, i) => (
                     <div key={i}>{s}</div>
@@ -165,7 +165,7 @@ export function RunDetails({
                 </div>
               </Field>
             )}
-            {status && <Field label="Status">{status}</Field>}
+            {status && <Field label="狀態">{status}</Field>}
           </dl>
         </section>
 
@@ -175,9 +175,9 @@ export function RunDetails({
           </h3>
           {hasUsage ? (
             <dl className="space-y-2.5 tabular-nums">
-              <Field label="Model">{models.length ? models.join(", ") : "n/a"}</Field>
+              <Field label="模型">{models.length ? models.join(", ") : "n/a"}</Field>
               {subscription && (
-                <Field label="Provider">
+                <Field label="供應商">
                   <span className="inline-flex items-center gap-1.5">
                     <span className="rounded-full border border-[#22c55e]/40 bg-[#22c55e]/10 px-2 py-0.5 text-[11px] text-[#22c55e]">
                       ChatGPT subscription
@@ -185,33 +185,33 @@ export function RunDetails({
                   </span>
                 </Field>
               )}
-              <Field label="Run time">{fmtDuration(durationSeconds)}</Field>
-              {requests != null && <Field label="Requests">{formatNumber(requests)}</Field>}
+              <Field label="執行時間">{fmtDuration(durationSeconds)}</Field>
+              {requests != null && <Field label="請求數">{formatNumber(requests)}</Field>}
               {inputTokens != null && (
-                <Field label="Input tokens">
+                <Field label="輸入 token">
                   {formatNumber(inputTokens)}
                   {cached != null && sub(cached, "cached")}
                 </Field>
               )}
               {outputTokens != null && (
-                <Field label="Output tokens">
+                <Field label="輸出 token">
                   {formatNumber(outputTokens)}
                   {reasoning != null && sub(reasoning, "reasoning")}
                 </Field>
               )}
-              {totalTokens != null && <Field label="Total tokens">{formatNumber(totalTokens)}</Field>}
+              {totalTokens != null && <Field label="token 總數">{formatNumber(totalTokens)}</Field>}
               {subscription ? (
-                <Field label="Cost">
+                <Field label="費用">
                   <span className="text-[#22c55e]">$0.00</span>
                   <span className="text-[#666]"> (subscription)</span>
                 </Field>
               ) : (
-                cost != null && <Field label="Cost">${cost.toFixed(2)}</Field>
+                cost != null && <Field label="費用">${cost.toFixed(2)}</Field>
               )}
-              {agents.length > 0 && <Field label="Agents">{formatNumber(agents.length)}</Field>}
+              {agents.length > 0 && <Field label="代理">{formatNumber(agents.length)}</Field>}
             </dl>
           ) : (
-            <p className="text-sm text-[#666]">Not available yet.</p>
+            <p className="text-sm text-[#666]">尚無資料。</p>
           )}
         </section>
       </div>

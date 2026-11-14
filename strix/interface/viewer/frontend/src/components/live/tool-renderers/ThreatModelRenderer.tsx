@@ -11,13 +11,13 @@ interface Amendment {
 }
 
 const ACTION_LABELS: Record<string, { label: string; Icon: typeof Crosshair }> = {
-  get_threat_model: { label: "Threat model", Icon: Crosshair },
-  save_threat_model: { label: "Threat model saved", Icon: Save },
-  amend_threat_model: { label: "Threat model amended", Icon: Plus },
+  get_threat_model: { label: "威脅模型", Icon: Crosshair },
+  save_threat_model: { label: "威脅模型已儲存", Icon: Save },
+  amend_threat_model: { label: "威脅模型已修訂", Icon: Plus },
 };
 
 export default function ThreatModelRenderer({ toolName, args, result }: ToolRendererProps) {
-  const action = ACTION_LABELS[toolName] ?? { label: "Threat model", Icon: Crosshair };
+  const action = ACTION_LABELS[toolName] ?? { label: "威脅模型", Icon: Crosshair };
   const ActionIcon = action.Icon;
   const target = (args.target as string) ?? "";
   const res = result as Record<string, unknown> | string | null;
@@ -52,7 +52,7 @@ export default function ThreatModelRenderer({ toolName, args, result }: ToolRend
       return (
         <div>
           {header}
-          <div className="mt-1.5 text-[#555] text-xs">No model derived for this target yet</div>
+          <div className="mt-1.5 text-[#555] text-xs">此目標尚未推導出威脅模型</div>
         </div>
       );
     }

@@ -137,7 +137,7 @@ export function AgentDetailModal({
           <button
             type="button"
             onClick={onClose}
-            aria-label="Close"
+            aria-label="關閉"
             className="flex-shrink-0 rounded-md p-1 text-[#888] transition-colors hover:bg-[#1a1a1a] hover:text-white"
           >
             <X className="h-4 w-4" />

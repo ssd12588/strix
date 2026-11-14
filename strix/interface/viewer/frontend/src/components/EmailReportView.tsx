@@ -225,7 +225,7 @@ export default function EmailReportView({
               <div className="flex items-start gap-2.5">
                 <ShieldCheck className="mt-0.5 h-4 w-4 flex-shrink-0 text-emerald-400" aria-hidden="true" />
                 <p className="text-xs leading-relaxed text-[#aaa]">
-                  We email an <span className="text-white">encrypted PDF</span>. Nothing else leaves your machine.
+                  We email an <span className="text-white">加密 PDF</span>. Nothing else leaves your machine.
                 </p>
               </div>
               <div className="flex items-start gap-2.5">
@@ -256,7 +256,7 @@ export default function EmailReportView({
             }}
           >
             <label className="block">
-              <span className="mb-1.5 block text-xs text-[#888]">Your work email</span>
+              <span className="mb-1.5 block text-xs text-[#888]">你的公司電子郵件</span>
               <input
                 type="email"
                 autoFocus
@@ -323,7 +323,7 @@ export default function EmailReportView({
         {step === "sending" && (
           <div className="flex flex-col items-center gap-3 py-8">
             <Loader2 className="h-6 w-6 animate-spin text-white" aria-hidden="true" />
-            <p className="text-sm text-[#aaa]">Generating and encrypting locally...</p>
+            <p className="text-sm text-[#aaa]">正在本機產生並加密...</p>
           </div>
         )}
 
@@ -336,7 +336,7 @@ export default function EmailReportView({
               </p>
             </div>
             <div>
-              <span className="mb-1.5 block text-xs text-[#888]">Your one-time password</span>
+              <span className="mb-1.5 block text-xs text-[#888]">你的一次性密碼</span>
               <div
                 className="flex items-center gap-2 rounded-lg bg-black p-3"
                 style={{ border: "1px solid #2a2a2a" }}

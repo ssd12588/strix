@@ -109,10 +109,10 @@ export default function McpRenderer({
     <div>
       <div className="flex items-center gap-2 flex-wrap">
         {listing ? (
-          <span className="text-[13px] text-[#555]">Listing connected MCP servers</span>
+          <span className="text-[13px] text-[#555]">列出已連線的 MCP 伺服器</span>
         ) : inspecting ? (
           <>
-            <span className="text-[13px] text-[#555]">Inspecting MCP server</span>
+            <span className="text-[13px] text-[#555]">正在檢查 MCP 伺服器</span>
             {mcpConnection && (
               <span className="font-mono text-teal-300 font-semibold text-sm">{mcpConnection}</span>
             )}
@@ -122,7 +122,7 @@ export default function McpRenderer({
             <span className="font-mono text-teal-300 font-semibold text-sm">
               {mcpTool || toolName}
             </span>
-            <span className="text-[13px] text-[#555]">via MCP server</span>
+            <span className="text-[13px] text-[#555]">透過 MCP 伺服器</span>
             {mcpConnection && <span className="text-[13px] text-teal-400/80">{mcpConnection}</span>}
           </>
         )}
@@ -159,7 +159,7 @@ export default function McpRenderer({
       )}
 
       <div className="mt-1 text-[13px]">
-        {status === "running" && <span className="text-[#666]">Running</span>}
+        {status === "running" && <span className="text-[#666]">執行中</span>}
         {status === "completed" && <span className="text-emerald-400/80">✓ Done</span>}
         {failed && <span className="text-red-400/80">✗ Failed</span>}
       </div>

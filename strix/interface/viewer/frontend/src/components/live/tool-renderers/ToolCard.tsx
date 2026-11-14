@@ -8,7 +8,7 @@ import "highlight.js/styles/github-dark.css";
 const OUTPUT_PREVIEW_LINES = 6;
 const CODE_PREVIEW_LINES = 20;
 
-/** Truncatable markdown text with "Show more" */
+/** Truncatable markdown text with "顯示更多" */
 export function TruncatedText({ text, maxLines = 20 }: { text: string; maxLines?: number }) {
   const [expanded, setExpanded] = useState(false);
   const lines = text.trimEnd().split("\n");
@@ -24,14 +24,14 @@ export function TruncatedText({ text, maxLines = 20 }: { text: string; maxLines?
       </div>
       {needsTruncation && (
         <button onClick={() => setExpanded(!expanded)} className="text-xs text-[#555] hover:text-[#888] mt-1">
-          {expanded ? "Show less" : "Show more"}
+          {expanded ? "收合" : "顯示更多"}
         </button>
       )}
     </div>
   );
 }
 
-/** Code/output block — truncates to 12 lines with "Show more", expanded view scrolls */
+/** Code/output block — truncates to 12 lines with "顯示更多", expanded view scrolls */
 export function CodeBlock({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   const [expanded, setExpanded] = useState(false);
 
@@ -54,7 +54,7 @@ export function CodeBlock({ children, className = "" }: { children: React.ReactN
           onClick={() => setExpanded(!expanded)}
           className="text-xs text-[#555] hover:text-[#888] mt-0.5"
         >
-          {expanded ? "Show less" : "Show more"}
+          {expanded ? "收合" : "顯示更多"}
         </button>
       )}
     </div>
@@ -62,7 +62,7 @@ export function CodeBlock({ children, className = "" }: { children: React.ReactN
 }
 
 /** Syntax-highlighted code block — no border, no line numbers, just highlighting.
- *  Pass `collapsible` to get a "Show more" toggle instead of a scroll cap. */
+ *  Pass `collapsible` to get a "顯示更多" toggle instead of a scroll cap. */
 export function SyntaxBlock({ code, language, className = "", collapsible = false }: { code: string; language?: string; className?: string; collapsible?: boolean }) {
   const [expanded, setExpanded] = useState(false);
 
@@ -92,7 +92,7 @@ export function SyntaxBlock({ code, language, className = "", collapsible = fals
       </pre>
       {needsTruncation && (
         <button onClick={() => setExpanded(!expanded)} className="text-xs text-[#555] hover:text-[#888] mt-0.5">
-          {expanded ? "Show less" : "Show more"}
+          {expanded ? "收合" : "顯示更多"}
         </button>
       )}
     </div>

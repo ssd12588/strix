@@ -19,12 +19,12 @@ import { SIGNUP_URL, PRICING_URL, DEMO_URL, ctaUrl, trackCta } from "@/lib/cta";
  */
 
 const CLOUD_HIGHLIGHTS: { icon: React.ElementType; label: string }[] = [
-  { icon: GitPullRequest, label: "PR security reviews" },
-  { icon: Shield, label: "Attack surface monitoring" },
-  { icon: Zap, label: "Real-time threat intelligence" },
-  { icon: CalendarClock, label: "Scheduled pentesting" },
-  { icon: WandSparkles, label: "One-click autofix" },
-  { icon: Plug, label: "Jira, Linear & Slack integrations" },
+  { icon: GitPullRequest, label: "PR 安全審查" },
+  { icon: Shield, label: "攻擊面監控" },
+  { icon: Zap, label: "即時威脅情報" },
+  { icon: CalendarClock, label: "排程滲透測試" },
+  { icon: WandSparkles, label: "一鍵自動修補" },
+  { icon: Plug, label: "Jira、Linear 與 Slack 整合" },
 ];
 
 export function UpgradeModal({
@@ -80,7 +80,7 @@ export function UpgradeModal({
       onClick={onClose}
       role="dialog"
       aria-modal="true"
-      aria-label="Upgrade your plan"
+      aria-label="升級你的方案"
     >
       <div
         data-state={state}
@@ -90,14 +90,14 @@ export function UpgradeModal({
         <button
           type="button"
           onClick={onClose}
-          aria-label="Close"
+          aria-label="關閉"
           className="absolute right-4 top-4 rounded-md p-1 text-[#888] transition-colors hover:bg-[#1a1a1a] hover:text-white"
         >
           <X className="h-4 w-4" />
         </button>
 
         <div>
-          <h2 className="text-lg text-white">Available in Strix Cloud</h2>
+          <h2 className="text-lg text-white">Strix Cloud 提供</h2>
           {description && (
             <p className="mt-2 text-base leading-relaxed text-[#e5e5e5]">{description}</p>
           )}
@@ -107,7 +107,7 @@ export function UpgradeModal({
           <div className="rounded-xl border border-[#333] bg-[#0a0a0a] p-4 sm:rounded-lg">
             <div className="mb-3 flex items-center gap-2">
               <Sparkles className="h-4 w-4 text-blue-400" />
-              <span className="text-sm font-medium text-white">Strix Cloud also includes</span>
+              <span className="text-sm font-medium text-white">Strix Cloud 另含</span>
             </div>
             <ul className="space-y-2 text-sm text-[#888]">
               {CLOUD_HIGHLIGHTS.map((f) => (
