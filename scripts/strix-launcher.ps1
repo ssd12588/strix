@@ -71,6 +71,7 @@ Write-Host '  [1] 掃描（選任務 md + 輸入目標）' -ForegroundColor Whit
 Write-Host '  [2] 本機資產收集（免費，不需 AI，用 Docker 工具鏈）' -ForegroundColor White
 Write-Host '  [3] 上游同步分析（看落後多少、哪些檔案會衝突）' -ForegroundColor White
 Write-Host '  [4] 開啟 Web 儀表板（看上次掃描結果）' -ForegroundColor White
+Write-Host '  [5] 合併資產清單（子網域 + 來源 IP + 高價值端點 → 一個 txt）' -ForegroundColor White
 Write-Host ''
 $mode = Read-Host '  輸入編號（預設 1）'
 if ([string]::IsNullOrWhiteSpace($mode)) { $mode = '1' }
@@ -100,6 +101,13 @@ if ($mode -eq '3') {
 if ($mode -eq '4') {
     Write-Host '  啟動 strix view（按 Ctrl+C 關閉）…' -ForegroundColor DarkGray
     & uv run strix view
+    exit 0
+}
+
+if ($mode -eq '5') {
+    $mergeScript = Join-Path $root 'scripts\merge-assets.ps1'
+    & pwsh -NoProfile -ExecutionPolicy Bypass -File $mergeScript
+    if (-not $NoPause) { Read-Host '按 Enter 結束' }
     exit 0
 }
 
