@@ -45,7 +45,9 @@
 **本漢化版由 [阿樂](https://github.com/ssd12588) 負責繁體中文漢化與維護。**
 
 - 本倉庫是 [usestrix/strix](https://github.com/usestrix/strix) 的**繁體中文漢化版**，依 Apache-2.0 授權散布，原始版權聲明與 [`LICENSE`](LICENSE) 均完整保留。
-- **已漢化**：終端機（CLI）說明與錯誤訊息、TUI 互動介面、`strix view` 的 Web 檢視器介面、`docs/` 文件站（31 篇）、本 README。
+- **已漢化**：終端機（CLI）說明與錯誤訊息、TUI 互動介面、`strix view` 的 Web 檢視器介面、`docs/` 文件站（31 篇）、`AGENTS.md`、`CONTRIBUTING.md`、本 README。
+- **中文入門文件**：[10 分鐘上手](docs-zh/QUICKSTART.md) · [常見錯誤排錯](docs-zh/TROUBLESHOOTING.md) · [術語對照表](docs-zh/glossary.md)
+- **Windows 一鍵啟動**：[`start-strix.ps1`](start-strix.ps1)（檢查 Docker、記住模型與金鑰、帶你啟動）
 - **刻意不改**：掃描引擎邏輯、代理提示詞（`strix/agents/prompts`）與技能內容（`skills/`）維持英文，以確保 AI 行為與上游一致。
 - 與上游同步：
 
